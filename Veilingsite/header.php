@@ -17,7 +17,14 @@ include_once "connect.php";
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
-            <h1>Welcome to Foundation</h1>
+            <div class="header">
+                <h1>Eenmaal Andermaal</h1>
+                <ul class="menu align-right">
+                    <li><a href="#">login</a></li>
+                    <li><p>of</p></li>
+                    <li><a href="#">Registreer</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

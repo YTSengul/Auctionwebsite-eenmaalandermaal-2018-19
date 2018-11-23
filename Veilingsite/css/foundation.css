@@ -2225,7 +2225,7 @@ h3, .h3,
 h4, .h4,
 h5, .h5,
 h6, .h6 {
-  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-family: sans-serif;
   font-style: normal;
   font-weight: normal;
   color: inherit;
@@ -2237,10 +2237,41 @@ h6, .h6 {
   h5 small, .h5 small,
   h6 small, .h6 small {
     line-height: 0;
-    color: #cacaca; }
+    color: #cacaca;
+  }
+
+.header {
+  min-height: 5.5em;
+  background-color: #a45a84;
+  position: relative;
+}
+
+.header > h1 {
+  position: absolute;
+  padding-left: 0.5em;
+  color: white;
+  margin: 0;
+  bottom: 0;
+}
+
+.header > ul > li > a, .header > ul > li > p{
+  padding: 0;
+  margin: 0;
+  color: white;
+  line-height: 1.6em;
+}
+
+.header > ul {
+  padding-right: 10px;
+}
+
+.header > ul > li > a, .header > ul > li > p {
+  padding: 10px 8px 0px 0px;
+}
+
 
 h1, .h1 {
-  
+  color: white;
   font-size: 1.5rem;
   line-height: 1.4;
   margin-top: 0;

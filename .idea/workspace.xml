@@ -12,21 +12,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Veilingsite/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="header.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="header.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="483">
-              <caret line="23" column="7" lean-forward="false" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+              <caret line="23" column="33" lean-forward="false" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -42,11 +32,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="foundation.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="foundation.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="2242" column="2" lean-forward="false" selection-start-line="2242" selection-start-column="2" selection-end-line="2242" selection-end-column="2" />
+            <state relative-caret-position="246">
+              <caret line="2246" column="1" lean-forward="true" selection-start-line="2246" selection-start-column="1" selection-end-line="2246" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -56,7 +46,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+      <find>.h1</find>
       <find>h1, .h1</find>
+      <find>font</find>
+      <find>source</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -66,9 +59,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Veilingsite/header.php" />
         <option value="$PROJECT_DIR$/Veilingsite/connect.php" />
         <option value="$PROJECT_DIR$/Veilingsite/index.html" />
+        <option value="$PROJECT_DIR$/Veilingsite/header.php" />
         <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
       </list>
     </option>
@@ -249,12 +242,12 @@
       <workItem from="1542809837767" duration="1894000" />
       <workItem from="1542811813287" duration="12000" />
       <workItem from="1542811891174" duration="366000" />
-      <workItem from="1542959978264" duration="4907000" />
+      <workItem from="1542959978264" duration="12467000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7179000" />
+    <option name="totallyTimeSpent" value="14739000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="954" y="0" width="974" height="1038" extended-state="0" />
@@ -293,10 +286,18 @@
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/Desktop/Eenmaal Andermaal.html" />
     <entry file="file://$PROJECT_DIR$/Veilingsite/index.php" />
-    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
+    <entry file="file://$PROJECT_DIR$/Veilingsite/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="23" column="7" lean-forward="false" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+        <state relative-caret-position="297">
+          <caret line="22" column="47" lean-forward="false" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="2246" column="1" lean-forward="true" selection-start-line="2246" selection-start-column="1" selection-end-line="2246" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -309,18 +310,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/index.html">
+    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="2242" column="2" lean-forward="false" selection-start-line="2242" selection-start-column="2" selection-end-line="2242" selection-end-column="2" />
+        <state relative-caret-position="483">
+          <caret line="23" column="33" lean-forward="false" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
           <folding />
         </state>
       </provider>
