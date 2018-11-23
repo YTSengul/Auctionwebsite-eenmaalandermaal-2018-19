@@ -1,6 +1,6 @@
 <?php
 
-$hostname = 'mssql2.iprject.icasites.nl';
+$hostname = 'mssql2.iproject.icasites.nl';
 $databasename = 'iproject4';
 
 try {
