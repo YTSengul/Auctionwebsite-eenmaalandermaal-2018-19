@@ -4,7 +4,7 @@ include_once 'header.php';
 
 <div class="grid-x grid-padding-x">
     <div class="medium-12 large-12 cell">
-        <p>Veilingen aan het sluiten</p>
+        <p class="homepage-titel">Veilingen aan het sluiten</p>
     </div>
 </div>
 
@@ -59,7 +59,7 @@ include_once 'header.php';
     </div>
 
     <div class="medium-12 large-12 cell">
-        <p>Ook interresant voor u</p>
+        <p class="homepage-titel">Ook interresant voor u</p>
     </div>
 
     <div class="small-6 medium-3 cell">
