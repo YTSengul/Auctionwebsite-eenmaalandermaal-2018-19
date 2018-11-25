@@ -1,29 +1,264 @@
 <?php
-    include_once 'header.php';
+include_once 'header.php';
 ?>
-      <div class="grid-x grid-padding-x">
-        <div class="large-12 cell">
-            <div class="grid-x grid-padding-x">
-              <div class="large-4 medium-4 cell">
-                <p><a href="http://foundation.zurb.com/docs">Foundation Documentation</a><br />Everything you need to know about using the framework.</p>
-              </div>
-              <div class="large-4 medium-4 cell">
-                <p><a href="http://zurb.com/university/code-skills">Foundation Code Skills</a><br />These online courses offer you a chance to better understand how Foundation works and how you can master it to create awesome projects.</p>
-              </div>
-              <div class="large-4 medium-4 cell">
-                <p><a href="http://foundation.zurb.com/forum">Foundation Forum</a><br />Join the Foundation community to ask a question or show off your knowlege.</p>
-              </div>
-            </div>
-            <div class="grid-x grid-padding-x">
-              <div class="large-4 medium-4 medium-push-2 cell">
-                <p><a href="http://github.com/zurb/foundation">Foundation on Github</a><br />Latest code, issue reports, feature requests and more.</p>
-              </div>
-              <div class="large-4 medium-4 medium-pull-2 cell">
-                <p><a href="https://twitter.com/ZURBfoundation">@zurbfoundation</a><br />Ping us on Twitter if you have questions. When you build something with this we'd love to see it (and send you a totally boss sticker).</p>
-              </div>
-            </div>
-        </div>
-      </div>
 
-  </body>
+<div class="grid-x grid-padding-x">
+    <div class="medium-12 large-12 cell">
+        <p>Veilingen aan het sluiten</p>
+    </div>
+</div>
+
+<div class="grid-x grid-padding-x">
+    <div class="small-6 medium-4 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-4 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-4 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+
+    <div class="medium-12 large-12 cell">
+        <p>Ook interresant voor u</p>
+    </div>
+
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+    <div class="small-6 medium-3 cell">
+        <div class="veiling-sluit-index">
+            <img class="thumbnail" src="img/img_no_thumb.jpg">
+
+            <div class="grid-x grid-padding-x">
+                <div class="small-6 medium-6 cell">
+                    <h5>Titel</h5>
+                </div>
+                <div class="small-6 medium-6 cell timer">
+                    <h5 class="float-right">00:00</h5>
+                </div>
+            </div>
+            <p>Omschrijving</p>
+            <a href="#" class="button expanded">Bied nu!</a>
+        </div>
+    </div>
+
+
+</div>
+
+</div>
+
+</body>
 </html>
