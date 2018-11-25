@@ -5835,3 +5835,26 @@ a.thumbnail {
 
 .long-delay {
   animation-delay: 700ms !important; }
+
+/* ---------------------------------------------------- */
+.top-nav > div >  ul {
+  display: flex;
+  flex-direction: row;
+  padding: 3px;
+  background-color: #5e5e5e;
+}
+
+.top-nav > div > ul > li {
+  float: none;
+  flex: 1;
+}
+
+.top-nav > div > ul > li > a {
+  margin: 0;
+  padding: 0!important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  overflow: hidden;
+  color: white;
+}

@@ -11,12 +11,22 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="header.php" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="header.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
-              <caret line="23" column="33" lean-forward="false" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+            <state relative-caret-position="653">
+              <caret line="54" column="21" lean-forward="true" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="foundation.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="479">
+              <caret line="5851" column="16" lean-forward="false" selection-start-line="5851" selection-start-column="16" selection-end-line="5851" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -32,12 +42,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="foundation.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="2246" column="1" lean-forward="true" selection-start-line="2246" selection-start-column="1" selection-end-line="2246" selection-end-column="1" />
-              <folding />
+            <state relative-caret-position="294">
+              <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+              <folding>
+                <marker date="1543108605537" expanded="true" signature="39:130" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="80:130" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="116:130" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="164:957" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="214:389" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="439:700" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="750:938" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="1005:1475" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="1069:1242" ph="..." />
+                <marker date="1543108605537" expanded="true" signature="1306:1475" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -50,6 +71,17 @@
       <find>h1, .h1</find>
       <find>font</find>
       <find>source</find>
+      <find>.column</find>
+      <find>submenu</find>
+      <find>has-submenu</find>
+      <find>hover</find>
+      <find>menu</find>
+      <find>data-dr</find>
+      <find>data-dropd</find>
+      <find>js</find>
+      <find>menu.vert</find>
+      <find>.dropdown.menu a</find>
+      <find>#1779ba</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -59,10 +91,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Veilingsite/connect.php" />
         <option value="$PROJECT_DIR$/Veilingsite/index.html" />
+        <option value="$USER_HOME$/AppData/Local/Temp/news-magazine.html" />
+        <option value="$PROJECT_DIR$/Veilingsite/connect.php" />
+        <option value="$PROJECT_DIR$/Veilingsite/test.html" />
         <option value="$PROJECT_DIR$/Veilingsite/header.php" />
         <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
+        <option value="$PROJECT_DIR$/Veilingsite/index.php" />
       </list>
     </option>
   </component>
@@ -74,9 +109,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP from XAMMP" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="954" />
-    <option name="width" value="974" />
-    <option name="height" value="1038" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -93,6 +129,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -119,34 +156,20 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="I-Project-2018-2019" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="I-Project-2018-2019" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Veilingsite" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="D:/HAN/Webtech/I1DN_BEROEPSPRODUCT_YILDIRIM_SENGUL_&amp;_FATIH_ULUTAS/beroepsproduct" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Lenid\Documents\GitHub\I-Project-2018-2019\Veilingsite\js\vendor" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -242,25 +265,25 @@
       <workItem from="1542809837767" duration="1894000" />
       <workItem from="1542811813287" duration="12000" />
       <workItem from="1542811891174" duration="366000" />
-      <workItem from="1542959978264" duration="12467000" />
+      <workItem from="1542959978264" duration="27567000" />
+      <workItem from="1543107721755" duration="958000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14739000" />
+    <option name="totallyTimeSpent" value="30797000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="954" y="0" width="974" height="1038" extended-state="0" />
-    <editor active="true" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15033408" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08754028" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24930748" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -284,20 +307,18 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Desktop/Eenmaal Andermaal.html" />
-    <entry file="file://$PROJECT_DIR$/Veilingsite/index.php" />
-    <entry file="file://$PROJECT_DIR$/Veilingsite/index.html">
+    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="22" column="47" lean-forward="false" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="2246" column="1" lean-forward="true" selection-start-line="2246" selection-start-column="1" selection-end-line="2246" selection-end-column="1" />
+        <state relative-caret-position="48867">
+          <caret line="2327" column="20" lean-forward="true" selection-start-line="2327" selection-start-column="20" selection-end-line="2327" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -310,11 +331,101 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Desktop/Eenmaal Andermaal.html" />
+    <entry file="file://$PROJECT_DIR$/Veilingsite/index.php" />
+    <entry file="file://$PROJECT_DIR$/Veilingsite/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/js/vendor/foundation.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/news-magazine.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="400" column="15" lean-forward="false" selection-start-line="400" selection-start-column="15" selection-end-line="400" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/js/vendor/jquery.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="4210" column="0" lean-forward="true" selection-start-line="4210" selection-start-column="0" selection-end-line="4210" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/js/vendor/foundation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-19">
+          <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/js/vendor/what-input.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-40">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/connect.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="5851" column="16" lean-forward="false" selection-start-line="5851" selection-start-column="16" selection-end-line="5851" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="23" column="33" lean-forward="false" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+        <state relative-caret-position="653">
+          <caret line="54" column="21" lean-forward="true" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+          <folding>
+            <marker date="1543108605537" expanded="true" signature="39:130" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="80:130" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="116:130" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="164:957" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="214:389" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="439:700" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="750:938" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="1005:1475" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="1069:1242" ph="..." />
+            <marker date="1543108605537" expanded="true" signature="1306:1475" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
