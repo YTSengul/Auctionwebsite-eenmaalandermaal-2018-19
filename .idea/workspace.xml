@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8309ad11-6b9b-4430-a8c8-60dc4831c087" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Veilingsite/components/scripts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/Veilingsite/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Veilingsite/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Veilingsite/ecommerce.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Veilingsite/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/Veilingsite/components/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Veilingsite/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Veilingsite/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Veilingsite/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Veilingsite/login.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,20 +17,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Veilingsite/login.html">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/login.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+            <state relative-caret-position="442">
+              <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="35" lean-forward="true" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+            <state relative-caret-position="505">
+              <caret line="213" column="30" selection-start-line="213" selection-start-column="30" selection-end-line="213" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -39,6 +41,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -80,29 +83,31 @@
         <option value="$USER_HOME$/AppData/Local/Temp/news-magazine.html" />
         <option value="$PROJECT_DIR$/Veilingsite/connect.php" />
         <option value="$PROJECT_DIR$/Veilingsite/test.html" />
-        <option value="$PROJECT_DIR$/Veilingsite/ecommerce.html" />
         <option value="$PROJECT_DIR$/Veilingsite/css/bewerkt.css" />
         <option value="$USER_HOME$/Desktop/index.html" />
         <option value="$PROJECT_DIR$/Veilingsite/inde.php" />
         <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
-        <option value="$PROJECT_DIR$/Veilingsite/index.php" />
         <option value="$PROJECT_DIR$/Veilingsite/login.html" />
+        <option value="$PROJECT_DIR$/Veilingsite/components/scripts.html" />
         <option value="$PROJECT_DIR$/Veilingsite/header.php" />
+        <option value="$PROJECT_DIR$/Veilingsite/login.php" />
+        <option value="$PROJECT_DIR$/Veilingsite/ecommerce.html" />
+        <option value="$PROJECT_DIR$/Veilingsite/index.php" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP from XAMMP" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="120" />
+    <option name="x" value="952" />
     <option name="width" value="977" />
-    <option name="height" value="918" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -113,25 +118,26 @@
             <path>
               <item name="I-Project-2018-2019" type="b2602c69:ProjectViewProjectNode" />
               <item name="I-Project-2018-2019" type="462c0819:PsiDirectoryNode" />
-              <item name="Database" type="462c0819:PsiDirectoryNode" />
+              <item name="Veilingsite" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="I-Project-2018-2019" type="b2602c69:ProjectViewProjectNode" />
               <item name="I-Project-2018-2019" type="462c0819:PsiDirectoryNode" />
               <item name="Veilingsite" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/foundation-6.5.1-complete" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/foundation-6.5.1-complete" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -182,22 +188,22 @@
       <workItem from="1543149463592" duration="367000" />
       <workItem from="1543219145145" duration="2100000" />
       <workItem from="1543229229384" duration="887000" />
-      <workItem from="1543230650504" duration="693000" />
+      <workItem from="1543230650504" duration="1950000" />
+      <workItem from="1543232669598" duration="39000" />
+      <workItem from="1543232770788" duration="450000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43500000" />
+    <option name="totallyTimeSpent" value="45246000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1913" y="-7" width="1295" height="695" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14331985" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12147651" />
       <window_info id="Structure" order="1" weight="0.24930748" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -209,6 +215,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="PHP-CGI Server" order="10" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -252,7 +260,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="4210" lean-forward="true" selection-start-line="4210" selection-end-line="4210" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -273,19 +280,47 @@
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/app.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/ecommerce.html">
+    <entry file="file://$USER_HOME$/Desktop/index.html" />
+    <entry file="file://$PROJECT_DIR$/Veilingsite/inde.php" />
+    <entry file="file://$PROJECT_DIR$/commit to github.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/components/header.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="30" lean-forward="true" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        <state relative-caret-position="511">
+          <caret line="49" column="10" selection-start-line="49" selection-start-column="10" selection-end-line="49" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/index.html" />
-    <entry file="file://$PROJECT_DIR$/Veilingsite/inde.php" />
+    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="3492" column="29" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
+          <folding>
+            <element signature="e#86532#86746#2" expanded="true" />
+            <element signature="e#87065#87406#2" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/components/scripts.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/ecommerce.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="257" column="9" selection-start-line="257" selection-start-column="9" selection-end-line="257" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" column="56" selection-start-line="69" selection-start-column="56" selection-end-line="69" selection-end-column="56" />
+        <state relative-caret-position="505">
+          <caret line="213" column="30" selection-start-line="213" selection-start-column="30" selection-end-line="213" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -296,28 +331,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+    <entry file="file://$PROJECT_DIR$/Veilingsite/login.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="3492" column="29" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
-          <folding>
-            <element signature="e#86532#86746#2" expanded="true" />
-            <element signature="e#87065#87406#2" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="35" lean-forward="true" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+        <state relative-caret-position="442">
+          <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
         </state>
       </provider>
     </entry>

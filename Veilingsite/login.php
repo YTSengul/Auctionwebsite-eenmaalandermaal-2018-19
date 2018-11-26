@@ -1,17 +1,10 @@
-<html lang="nl">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inloggen - EenmaalAndermaal</title>
-    <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.css">
-</head>
+<?php
+include_once "header.php"
+?>
 <body>
     <div class='grid-container grid-x'>
-        
         <div class="cell large-4">
-            Inloggen
+            <h5>Inloggen</h5>
             <form>
                 <label>Gebruikersnaam </label>
                 <input type='text' placeholder='Gebruikersnaam'>
@@ -19,10 +12,10 @@
                 <input type='password' placeholder='Wachtwoord'>
             </form>
         </div>
-        
+
+        <h5>Nieuw bij EenmaalAndermaal?</h5>
+        <h5>Registreren</h5>
         <form class='cell large-4'>
-            Nieuw bij EenmaalAndermaal?
-            Registreren
             <label>Gebruikersnaam</label>
             <input type="text" placeholder="Gebruikersnaam">
             <label>Wachtwoord</label>
@@ -31,10 +24,6 @@
             <input type="password" placeholder="Herhaal wachtwoord">
         </form> 
     </div>
-    
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/what-input.js"></script>
-    <script src="js/vendor/foundation.js"></script>
-    <script src="js/app.js"></script>
+    <?php include "scripts.html"?>
 </body>
 </html>

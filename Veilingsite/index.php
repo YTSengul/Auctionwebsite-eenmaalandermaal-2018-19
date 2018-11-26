@@ -211,6 +211,6 @@ include_once 'header.php';
 </div>
 
 </div>
-
+<?php include "scripts.html"?>
 </body>
 </html>
