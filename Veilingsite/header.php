@@ -3,7 +3,7 @@ include_once "connect.php";
 ?>
 
 <!doctype html>
-<html class="" lang="en" dir="ltr">
+<html class="" lang="nl" dir="ltr">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -18,11 +18,11 @@ include_once "connect.php";
     <div class="grid-x grid-padding-x">
         <div class="medium-12 cell">
             <div class="header">
-                <h1>Eenmaal Andermaal</h1>
+                <h1>EenmaalAndermaal</h1>
                 <ul class="menu align-right">
-                    <li><a href="#">login</a></li>
+                    <li><a href="#">Inloggen</a></li>
                     <li><p>of</p></li>
-                    <li><a href="#">Registreer</a></li>
+                    <li><a href="#">Registreren</a></li>
                 </ul>
             </div>
         </div>
@@ -54,4 +54,3 @@ include_once "connect.php";
     <script>
         $(document).foundation();
     </script>
-
