@@ -3490,7 +3490,7 @@ h6 small, .h6 small {
 
 .header {
     min-height: 5.5em;
-    background-color: #F2552C;
+    /* background-color: #F2552C; */
     position: relative;
 }
 
@@ -8442,58 +8442,4 @@ a.thumbnail image {
 
 .long-delay {
     animation-delay: 700ms !important;
-}
-
-/* ---------------------------------------------------- */
-.top-nav > div > ul {
-    display: flex;
-    flex-direction: row;
-    padding: 3px;
-    background-color: #5E5E5E;
-}
-
-.top-nav > div > ul > li {
-    float: none;
-    flex: 1;
-}
-
-.top-nav > div > ul > li > a {
-    margin: 0;
-    padding: 0 !important;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: center;
-    overflow: hidden;
-    color: white;
-    font-size: 0.9rem;
-}
-
-.cell > p > img {
-    display: block;
-    margin: auto;
-}
-
-.veiling-sluit-index {
-    margin: 5px;
-    padding: 10px;
-    background-color: #F0F0F0;
-    box-shadow: 0 0 4px gray;
-}
-
-.veiling-sluit-index > div > .timer {
-    color: firebrick;
-    font-size: large;
-}
-
-.demo-toggle-title {
-    margin-top: 0.5rem;
-}
-
-.homepage-titel {
-    margin: 1rem 0 0 1rem;
-}
-
-.index-body {
-    background-color: #f0f0f0;
-    margin: 0;
 }
