@@ -1,0 +1,24 @@
+how to commit something to github:
+
+"git add -A" <- confirms all changes made, including deletes
+
+"git commit -m '(text for update)'"<- starts the commit
+
+git push
+
+
+
+
+
+
+
+
+(Irrelevant)
+
+(-> new screen <-
+
+enter a new for the commit
+
+press escape
+
+:wq)
