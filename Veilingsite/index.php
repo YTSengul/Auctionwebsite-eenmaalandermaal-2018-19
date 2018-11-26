@@ -19,6 +19,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -34,6 +35,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -49,6 +51,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -64,6 +67,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
