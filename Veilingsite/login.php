@@ -3,7 +3,7 @@ include_once "components/connect.php";
 ?>
 
 <!doctype html>
-<html class="" lang="en" dir="ltr">
+<html class="" lang="nl" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -23,7 +23,7 @@ include_once "components/connect.php";
       <div class='grid-container grid-x'>
 
         <div class="cell large-4">
-          Log IN
+          <h5>Inloggen</h5>
           <form>
             <label>Gebruikersnaam </label>
             <input type='text' placeholder='Gebruikersnaam'>
@@ -33,7 +33,7 @@ include_once "components/connect.php";
         </div>
 
         <form class='cell large-4'>
-          Bent U nieuw?
+          <h5>Registreren</h5>
           <label>Gebruikersnaam</label>
           <input type="text" placeholder="Gebruikersnaam">
           <label>Wachtwoord</label>

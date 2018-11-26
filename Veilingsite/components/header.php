@@ -3,9 +3,9 @@
     <div class="header">
       <h1>Eenmaal Andermaal</h1>
       <ul class="menu align-right">
-        <li><a href="#">login</a></li>
-        <li><p>of</p></li>
-        <li><a href="#">Registreer</a></li>
+        <li><a href="login.php">Inloggen</a></li>
+        <li><p>|</p></li>
+        <li><a href="#">Registreren</a></li>
       </ul>
     </div>
   </div>
