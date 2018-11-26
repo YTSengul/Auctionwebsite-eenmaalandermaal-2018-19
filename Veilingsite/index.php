@@ -2,13 +2,11 @@
 include_once 'header.php';
 ?>
 
-<div class="grid-x grid-padding-x">
-    <div class="medium-12 large-12 cell">
+<div class="grid-x grid-padding-x index-body">
+    <div class="small-12 medium-12 large-12 cell">
         <p class="homepage-titel">Veilingen aan het sluiten</p>
     </div>
-</div>
 
-<div class="grid-x grid-padding-x">
     <div class="small-6 medium-4 cell">
         <div class="veiling-sluit-index">
             <img class="thumbnail" src="img/img_no_thumb.jpg">
@@ -86,7 +84,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -102,7 +100,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -118,7 +116,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -134,7 +132,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -152,7 +150,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -168,7 +166,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -184,7 +182,7 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
@@ -200,11 +198,11 @@ include_once 'header.php';
                     <h5 class="float-right">00:00</h5>
                 </div>
             </div>
-            <p class="text-center" >Hoogste bod: €0,-</p>
+            <p class="text-center">Hoogste bod: €0,-</p>
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
-// ok
+
 
 </div>
 
