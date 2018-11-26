@@ -15,12 +15,43 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="588">
-              <caret line="61" column="33" lean-forward="false" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="33" />
+            <state relative-caret-position="567">
+              <caret line="205" column="10" lean-forward="false" selection-start-line="205" selection-start-column="10" selection-end-line="205" selection-end-column="10" />
               <folding>
-                <marker date="1543149809006" expanded="true" signature="36:77" ph="..." />
-                <marker date="1543149809006" expanded="true" signature="71:77" ph="..." />
+                <element signature="n#div#0;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#2;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#3;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#4;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#5;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#6;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#7;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#8;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#9;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#10;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#11;n#div#1;n#!!top" expanded="false" />
+                <element signature="n#div#12;n#div#1;n#!!top" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="21">
+              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="connect.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Veilingsite/connect.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="42">
+              <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -28,8 +59,8 @@
       <file leaf-file-name="foundation.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="8467" column="20" lean-forward="true" selection-start-line="8467" selection-start-column="20" selection-end-line="8467" selection-end-column="20" />
+            <state relative-caret-position="-184">
+              <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
               <folding>
                 <element signature="e#86532#86746#2" expanded="true" />
                 <element signature="e#87065#87406#2" expanded="true" />
@@ -70,6 +101,7 @@
       <find>cell</find>
       <find>.column</find>
       <find>.cell</find>
+      <find>body</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -86,10 +118,10 @@
         <option value="$PROJECT_DIR$/Veilingsite/ecommerce.html" />
         <option value="$PROJECT_DIR$/Veilingsite/css/bewerkt.css" />
         <option value="$USER_HOME$/Desktop/index.html" />
-        <option value="$PROJECT_DIR$/Veilingsite/header.php" />
         <option value="$PROJECT_DIR$/Veilingsite/inde.php" />
-        <option value="$PROJECT_DIR$/Veilingsite/index.php" />
         <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
+        <option value="$PROJECT_DIR$/Veilingsite/header.php" />
+        <option value="$PROJECT_DIR$/Veilingsite/index.php" />
       </list>
     </option>
   </component>
@@ -101,8 +133,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP from XAMMP" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="954" />
-    <option name="width" value="974" />
+    <option name="x" value="787" />
+    <option name="width" value="1141" />
     <option name="height" value="1038" />
   </component>
   <component name="ProjectView">
@@ -184,8 +216,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -299,17 +331,18 @@
       <workItem from="1542959978264" duration="27567000" />
       <workItem from="1543107721755" duration="9614000" />
       <workItem from="1543149463592" duration="367000" />
+      <workItem from="1543219145145" duration="1503000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39820000" />
+    <option name="totallyTimeSpent" value="41323000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="954" y="0" width="974" height="1038" extended-state="0" />
+    <frame x="787" y="0" width="1141" height="1038" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22939867" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15211268" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -360,6 +393,39 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#div#0;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#3;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#4;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#5;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#6;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#7;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#8;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#9;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#10;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#11;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#12;n#div#1;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177807">
+          <caret line="8467" column="20" lean-forward="true" selection-start-line="8467" selection-start-column="20" selection-end-line="8467" selection-end-column="20" />
+          <folding>
+            <element signature="e#86532#86746#2" expanded="true" />
+            <element signature="e#87065#87406#2" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -373,8 +439,19 @@
         <state relative-caret-position="42">
           <caret line="2" column="2" lean-forward="false" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
           <folding>
-            <marker date="1543149809006" expanded="true" signature="36:77" ph="..." />
-            <marker date="1543149809006" expanded="true" signature="71:77" ph="..." />
+            <element signature="n#div#0;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#3;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#4;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#5;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#6;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#7;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#8;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#9;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#10;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#11;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#12;n#div#1;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -458,14 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/connect.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/bewerkt.css" />
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/app.css">
       <provider selected="true" editor-type-id="text-editor">
@@ -488,26 +557,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="30" column="25" lean-forward="false" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Veilingsite/inde.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="265" column="0" lean-forward="false" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/inde.php" />
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="8467" column="20" lean-forward="true" selection-start-line="8467" selection-start-column="20" selection-end-line="8467" selection-end-column="20" />
+        <state relative-caret-position="-184">
+          <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
           <folding>
             <element signature="e#86532#86746#2" expanded="true" />
             <element signature="e#87065#87406#2" expanded="true" />
@@ -515,13 +569,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/connect.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/header.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="61" column="33" lean-forward="false" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="33" />
+        <state relative-caret-position="567">
+          <caret line="205" column="10" lean-forward="false" selection-start-line="205" selection-start-column="10" selection-end-line="205" selection-end-column="10" />
           <folding>
-            <marker date="1543149809006" expanded="true" signature="36:77" ph="..." />
-            <marker date="1543149809006" expanded="true" signature="71:77" ph="..." />
+            <element signature="n#div#0;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#3;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#4;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#5;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#6;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#7;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#8;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#9;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#10;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#11;n#div#1;n#!!top" expanded="false" />
+            <element signature="n#div#12;n#div#1;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
