@@ -3490,7 +3490,7 @@ h6 small, .h6 small {
 
 .header {
     min-height: 5.5em;
-    background-color: #FF9122;
+    background-color: #F2552C;
     position: relative;
 }
 
@@ -3891,7 +3891,7 @@ ul.no-bullet, ol.no-bullet {
     line-height: 1;
     text-align: center;
     cursor: pointer;
-    background-color: #F2552C;
+    background-color: #1779ba;
     color: #fefefe;
 }
 
@@ -3900,7 +3900,7 @@ ul.no-bullet, ol.no-bullet {
 }
 
 .button:hover, .button:focus {
-    background-color: #F2281E;
+    background-color: #14679e;
     color: #fefefe;
 }
 
@@ -8478,8 +8478,6 @@ a.thumbnail image {
     padding: 10px;
     background-color: #F0F0F0;
     box-shadow: 0 0 4px gray;
-    border: 3px solid #FF9122;
-    border-radius: 3px;
 }
 
 .veiling-sluit-index > div > .timer {
@@ -8496,10 +8494,6 @@ a.thumbnail image {
 }
 
 .index-body {
-    margin: 0!important;
-}
-
-.body {
     background-color: #f0f0f0;
-    box-shadow: 0 0 4px gray;
+    margin: 0;
 }
