@@ -1,5 +1,5 @@
 <?php
-include_once 'header.php';
+include_once 'components/header.php';
 ?>
 
 <div class="grid-x grid-padding-x index-body">
