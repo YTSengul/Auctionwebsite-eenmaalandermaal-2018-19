@@ -45,8 +45,8 @@
       <file leaf-file-name="foundation.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="840">
-              <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+            <state relative-caret-position="362">
+              <caret line="3492" column="29" lean-forward="false" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
               <folding>
                 <element signature="e#86532#86746#2" expanded="true" />
                 <element signature="e#87065#87406#2" expanded="true" />
@@ -88,6 +88,7 @@
       <find>.column</find>
       <find>.cell</find>
       <find>body</find>
+      <find>header</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -105,9 +106,9 @@
         <option value="$PROJECT_DIR$/Veilingsite/css/bewerkt.css" />
         <option value="$USER_HOME$/Desktop/index.html" />
         <option value="$PROJECT_DIR$/Veilingsite/inde.php" />
-        <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
         <option value="$PROJECT_DIR$/Veilingsite/header.php" />
         <option value="$PROJECT_DIR$/Veilingsite/index.php" />
+        <option value="$PROJECT_DIR$/Veilingsite/css/foundation.css" />
       </list>
     </option>
   </component>
@@ -318,12 +319,12 @@
       <workItem from="1543107721755" duration="9614000" />
       <workItem from="1543149463592" duration="367000" />
       <workItem from="1543219145145" duration="2100000" />
-      <workItem from="1543229229384" duration="11000" />
+      <workItem from="1543229229384" duration="118000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41931000" />
+    <option name="totallyTimeSpent" value="42038000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="787" y="0" width="1141" height="1038" extended-state="0" />
@@ -510,6 +511,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="4210" column="0" lean-forward="true" selection-start-line="4210" selection-start-column="0" selection-end-line="4210" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -517,6 +519,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-19">
           <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -550,17 +553,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/inde.php" />
-    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
-          <folding>
-            <element signature="e#86532#86746#2" expanded="true" />
-            <element signature="e#87065#87406#2" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/connect.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
@@ -574,6 +566,17 @@
         <state relative-caret-position="21">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="3492" column="29" lean-forward="false" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
+          <folding>
+            <element signature="e#86532#86746#2" expanded="true" />
+            <element signature="e#87065#87406#2" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
