@@ -204,7 +204,7 @@ include_once 'header.php';
             <a href="#" class="button expanded">Bied nu!</a>
         </div>
     </div>
-
+// ok
 
 </div>
 
