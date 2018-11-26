@@ -60,8 +60,8 @@
       <file leaf-file-name="foundation.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="502">
-              <caret line="8491" column="8" lean-forward="false" selection-start-line="8491" selection-start-column="8" selection-end-line="8491" selection-end-column="8" />
+            <state relative-caret-position="299">
+              <caret line="3492" column="29" lean-forward="false" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
               <folding>
                 <element signature="e#86532#86746#2" expanded="true" />
                 <element signature="e#87065#87406#2" expanded="true" />
@@ -334,12 +334,12 @@
       <workItem from="1543107721755" duration="9614000" />
       <workItem from="1543149463592" duration="367000" />
       <workItem from="1543219145145" duration="2100000" />
-      <workItem from="1543229229384" duration="718000" />
+      <workItem from="1543229229384" duration="816000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42638000" />
+    <option name="totallyTimeSpent" value="42736000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="952" y="0" width="976" height="1038" extended-state="0" />
@@ -654,8 +654,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Veilingsite/css/foundation.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="8491" column="8" lean-forward="false" selection-start-line="8491" selection-start-column="8" selection-end-line="8491" selection-end-column="8" />
+        <state relative-caret-position="299">
+          <caret line="3492" column="29" lean-forward="false" selection-start-line="3492" selection-start-column="29" selection-end-line="3492" selection-end-column="29" />
           <folding>
             <element signature="e#86532#86746#2" expanded="true" />
             <element signature="e#87065#87406#2" expanded="true" />
