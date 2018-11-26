@@ -14,19 +14,20 @@ include_once "connect.php";
 </head>
 
 <body>
-<div class="grid-container">
-    <div class="grid-x grid-padding-x">
-        <div class="medium-12 cell">
-            <div class="header">
-                <h1>Eenmaal Andermaal</h1>
-                <ul class="menu align-right">
-                    <li><a href="#">login</a></li>
-                    <li><p>of</p></li>
-                    <li><a href="#">Registreer</a></li>
-                </ul>
-            </div>
+<div class="grid-container body full">
+    <div class="medium-12 cell full">
+        <div class="header">
+            <h1>Eenmaal Andermaal</h1>
+            <ul class="menu align-right">
+                <li><a href="#">login</a></li>
+                <li><p>of</p></li>
+                <li><a href="#">Registreer</a></li>
+            </ul>
         </div>
     </div>
+
+
+
 
     <div class="top-nav">
         <div class="medium-12 cell">
@@ -48,7 +49,7 @@ include_once "connect.php";
             </ul>
         </div>
     </div>
-
+</div>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script>
