@@ -9,6 +9,7 @@ GO
 
 drop table Rubriek
 drop table Gebruikerstelefoon
+drop table Beheerder
 drop table Gebruiker
 drop table Vraag
 
@@ -61,3 +62,12 @@ CREATE TABLE Gebruikerstelefoon
 	CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruikerstelefoon FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
 ) 
+
+CREATE TABLE Beheerder
+(
+	gebruikersnaam VARCHAR(10) NOT NULL UNIQUE,
+	BeheerWachtwoord VARCHAR(20) NOT NULL
+
+	CONSTRAINT PK_Beheerder PRIMARY KEY (gebruikersnaam)
+	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
+)
