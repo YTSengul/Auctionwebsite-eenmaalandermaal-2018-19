@@ -1,10 +1,11 @@
-
+/*LOCAL USE
 DROP DATABASE Iproject
 GO
 CREATE DATABASE Iproject
 GO
 USE Iproject
 GO
+*/
 
 drop table Rubriek
 drop table Gebruikerstelefoon
