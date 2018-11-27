@@ -387,7 +387,7 @@ if (isset($_POST["registreer"])) {
 </div>
 
 <?php include "components/scripts.html"; ?>
-
+fix
 </body>
 
 
