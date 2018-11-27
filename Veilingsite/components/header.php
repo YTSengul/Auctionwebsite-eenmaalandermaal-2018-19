@@ -5,7 +5,7 @@
       <ul class="menu align-right">
         <li><a href="login.php">Inloggen</a></li>
         <li><p>|</p></li>
-        <li><a href="#">Registreren</a></li>
+        <li><a href="registreren.php">Registreren</a></li>
       </ul>
     </div>
   </div>

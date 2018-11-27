@@ -6,9 +6,9 @@ GO
 */
 
 drop table Rubriek
+drop table Gebruikerstelefoon
 drop table Gebruiker
 drop table Vraag
-drop table Gebruikerstelefoon
 
 CREATE TABLE Rubriek
 (
@@ -24,7 +24,7 @@ CREATE TABLE Rubriek
 CREATE TABLE Vraag
 (
 	vraagnummer TINYINT NOT NULL,
-	TekstVraag VARCHAR(21) NOT NULL,
+	TekstVraag VARCHAR(50) NOT NULL,
 
 	CONSTRAINT PK_vraagnummer PRIMARY KEY (vraagnummer)
 )
