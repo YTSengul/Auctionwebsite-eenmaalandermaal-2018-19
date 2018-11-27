@@ -1,5 +1,5 @@
 <?php
-include_once "../components/connect.php";
+include_once "components/connect.php";
 ?>
 
 <!doctype html>
@@ -25,7 +25,7 @@ include_once "../components/connect.php";
                         <input type='password' placeholder='Wachtwoord'>
                     </form>
                 </div>
-            <?php include "../components/scripts.html"; ?>
+            <?php include "components/scripts.html"; ?>
         </div>
     </body>
 </html>
