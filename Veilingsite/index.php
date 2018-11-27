@@ -14,10 +14,12 @@ include_once "components/connect.php";
   </head>
 
   <body>
+
+  <?php include_once 'components/header.php'; ?>
+
     <div class="grid-container">
 
       <!-- Include the header into the page -->
-      <?php include_once 'components/header.php'; ?>
       <!-- ________________________________ -->
 
       <!-- Text for first auction type.                              -->

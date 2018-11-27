@@ -1,3 +1,58 @@
+<?php
+
+
+$hostname = 'mssql2.iproject.icasites.nl';
+$databasename = 'iproject4';
+
+try {
+    $db = new PDO("sqlsrv:Server=$hostname;Database=$databasename;ConnectionPooling=0", "iproject4", "F5H8b3Jqdg");
+    echo("Connectie met de database gelukt.");
+} catch (PDOException $e) {
+    echo("Connectie met de database mislukt. Activeer de 'getMessage' een regel hieronder om de foutmelding te lezen.");
+    echo $e->getMessage();
+}
+
+
+$valid = 0;
+$invalid = 1;
+$formulier_validation = $valid;
+$gebruikersnaam_validation = $valid;
+$wachtwoord_validation = $valid;
+$db->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
+
+
+if (isset($_POST["registreer"])) {
+
+
+    /* Gebruikersnaam definieren voor de check */
+    $gebruikersnaam = $_POST["gebruikersnaam"];
+    $sql_gebruikersnaam_check = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
+
+    try {
+
+        if ($db->query($sql_gebruikersnaam_check)) {
+        } else {
+            $gebruikersnaam_validation = $invalid;
+            $formulier_validation = $invalid;
+        }
+
+        $db = null;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    if (isset($_POST["registreer"])) {
+        if ($_POST["wachtwoord1"] = !$_POST["wachtwoord2"]) {
+            $formulier_validation = $invalid;
+            $wachtwoord_validation = $invalid;
+        }
+    }
+
+}
+
+?>
+
+
 <!doctype html>
 <html class="" lang="en" dir="ltr">
 <head>
@@ -10,48 +65,63 @@
 </head>
 
 <body>
+
+<!-- Include the header into the page -->
+<?php include_once 'components/header.php'; ?>
+
 <div class="grid-container">
 
-    <!-- Include the header into the page -->
-    <?php include_once 'components/header.php'; ?>
-    <form name="input" action="registreren.php" method="POST">
+
+    <form action="registreren.php" method="POST">
         <div class="grid-x grid-padding-x">
             <div class="medium-12 large-12 float-center cell">
                 <label>Gebruikersnaam
-                    <input type="text" placeholder="Uw gebruikersnaam">
+                    <input <?php if ($gebruikersnaam_validation == $invalid) {
+                        echo 'class="is-invalid-input"';
+                    } ?> name="gebruikersnaam" type="text" placeholder="Uw gebruikersnaam" required>
                 </label>
+                <?php if ($gebruikersnaam_validation == $invalid) {
+                    echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam bestaat al.</span>';
+                } ?>
                 <label>Wachtwoord
-                    <input type="text" placeholder="Wachtwoord">
+                    <input <?php if ($wachtwoord_validation == $invalid) {
+                        echo 'class="is-invalid-input"';
+                    } ?> name="wachtwoord1" type="password" placeholder="Wachtwoord" required>
                 </label>
                 <label>Herhaal wachtwoord
-                    <input type="text" placeholder="Herhaal wachtwoord">
+                    <input <?php if ($wachtwoord_validation == $invalid) {
+                        echo 'class="is-invalid-input"';
+                    } ?> name="wachtwoord2" type="password" placeholder="Herhaal wachtwoord" required>
+                    <?php if ($wachtwoord_validation == $invalid) {
+                        echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoorden komen niet overeen.</span>';
+                    } ?>
                 </label>
                 <label>Voornaam
-                    <input type="text" placeholder="Uw voornaam">
+                    <input name="voornaam" type="text" placeholder="Uw voornaam" required>
                 </label>
                 <label>Achternaam
-                    <input type="text" placeholder="Uw achternaam">
+                    <input name="achternaam" type="text" placeholder="Uw achternaam" required>
                 </label>
                 <label>Adresregel1
-                    <input type="text" placeholder="Uw adresregel1">
+                    <input name="adresregel1" type="text" placeholder="Uw adresregel1" required>
                 </label>
                 <label>Adresregel2
-                    <input type="text" placeholder="Uw adresregel2">
+                    <input name="adresregel2" type="text" placeholder="Uw adresregel2">
                 </label>
             </div>
             <div class="medium-6 small-6 cell">
                 <label>Plaatsnaam
-                    <input type="text" placeholder="Uw plaatsnaam">
+                    <input name="plaatsnaam" type="text" placeholder="Uw plaatsnaam" required>
                 </label>
             </div>
             <div class="medium-6 small-6 cell">
                 <label>Postcode
-                    <input type="text" placeholder="Uw postcode">
+                    <input name="postcode" type="text" placeholder="Uw postcode" required>
                 </label>
             </div>
             <div class="medium-12 cell">
                 <label>Selecteer je land
-                    <select>
+                    <select name="land">
                         <option value="Afghanistan">Afghanistan</option>
                         <option value="Albanië">Albanië</option>
                         <option value="Algerije">Algerije</option>
@@ -223,38 +293,101 @@
                     </select>
                 </label>
                 <label>Geboortedatum
-                    <input type="date">
+                    <input name="geboortedatum" type="date" required>
                 </label>
                 <label>E-mailadres
-                    <input type="email" placeholder="Uw E-mailadres">
+                    <input name="emailadres" type="email" placeholder="Uw E-mailadres" required>
                 </label>
                 <label>Veiligheidsvraag
-                    <select>
-                        <option value="Vraag1">Wat is de naam van je eerste huisdier?</option>
-                        <option value="Vraag2">Op welk basisschool heb je gezeten?</option>
-                        <option value="Vraag3">Wat is de meisjesnaam van je moeder?</option>
+                    <select name="veiligheidsvraag" required>
+                        <option value="1">Wat is de naam van je eerste huisdier?</option>
+                        <option value="2">Op welk basisschool heb je gezeten?</option>
+                        <option value="3">Wat is de meisjesnaam van je moeder?</option>
                     </select>
                 </label>
                 <label>Antwoord
-                    <input type="text" placeholder="Uw antwoord op de veiligheidsvraag">
+                    <input name="antwoord_op_veiligheidsvraag" type="text"
+                           placeholder="Uw antwoord op de veiligheidsvraag" required>
                 </label>
-                <input type="submit" value="Registreer nu!" name="Registreer" class="button expanded float-right">
+                <input type="submit" value="Registreer" name="registreer" class="button expanded float-right">
             </div>
         </div>
     </form>
 
     <?php
 
-    if (isset($_POST["'Registreer"])) {
-        echo "hello";
-    } else {
-        echo 'niksnoppes';
-    }
+    if (isset($_POST["registreer"])) {
 
+        $voornaam = $_POST["voornaam"];
+        $achternaam = $_POST["achternaam"];
+        $adresregel1 = $_POST["adresregel1"];
+        $adresregel2 = $_POST["adresregel2"];
+        $postcode = $_POST["postcode"];
+        $plaatsnaam = $_POST["plaatsnaam"];
+        $land = $_POST["land"];
+        $geboortedatum = $_POST["geboortedatum"];
+        $emailadres = $_POST["emailadres"];
+        $wachtwoord1 = $_POST["wachtwoord1"];
+        $veiligheidsvraag = $_POST["veiligheidsvraag"];
+        $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
+        print($gebruikersnaam) . "<br>";
+        print($voornaam) . "<br>";
+        print($achternaam) . "<br>";
+        print($adresregel1) . "<br>";
+        print($adresregel2) . "<br>";
+        print($postcode) . "<br>";
+        print($plaatsnaam) . "<br>";
+        print($land) . "<br>";
+        print($geboortedatum) . "<br>";
+        print($emailadres) . "<br>";
+        print($wachtwoord1) . "<br>";
+        print($veiligheidsvraag) . "<br>";
+        print($antwoord_op_veiligheidsvraag) . "<br>";
+
+        $sql_registreer = "insert into gebruiker 
+([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values 
+(':gebruikersnaam', ':voornaam', ':achternaam', ':adresregel1', ':adresregel2', ':postcode', ':plaatsnaam', ':land', ':geboortedatum', ':emailadres', ':wachtwoord1', ':veiligheidsvraag', ':antwoord_op_veiligheidsvraag')";
+
+        echo '<br>' . $sql_registreer . '<br>';
+        print_r('<br>$DB GEGEVENS<br>' . $db . '<br>');
+        var_dump($db);
+        print_r($_POST);
+        $stmt = $db->prepare("insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (':gebruikersnaam', ':voornaam', ':achternaam', ':adresregel1', ':adresregel2', ':postcode', ':plaatsnaam', ':land', ':geboortedatum', ':emailadres', ':wachtwoord1', ':veiligheidsvraag', ':antwoord_op_veiligheidsvraag')");
+
+        if ($stmt) {
+            $stmt->bindParam(':voornaam', $voornaam);
+            $stmt->bindParam(':achternaam', $achternaam);
+            $stmt->bindParam(':adresregel1', $adresregel1);
+            $stmt->bindParam(':adresregel2', $adresregel2);
+            $stmt->bindParam(':postcode', $postcode);
+            $stmt->bindParam(':plaatsnaam', $plaatsnaam);
+            $stmt->bindParam(':land', $land);
+            $stmt->bindParam(':geboortedatum', $geboortedatum);
+            $stmt->bindParam(':emailadres', $emailadres);
+            $stmt->bindParam(':wachtwoord1', $wachtwoord1);
+            $stmt->bindParam(':veiligheidsvraag', $veiligheidsvraag);
+            $stmt->bindParam(':antwoord_op_veiligheidsvraag', $antwoord_op_veiligheidsvraag);
+
+            try {
+                if ($stmt->execute()) {
+                    echo "succesvol goegevoegd aan database";
+                } else {
+                    echo "niet toegevoegd aan database";
+                }
+
+                $db = null;
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
+        }
+    }
     ?>
 
-
 </div>
+
+<?php include "components/scripts.html"; ?>
+
 </body>
 
 
