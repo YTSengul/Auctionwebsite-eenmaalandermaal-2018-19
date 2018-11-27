@@ -2,8 +2,6 @@
 include_once "components/connect.php";
 ?>
 
-<?php include_once 'components/header.php'; ?>
-
 <!doctype html>
 <html class="" lang="en" dir="ltr">
   <head>
@@ -16,6 +14,9 @@ include_once "components/connect.php";
   </head>
 
   <body>
+
+  <?php include_once 'components/header.php'; ?>
+
     <div class="grid-container">
 
       <!-- Include the header into the page -->

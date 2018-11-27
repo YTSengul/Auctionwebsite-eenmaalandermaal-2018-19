@@ -35,6 +35,8 @@ if (isset($_POST["registreer"])) {
 }
 
 ?>
+
+
 <!doctype html>
 <html class="" lang="en" dir="ltr">
 <head>
@@ -47,10 +49,12 @@ if (isset($_POST["registreer"])) {
 </head>
 
 <body>
+
+<!-- Include the header into the page -->
+<?php include_once 'components/header.php'; ?>
+
 <div class="grid-container">
 
-    <!-- Include the header into the page -->
-    <?php include_once 'components/header.php'; ?>
 
     <form action="registreren.php" method="POST">
         <div class="grid-x grid-padding-x">

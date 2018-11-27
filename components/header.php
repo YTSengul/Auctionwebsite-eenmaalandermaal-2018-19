@@ -1,12 +1,11 @@
-
-    <div class="medium-12 cell header">
-        <h1>Eenmaal Andermaal</h1>
-        <ul class="menu align-right">
-            <li><a href="login.php">Inloggen</a></li>
-            <li><p>|</p></li>
-            <li><a href="registreren.php">Registreren</a></li>
-        </ul>
-    </div>
+<div class="medium-12 cell header">
+    <h1>Eenmaal Andermaal</h1>
+    <ul class="menu align-right">
+        <li><a href="login.php">Inloggen</a></li>
+        <li><p>|</p></li>
+        <li><a href="registreren.php">Registreren</a></li>
+    </ul>
+</div>
 
 <div class="grid-x grid-padding-x">
     <div class="medium-12 cell top-nav">
