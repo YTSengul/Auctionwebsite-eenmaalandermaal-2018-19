@@ -42,7 +42,7 @@ include_once "components/connect.php";
           <input type="password" placeholder="Herhaal wachtwoord">
         </form>
       </div>
-      fix
+
     <?php include "components/scripts.html"; ?>
     </div>
   </body>

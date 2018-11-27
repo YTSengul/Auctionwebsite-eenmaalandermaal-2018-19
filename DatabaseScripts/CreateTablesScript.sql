@@ -71,4 +71,3 @@ CREATE TABLE Beheerder
 	CONSTRAINT PK_Beheerder PRIMARY KEY (gebruikersnaam)
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
 )
---fix--

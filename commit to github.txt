@@ -22,4 +22,3 @@ enter a new for the commit
 press escape
 
 :wq)
-fix

@@ -14,4 +14,3 @@
 <?php
   include_once "rubriekenBoom.php";
  ?>
-fix

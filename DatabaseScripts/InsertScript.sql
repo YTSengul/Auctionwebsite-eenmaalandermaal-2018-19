@@ -3437,4 +3437,3 @@ insert into vraag values (1, 'Wat is de naam van je eerste huisdier?'),
 (2, 'Op welk basisschool heb je gezeten?'),
 (3, 'Wat is de meisjesnaam van je moeder?')
 GO
---fix--

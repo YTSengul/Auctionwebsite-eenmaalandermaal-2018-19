@@ -10362,4 +10362,3 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
-/*fix*/

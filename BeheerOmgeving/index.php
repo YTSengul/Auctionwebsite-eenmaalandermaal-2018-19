@@ -29,4 +29,3 @@ include_once "components/connect.php";
         </div>
     </body>
 </html>
-fix
