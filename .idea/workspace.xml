@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2f39eada-e093-45c0-9349-033f182d7643" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/I-Project-2018-2019.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Veilingsite.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/jenni.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/I-Project-2018-2019.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/Veilingsite.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/deployment.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/dictionaries/jenni.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Veilingsite/.idea/webServers.xml" beforeDir="false" />
-    </list>
+    <list default="true" id="2f39eada-e093-45c0-9349-033f182d7643" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +14,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17">
-              <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+              <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -127,12 +104,12 @@
       <workItem from="1543273039740" duration="5956000" />
       <workItem from="1543305195469" duration="1855000" />
       <workItem from="1543318057737" duration="95000" />
-      <workItem from="1543321343866" duration="457000" />
+      <workItem from="1543321343866" duration="510000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8363000" />
+    <option name="totallyTimeSpent" value="8416000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -170,7 +147,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+          <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
         </state>
       </provider>
     </entry>
