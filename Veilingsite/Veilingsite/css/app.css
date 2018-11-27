@@ -1,5 +1,5 @@
 body{
-    background-color: #FFF;
+  background-color: #F0F0F0;
 }
 
 .top-nav > div > ul {
@@ -23,11 +23,6 @@ body{
     overflow: hidden;
     color: white;
     font-size: 0.9rem;
-}
-
-.top-nav {
-    margin:0!important;
-    padding: 0!important;
 }
 
 .cell > p > img {
@@ -61,7 +56,3 @@ body{
   background-color: #F2552C;
 }
 
-body > .grid-container {
-    background-color: #F0F0F0;
-    box-shadow: 0px 0px 5px #a9a9a9;
-}

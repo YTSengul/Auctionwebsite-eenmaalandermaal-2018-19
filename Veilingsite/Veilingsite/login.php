@@ -44,7 +44,6 @@ include_once "components/connect.php";
       </div>
 
     <?php include "components/scripts.html"; ?>
-
     </div>
   </body>
 </html>
