@@ -1,14 +1,15 @@
-/*Local Use
+
 DROP DATABASE Iproject
 GO
 CREATE DATABASE Iproject
 GO
-*/
+USE Iproject
+GO
 
 drop table Rubriek
+drop table Gebruikerstelefoon
 drop table Gebruiker
 drop table Vraag
-drop table Gebruikerstelefoon
 
 CREATE TABLE Rubriek
 (
@@ -41,6 +42,7 @@ CREATE TABLE Gebruiker
 	land VARCHAR(50) NOT NULL,
 	datum DATE NOT NULL,
 	mailbox VARCHAR(50) NOT NULL UNIQUE,
+	wachtwoord VARCHAR(20) NOT NULL,
 	vraagnummer TINYINT NOT NULL, --0 tot 255 zou genoeg moeten.
 	antwoordtekst VARCHAR(25) NOT NULL,
 	Verkoper BIT NOT NULL DEFAULT 0, --Bij registratie is een gebruiker nog geen verkoper.
