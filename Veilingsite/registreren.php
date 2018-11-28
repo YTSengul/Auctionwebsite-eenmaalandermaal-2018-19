@@ -10,7 +10,7 @@ $formulier_validation = $valid;
 $gebruikersnaam_validation = $valid;
 $emailadres_validation = $valid;
 $wachtwoord_validation = $valid;
-$db->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
+// $db->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
 
 
 if (isset($_POST["registreer"])) {
@@ -66,8 +66,8 @@ if (isset($_POST["registreer"])) {
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EenmaalAndermaal</title>
-    <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="foundation/css/foundation.css">
+    <link rel="stylesheet" href="foundation/css/app.css">
 </head>
 
 <body>
@@ -404,7 +404,3 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
 ?>
 
 <?php include "components/scripts.html"; ?>
-
-
-
-

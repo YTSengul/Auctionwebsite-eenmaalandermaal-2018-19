@@ -67,3 +67,35 @@ body > .grid-container {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.MegaMenu{
+  top: 200% !important;
+  right: 50% !important;
+  left: -650% !important;
+  min-width: 700% !important;
+}
+
+hr {
+  border: 1px solid black;
+  margin: 0;
+  padding: 0;
+}
+
+.hoofdRubriek{
+  font-size: 1.1  em;
+  color: #F2552C;
+}
+
+.subRubriek{
+  color: #FF9122;
+}
+
+.rubriekSpacing{
+  margin-bottom: 15px;
+}
+
+.colourAndBoxMegaMenu{
+  background-color: #F0F0F0;
+  border: 1px solid black;
+  border-radius: 3px;
+}
