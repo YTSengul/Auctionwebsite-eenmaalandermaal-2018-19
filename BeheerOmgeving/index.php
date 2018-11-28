@@ -1,5 +1,8 @@
 <?php
 include_once "components/connect.php";
+include_once "components/header.php";
+include_once "components/functions.php";
+
 ?>
 
 <!doctype html>

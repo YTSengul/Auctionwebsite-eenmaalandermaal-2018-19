@@ -1,5 +1,4 @@
 <?php
-echo 'connect check-';
 
 $hostname = 'mssql2.iproject.icasites.nl'; // naam van server
 $dbname = 'iproject4'; // naam van database
