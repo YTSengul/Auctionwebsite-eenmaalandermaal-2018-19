@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "components/connect.php";
 ?>
 
@@ -9,8 +10,8 @@ include_once "components/connect.php";
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EenmaalAndermaal</title>
-    <link rel="stylesheet" href="foundation/css/foundation.css">
-    <link rel="stylesheet" href="foundation/css/app.css">
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
   </head>
 
   <body>

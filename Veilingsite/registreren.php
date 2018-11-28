@@ -1,5 +1,4 @@
 <?php
-
 /* Zonder dit werkt het doorsturen naar de login pagina niet */
 ob_start();
 /*-----------------------------------------------------------*/
@@ -9,31 +8,53 @@ $valid = 0;
 $invalid = 1;
 $formulier_validation = $valid;
 $gebruikersnaam_validation = $valid;
+$emailadres_validation = $valid;
 $wachtwoord_validation = $valid;
 $db->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
 
 
 if (isset($_POST["registreer"])) {
 
+    /* Mailbox definieren voor de check */
+    $emailadres = $_POST["emailadres"];
+    $sql_emailadres_check_query = "select * from gebruiker where mailbox = '$emailadres'";
+    $sql_emailadres_check = $db->prepare($sql_emailadres_check_query);
+    $sql_emailadres_check->execute();
+    $sql_emailadres_check->fetchAll(PDO::FETCH_NUM);
+
+    $rowcount = $sql_emailadres_check->rowCount();
+
+    if ($sql_emailadres_check->rowCount() > 0) {
+        $emailadres_validation = $invalid;
+        $formulier_validation = $invalid;
+    }
+
     /* Gebruikersnaam definieren voor de check */
     $gebruikersnaam = $_POST["gebruikersnaam"];
     $sql_gebruikersnaam_check_query = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
-    $sql_gebruikersnaam_check = $db->query($sql_gebruikersnaam_check_query);
+    $sql_gebruikersnaam_check = $db->prepare($sql_gebruikersnaam_check_query);
+    $sql_gebruikersnaam_check->execute();
+    $sql_gebruikersnaam_check->fetchAll(PDO::FETCH_NUM);
 
-    if (!$sql_gebruikersnaam_check) {
+    $rowcount = $sql_gebruikersnaam_check->rowCount();
+
+    if ($sql_gebruikersnaam_check->rowCount() > 0) {
         $gebruikersnaam_validation = $invalid;
         $formulier_validation = $invalid;
     }
 
 
-    if (isset($_POST["registreer"])) {
-        if ($_POST["wachtwoord1"] == $_POST["wachtwoord2"]) {
-            $formulier_validation = $valid;
-        } else {
-            $wachtwoord_validation = $invalid;
-            $formulier_validation = $invalid;
-        }
+
+    $wachtwoordcheck1 = $_POST["wachtwoord1"];
+    $wachtwoordcheck2 = $_POST["wachtwoord2"];
+
+
+    if ($wachtwoordcheck1 != $wachtwoordcheck2) {
+        $wachtwoord_validation = $invalid;
+        $formulier_validation = $invalid;
     }
+
+
 
 }
 
@@ -283,8 +304,13 @@ if (isset($_POST["registreer"])) {
                     <input name="geboortedatum" type="date" required>
                 </label>
                 <label>E-mailadres
-                    <input name="emailadres" type="email" placeholder="Uw E-mailadres" required>
+                    <input <?php if ($emailadres_validation == $invalid) {
+                        echo 'class="is-invalid-input"';
+                    } ?> name="emailadres" type="email" placeholder="Uw E-mailadres" required>
                 </label>
+                <?php if ($emailadres_validation == $invalid) {
+                    echo '<span class="form-error is-visible" id="exemple2Error">Er bestaat al een account met deze emailadres.</span>';
+                } ?>
                 <label>Veiligheidsvraag
                     <select name="veiligheidsvraag" required>
                         <option value="1">Wat is de naam van je eerste huisdier?</option>
@@ -306,7 +332,7 @@ if (isset($_POST["registreer"])) {
 </body>
 <?php
 
-if (isset($_POST["registreer"])) {
+if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
 
     $voornaam = $_POST["voornaam"];
     $achternaam = $_POST["achternaam"];
@@ -320,6 +346,8 @@ if (isset($_POST["registreer"])) {
     $wachtwoord1 = $_POST["wachtwoord1"];
     $veiligheidsvraag = $_POST["veiligheidsvraag"];
     $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
+    $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
 
     /*
     print($gebruikersnaam) . "<br>";
@@ -352,7 +380,7 @@ if (isset($_POST["registreer"])) {
         $stmt->bindParam(":land", $land, PDO::PARAM_STR);
         $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
         $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
-        $stmt->bindParam(":wachtwoord1", $wachtwoord1, PDO::PARAM_STR);
+        $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
         $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
         $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord_op_veiligheidsvraag, PDO::PARAM_STR);
         $gebruiker_registreren = $stmt->execute();
@@ -375,3 +403,7 @@ if (isset($_POST["registreer"])) {
 ?>
 
 <?php include "components/scripts.html"; ?>
+
+
+
+
