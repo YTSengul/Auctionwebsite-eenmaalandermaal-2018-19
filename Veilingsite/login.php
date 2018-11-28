@@ -5,12 +5,15 @@ if ($_GET["registratie"] = !null) {
     $new_registered = $_GET["registratie"];
 }
 
+$valid = 0;
+$invalid = 1;
+$login_verification = $valid;
+$username_verification = $valid;
+$password_verification = $valid;
+
 if (isset($_POST["login"])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];
     $wachtwoord = $_POST['wachtwoord'];
-    $valid = 0;
-    $invalid = 1;
-    $login_verification = $valid;
 
     $sql_login_check_query = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
     $sql_login_check = $db->prepare($sql_login_check_query);
@@ -23,10 +26,10 @@ if (isset($_POST["login"])) {
             $_SESSION['ingelogde_gebruiker'] = $gebruikersnaam;
             header('location:index.php');
         } else {
-            $login_verification = $invalid;
+            $password_verification = $invalid;
         }
     } else {
-        echo "bestaat niet";
+        $username_verification = $invalid;
     }
 }
 
@@ -56,15 +59,17 @@ if (isset($_POST["login"])) {
             <h5>Inloggen</h5>
             <form action="login.php" method="POST">
                 <label>Gebruikersnaam </label>
-                <input <?php if ($login_verification == $invalid) {
+                <input <?php if ($username_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='text' name="gebruikersnaam" placeholder='Gebruikersnaam'>
                 <label>Wachtwoord</label>
-                <input <?php if ($login_verification == $invalid) {
+                <input <?php if ($password_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='password' name="wachtwoord" placeholder='Wachtwoord'>
-                <?php if ($login_verification == $invalid) {
-                    echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoord/gebruikersnaam komen niet overeen.</span>';
+                <?php if ($username_verification == $invalid) {
+                    echo '<span class="form-error is-visible" id="exemple2Error">Gebruikersnaam bestaat niet.</span>';
+                } else if ($password_verification == $invalid) {
+                    echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoord is onjuist.</span>';
                 } ?>
                 <input type="submit" value="Login" name="login" class="button expanded float-right">
             </form>
