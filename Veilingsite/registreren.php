@@ -44,7 +44,6 @@ if (isset($_POST["registreer"])) {
     }
 
 
-
     $wachtwoordcheck1 = $_POST["wachtwoord1"];
     $wachtwoordcheck2 = $_POST["wachtwoord2"];
 
@@ -53,7 +52,6 @@ if (isset($_POST["registreer"])) {
         $wachtwoord_validation = $invalid;
         $formulier_validation = $invalid;
     }
-
 
 
 }
@@ -78,8 +76,11 @@ if (isset($_POST["registreer"])) {
 <?php include_once 'components/header.php'; ?>
 
 <div class="grid-container">
-
-
+    <div class="grid-x grid-padding-x">
+        <div class="medium-12 large-12 cell">
+            <h2 class="registreren_titel" >Registreren</h2>
+        </div>
+    </div>
     <form action="registreren.php" method="POST">
         <div class="grid-x grid-padding-x">
             <div class="medium-12 large-12 float-center cell">
