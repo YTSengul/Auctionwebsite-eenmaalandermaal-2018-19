@@ -1,17 +1,9 @@
 <?php
 
-
-$hostname = 'mssql2.iproject.icasites.nl';
-$databasename = 'iproject4';
-
-try {
-    $db = new PDO("sqlsrv:Server=$hostname;Database=$databasename;ConnectionPooling=0", "iproject4", "F5H8b3Jqdg");
-    echo("Connectie met de database gelukt.");
-} catch (PDOException $e) {
-    echo("Connectie met de database mislukt. Activeer de 'getMessage' een regel hieronder om de foutmelding te lezen.");
-    echo $e->getMessage();
-}
-
+/* Zonder dit werkt het doorsturen naar de login pagina niet */
+ob_start();
+/*-----------------------------------------------------------*/
+include_once "components/connect.php";
 
 $valid = 0;
 $invalid = 1;
@@ -23,28 +15,23 @@ $db->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
 
 if (isset($_POST["registreer"])) {
 
-
     /* Gebruikersnaam definieren voor de check */
     $gebruikersnaam = $_POST["gebruikersnaam"];
-    $sql_gebruikersnaam_check = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
+    $sql_gebruikersnaam_check_query = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
+    $sql_gebruikersnaam_check = $db->query($sql_gebruikersnaam_check_query);
 
-    try {
-
-        if ($db->query($sql_gebruikersnaam_check)) {
-        } else {
-            $gebruikersnaam_validation = $invalid;
-            $formulier_validation = $invalid;
-        }
-
-        $db = null;
-    } catch (PDOException $e) {
-        echo $e->getMessage();
+    if (!$sql_gebruikersnaam_check) {
+        $gebruikersnaam_validation = $invalid;
+        $formulier_validation = $invalid;
     }
 
+
     if (isset($_POST["registreer"])) {
-        if ($_POST["wachtwoord1"] = !$_POST["wachtwoord2"]) {
-            $formulier_validation = $invalid;
+        if ($_POST["wachtwoord1"] == $_POST["wachtwoord2"]) {
+            $formulier_validation = $valid;
+        } else {
             $wachtwoord_validation = $invalid;
+            $formulier_validation = $invalid;
         }
     }
 
@@ -60,8 +47,8 @@ if (isset($_POST["registreer"])) {
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EenmaalAndermaal</title>
-    <link rel="stylesheet" href="foundation/css/foundation.css">
-    <link rel="stylesheet" href="foundation/css/app.css">
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body>
@@ -314,81 +301,77 @@ if (isset($_POST["registreer"])) {
         </div>
     </form>
 
-    <?php
-
-    if (isset($_POST["registreer"])) {
-
-        $voornaam = $_POST["voornaam"];
-        $achternaam = $_POST["achternaam"];
-        $adresregel1 = $_POST["adresregel1"];
-        $adresregel2 = $_POST["adresregel2"];
-        $postcode = $_POST["postcode"];
-        $plaatsnaam = $_POST["plaatsnaam"];
-        $land = $_POST["land"];
-        $geboortedatum = $_POST["geboortedatum"];
-        $emailadres = $_POST["emailadres"];
-        $wachtwoord1 = $_POST["wachtwoord1"];
-        $veiligheidsvraag = $_POST["veiligheidsvraag"];
-        $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
-
-        print($gebruikersnaam) . "<br>";
-        print($voornaam) . "<br>";
-        print($achternaam) . "<br>";
-        print($adresregel1) . "<br>";
-        print($adresregel2) . "<br>";
-        print($postcode) . "<br>";
-        print($plaatsnaam) . "<br>";
-        print($land) . "<br>";
-        print($geboortedatum) . "<br>";
-        print($emailadres) . "<br>";
-        print($wachtwoord1) . "<br>";
-        print($veiligheidsvraag) . "<br>";
-        print($antwoord_op_veiligheidsvraag) . "<br>";
-
-        $sql_registreer = "insert into gebruiker 
-([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values 
-(':gebruikersnaam', ':voornaam', ':achternaam', ':adresregel1', ':adresregel2', ':postcode', ':plaatsnaam', ':land', ':geboortedatum', ':emailadres', ':wachtwoord1', ':veiligheidsvraag', ':antwoord_op_veiligheidsvraag')";
-
-        echo '<br>' . $sql_registreer . '<br>';
-        print_r('<br>$DB GEGEVENS<br>' . $db . '<br>');
-        var_dump($db);
-        print_r($_POST);
-        $stmt = $db->prepare("insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (':gebruikersnaam', ':voornaam', ':achternaam', ':adresregel1', ':adresregel2', ':postcode', ':plaatsnaam', ':land', ':geboortedatum', ':emailadres', ':wachtwoord1', ':veiligheidsvraag', ':antwoord_op_veiligheidsvraag')");
-
-        if ($stmt) {
-            $stmt->bindParam(':voornaam', $voornaam);
-            $stmt->bindParam(':achternaam', $achternaam);
-            $stmt->bindParam(':adresregel1', $adresregel1);
-            $stmt->bindParam(':adresregel2', $adresregel2);
-            $stmt->bindParam(':postcode', $postcode);
-            $stmt->bindParam(':plaatsnaam', $plaatsnaam);
-            $stmt->bindParam(':land', $land);
-            $stmt->bindParam(':geboortedatum', $geboortedatum);
-            $stmt->bindParam(':emailadres', $emailadres);
-            $stmt->bindParam(':wachtwoord1', $wachtwoord1);
-            $stmt->bindParam(':veiligheidsvraag', $veiligheidsvraag);
-            $stmt->bindParam(':antwoord_op_veiligheidsvraag', $antwoord_op_veiligheidsvraag);
-
-            try {
-                if ($stmt->execute()) {
-                    echo "succesvol goegevoegd aan database";
-                } else {
-                    echo "niet toegevoegd aan database";
-                }
-
-                $db = null;
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-            }
-        }
-    }
-    ?>
-
 </div>
 
-<?php include "components/scripts.html"; ?>
-
 </body>
+<?php
+
+if (isset($_POST["registreer"])) {
+
+    $voornaam = $_POST["voornaam"];
+    $achternaam = $_POST["achternaam"];
+    $adresregel1 = $_POST["adresregel1"];
+    $adresregel2 = $_POST["adresregel2"];
+    $postcode = $_POST["postcode"];
+    $plaatsnaam = $_POST["plaatsnaam"];
+    $land = $_POST["land"];
+    $geboortedatum = $_POST["geboortedatum"];
+    $emailadres = $_POST["emailadres"];
+    $wachtwoord1 = $_POST["wachtwoord1"];
+    $veiligheidsvraag = $_POST["veiligheidsvraag"];
+    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
+    /*
+    print($gebruikersnaam) . "<br>";
+    print($voornaam) . "<br>";
+    print($achternaam) . "<br>";
+    print($adresregel1) . "<br>";
+    print($adresregel2) . "<br>";
+    print($postcode) . "<br>";
+    print($plaatsnaam) . "<br>";
+    print($land) . "<br>";
+    print($geboortedatum) . "<br>";
+    print($emailadres) . "<br>";
+    print($wachtwoord1) . "<br>";
+    print($veiligheidsvraag) . "<br>";
+    print($antwoord_op_veiligheidsvraag) . "<br>";
+    */
+
+    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
+
+    $stmt = $db->prepare($sql_registreer);
+
+    if ($stmt) {
+        $stmt->bindParam(":gebruikersnaam", $gebruikersnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":voornaam", $voornaam, PDO::PARAM_STR);
+        $stmt->bindParam(":achternaam", $achternaam, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel1", $adresregel1, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel2", $adresregel2, PDO::PARAM_STR);
+        $stmt->bindParam(":postcode", $postcode, PDO::PARAM_STR);
+        $stmt->bindParam(":plaatsnaam", $plaatsnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":land", $land, PDO::PARAM_STR);
+        $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
+        $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
+        $stmt->bindParam(":wachtwoord1", $wachtwoord1, PDO::PARAM_STR);
+        $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
+        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord_op_veiligheidsvraag, PDO::PARAM_STR);
+        $gebruiker_registreren = $stmt->execute();
+
+        try {
+            if ($gebruiker_registreren) {
+                /*echo "<br>succesvol toegevoegd aan database";*/
+                header('location:login.php?registratie=true');
+            } else {
+                /*echo "<br>niet toegevoegd aan database";*/
+            }
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+}
 
 
+?>
 
+<?php include "components/scripts.html"; ?>
