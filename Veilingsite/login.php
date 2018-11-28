@@ -8,8 +8,6 @@ if ($_GET["registratie"] = !null) {
 $valid = 0;
 $invalid = 1;
 $login_verification = $valid;
-$username_verification = $valid;
-$password_verification = $valid;
 
 if (isset($_POST["login"])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];
@@ -26,10 +24,10 @@ if (isset($_POST["login"])) {
             $_SESSION['ingelogde_gebruiker'] = $gebruikersnaam;
             header('location:index.php');
         } else {
-            $password_verification = $invalid;
+            $login_verification = $invalid;
         }
     } else {
-        $username_verification = $invalid;
+        $login_verification = $invalid;
     }
 }
 
@@ -59,17 +57,15 @@ if (isset($_POST["login"])) {
             <h5>Inloggen</h5>
             <form action="login.php" method="POST">
                 <label>Gebruikersnaam </label>
-                <input <?php if ($username_verification == $invalid) {
+                <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='text' name="gebruikersnaam" placeholder='Gebruikersnaam'>
                 <label>Wachtwoord</label>
-                <input <?php if ($password_verification == $invalid) {
+                <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='password' name="wachtwoord" placeholder='Wachtwoord'>
-                <?php if ($username_verification == $invalid) {
-                    echo '<span class="form-error is-visible" id="exemple2Error">Gebruikersnaam bestaat niet.</span>';
-                } else if ($password_verification == $invalid) {
-                    echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoord is onjuist.</span>';
+                <?php if ($login_verification == $invalid) {
+                    echo '<span class="form-error is-visible" id="exemple2Error">Gebruikersnaam/wachtwoord is onjuist.</span>';
                 } ?>
                 <input type="submit" value="Login" name="login" class="button expanded float-right">
             </form>
