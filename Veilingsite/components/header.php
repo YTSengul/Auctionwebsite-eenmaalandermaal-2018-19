@@ -21,7 +21,6 @@
     <!-- Close button -->
     <button class="menu-icon float-right opened-icon" type="button" data-toggle="ecommerce-header"></button>
 
-
     <ul class="vertical menu">
         <li class="main-nav-link"><a href="#">Category 1</a></li>
     </ul>
