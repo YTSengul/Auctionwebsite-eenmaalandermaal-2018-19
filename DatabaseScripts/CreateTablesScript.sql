@@ -71,3 +71,11 @@ CREATE TABLE Beheerder
 	CONSTRAINT PK_Beheerder PRIMARY KEY (gebruikersnaam)
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
 )
+
+CREATE TABLE Categorieen (
+	ID INT NOT NULL,
+	Name VARCHAR(100) NOT NULL,
+	Parent INT NULL
+	CONSTRAINT pk_categorieen PRIMARY KEY (ID)
+)
+GO
