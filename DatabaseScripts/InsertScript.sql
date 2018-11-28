@@ -2,14 +2,6 @@
 USE iproject4
 GO
 
-CREATE TABLE Categorieen (
-	ID INT NOT NULL,
-	Name VARCHAR(100) NOT NULL,
-	Parent INT NULL
-	CONSTRAINT pk_categorieen PRIMARY KEY (ID)
-)
-GO
-
 INSERT Categorieen (ID,Name,Parent) VALUES
 (-1,'Root',NULL),
 (1,'Verzamelen',-1),
