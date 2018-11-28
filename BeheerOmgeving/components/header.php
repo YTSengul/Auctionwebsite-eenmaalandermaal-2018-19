@@ -1,7 +1,7 @@
-<div class="grid-x grid-padding-x">
+<div class="grid-x">
   <div class="medium-12 cell">
     <div class="header">
-      <h1>Beheeromgeving Eenmaal Andermaal</h1>
+      <h1><a href="index.php">Eenmaal Andermaal</a></h1>
       <ul class="menu align-right">
         <li><a href="login.php">Inloggen</a></li>
         <li><p>|</p></li>
@@ -10,7 +10,3 @@
     </div>
   </div>
 </div>
-
-<?php
-  include_once "rubriekenBoom.php";
- ?>
