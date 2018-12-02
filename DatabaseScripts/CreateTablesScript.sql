@@ -8,6 +8,7 @@ GO
 */
 
 drop table Rubriek
+drop table Voorwerp
 drop table Gebruikerstelefoon
 drop table Beheerder
 drop table Gebruiker
@@ -21,7 +22,32 @@ CREATE TABLE Rubriek
 	Volgnr TINYINT NOT NULL DEFAULT 0, --0 tot 255, zou genoeg moeten zijn.
 
 	CONSTRAINT PK_Rubriek PRIMARY KEY (rubrieknummer),
-	CONSTRAINT FK_Rubriek_rubrieknummer_Rubriek_Rubriek FOREIGN KEY (Rubriek) REFERENCES Rubriek (rubrieknummer)
+	CONSTRAINT FK_Rubriek_rubrieknummer_Rubriek_Rubriek FOREIGN KEY (Rubriek) REFERENCES Rubriek (Rubrieknummer)
+)
+
+create table Voorwerp (
+voorwerpnummer INT NOT NULL,
+titel varchar (40) NOT NULL,
+beschrijving varchar (450) NOT NULL,
+startprijs dec(8,2) NOT NULL,
+betalingswijze varchar (25) NOT NULL,
+betalingsinstrutie varchar (100) NULL,
+plaatsnaam varchar (50) NOT NULL,
+land varchar (50) NOT NULL,
+looptijd int NOT NULL,
+looptijdbegindag date NOT NULL,
+looptijdbegintijdstip time NOT NULL,
+verzendkosten dec(5,2) NULL,
+verzendinstructies varchar NULL,
+verkoper varchar (10) NOT NULL,
+koper varchar NULL,
+looptijdeindedag date NOT NULL,
+looptijdeindetijdstip time NOT NULL,
+veilinggesloten bit NOT NULL,
+verkoopprijs dec(8,2) NULL
+
+	CONSTRAINT PK_voorwerp_vraagnummer PRIMARY KEY (voorwerpnummer)
+
 )
 
 CREATE TABLE Vraag
