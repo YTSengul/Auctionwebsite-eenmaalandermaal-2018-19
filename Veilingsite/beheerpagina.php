@@ -11,7 +11,7 @@ if (isset($_GET['rubriek_hernoem'])) {
     $nummer_van_hernoem_rubriek = $_GET['nummer_van_hernoem_rubriek'];
 
     $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
-    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
+    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubri21qek_query);
 
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
