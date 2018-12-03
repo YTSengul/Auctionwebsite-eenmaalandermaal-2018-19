@@ -1,8 +1,8 @@
-body{
-    background-color: #FFF;
+body {
+  background-color: #FFF;
 }
 
-.top-nav > div > ul {
+/* .top-nav > div > ul {
     display: flex;
     flex-direction: row;
     padding: 3px;
@@ -28,51 +28,59 @@ body{
 .top-nav {
     margin:0!important;
     padding: 0!important;
-}
+} */
 
-.cell > p > img {
-    display: block;
-    margin: auto;
+.cell>p>img {
+  display: block;
+  margin: auto;
 }
 
 .veiling-sluit-index {
-    margin: 5px;
-    padding: 10px;
-    background-color: #FFFFFF;
-    box-shadow: 0px 0px 5px #F2552C;
-    /* border: 2px solid #FF9122; */
-    border-radius: 3px;
+  margin: 5px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 5px #F2552C;
+  /* border: 2px solid #FF9122; */
+  border-radius: 3px;
 }
 
-.veiling-sluit-index > div > .timer {
-    color: firebrick;
-    font-size: large;
+.veiling-sluit-index>div>.timer {
+  color: firebrick;
+  font-size: large;
 }
 
-.demo-toggle-title {
+/* .demo-toggle-title {
     margin-top: 0.5rem;
-}
+} */
 
 .homepage-titel {
-    margin: 1rem 0 0 1rem;
+  margin: 1rem 0 0 1rem;
 }
 
+/* first header */
 .header {
   background-color: #F2552C;
 }
 
-body > .grid-container {
-    background-color: #F0F0F0;
-    box-shadow: 0px 0px 5px #a9a9a9;
-    padding-top: 20px;
-    padding-bottom: 20px;
+/* Second header */
+.colourHeader {
+  background-color: #d4d2d1 !important;
+  border-top: 1px solid #b5b3b2 !important;
+  border-bottom: 2px solid #b5b3b2 !important;
 }
 
-.MegaMenu{
-  top: 200% !important;
-  right: 50% !important;
-  left: -650% !important;
-  min-width: 700% !important;
+body>.grid-container {
+  background-color: #F0F0F0;
+  box-shadow: 0px 0px 5px #a9a9a9;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.MegaMenu {
+  top: 120% !important;
+  right: 12.5% !important;
+  left: 12.5% !important;
+  width: 75% !important;
 }
 
 hr {
@@ -81,21 +89,321 @@ hr {
   padding: 0;
 }
 
-.hoofdRubriek{
-  font-size: 1.1  em;
+.hoofdRubriek {
+  font-size: 1.1 em;
   color: #F2552C;
 }
 
-.subRubriek{
+.subRubriek {
   color: #FF9122;
 }
 
-.rubriekSpacing{
+.rubriekSpacing {
   margin-bottom: 15px;
 }
 
-.colourAndBoxMegaMenu{
+.colourAndBoxMegaMenu {
   background-color: #F0F0F0;
-  border: 1px solid black;
   border-radius: 3px;
+  border: 1px solid black;
 }
+
+.dropdown.menu>li.is-dropdown-submenu-parent>a::after {
+  display: none;
+}
+
+.spacingHeaderRubrieken {
+  margin: 10px 15px 10px 15px !important;
+}
+
+.noPadding {
+  padding: 0px !important;
+}
+
+.noMargins {
+  margin: 0px !important;
+}
+
+.noBorder {
+  border: 0px;
+}
+
+.marginAndPaddingA {
+  padding: 10px !important;
+  margin: 0px !important;
+}
+
+.centerText {
+  display: flex !important;
+  justify-content: space-around !important;
+}
+
+.aaa {
+  top: 100%;
+  bottom: 0px;
+}
+
+.test {
+  position: static;
+}
+
+.centeraaa {
+  line-height: 1 !important;
+}
+
+.header a {
+  color: #FFFFFF !important;
+}
+
+.header a:hover {
+  color: #FFFFFF !important;
+}
+
+a.specialheader:hover {
+  color: #000000 !important;
+}
+
+a.specialsomething:hover {
+  color: #F2552C !important;
+}
+
+.header a:active {
+  color: #FF9122 !important;
+}
+
+a {
+  color: #000000 !important;
+}
+
+a:hover {
+  color: #FFFFFF !important;
+}
+
+.alalalala {
+  margin: 15px 0px 0px 0px;
+}
+
+.bababab li:hover {
+  color: blue;
+}
+
+/* This whole part is for the drop right menu for phones  */
+/* ______________________________________________________ */
+/* ______________________________________________________ */
+/* ______________________________________________________ */
+.ecommerce-header {
+  width: 100%;
+  background-color: #F2552C;
+}
+
+.ecommerce-header .logo {
+  height: 50px;
+  width: 160px;
+}
+
+.ecommerce-header ul {
+  background-color: #5e5e5e;
+}
+
+.ecommerce-header li {
+  display: inline-block;
+}
+
+.ecommerce-header .nav-links {
+  margin-left: 15px;
+}
+
+.ecommerce-header a {
+  color: #8a8a8a;
+  transition: color 0.5s ease;
+  display: block;
+}
+
+.ecommerce-header a:hover {
+  color: #0b0b0b;
+  transition: color 0.5s ease;
+}
+
+.ecommerce-header input {
+  margin-right: 0px;
+}
+
+@media screen and (max-width: 74.9375em) {
+  .ecommerce-header input {
+    width: 150px;
+  }
+}
+
+.ecommerce-header.top-bar {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.ecommerce-header .button.search-button {
+  width: 39px;
+  height: 39px;
+  background-size: 20px 20px;
+  background-image: url("https://placehold.it/20x20");
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0px;
+}
+
+.ecommerce-header .menu>.main-nav-link>a {
+  padding: 1.5em 0.85em 1.9em 0.85em;
+}
+
+.ecommerce-header-top {
+  width: 100%;
+  background-color: #5e5e5e;
+  height: 40px;
+  padding: 8px 20px 10px 20px;
+}
+
+.ecommerce-header-top .fa {
+  color: #5e5e5e;
+  font-size: 1.5rem;
+}
+
+.ecommerce-header-top-message {
+  color: white;
+  float: left;
+}
+
+.ecommerce-header-top-links {
+  color: white;
+}
+
+.ecommerce-header-top-links ul li {
+  display: inline;
+  padding-left: 20px;
+}
+
+.ecommerce-header-top-links a {
+  color: white;
+  transition: color 0.5s ease;
+}
+
+.ecommerce-header-top-links a:hover {
+  color: white;
+  transition: color 0.5s ease;
+}
+
+/* Change this colour to change the drop in header on phone */
+
+.ecommerce-header-off-canvas {
+  background-color: #d4d2d1;
+}
+
+.ecommerce-header-off-canvas .menu {
+  padding: 1rem 0;
+}
+
+.ecommerce-header-off-canvas .menu a {
+  color: #8a8a8a;
+}
+
+/* Edit this to change the colours of the menu on phone */
+
+.ecommerce-header-mobile {
+  /* Change this colour to change the phone header */
+  background-color: #F2552C;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  /* padding: 0.625rem 1.25rem; */
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.ecommerce-header-mobile-left,
+.ecommerce-header-mobile-right,
+.ecommerce-header-mobile-center {
+  -webkit-flex: 1 0 0;
+  -ms-flex: 1 0 0px;
+  flex: 1 0 0;
+}
+
+.ecommerce-header-mobile-left {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.ecommerce-header-mobile-center {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.ecommerce-header-mobile-right {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.ecommerce-header-mobile-right .fa {
+  color: x;
+  font-size: 1.5rem;
+}
+
+.ecommerce-header-search-exandable input[type=search] {
+  margin: 0 1rem;
+  background: #e6e6e6 url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+  border: solid 1px #cacaca;
+  padding: 9px 10px 9px 26px;
+  width: 35px;
+  border-radius: 5000px;
+  transition: all 0.5s;
+}
+
+.ecommerce-header-search-exandable input[type=search]:focus {
+  width: 120px;
+  background-color: #fefefe;
+  border-color: #1779ba;
+  box-shadow: 0 0 5px rgba(23, 121, 186, 0.5);
+}
+
+.ecommerce-header-search-exandable input:-moz-placeholder {
+  color: #8a8a8a;
+}
+
+.ecommerce-header-search-exandable input::-webkit-input-placeholder {
+  color: #8a8a8a;
+}
+
+.ecommerce-header-search-exandable input[type=search]:hover {
+  background-color: #fefefe;
+}
+
+.close-button {
+  z-index: 1;
+}
+
+/* ______________________________________________________ */
+/* ______________________________________________________ */
+/* ______________________________________________________ */
