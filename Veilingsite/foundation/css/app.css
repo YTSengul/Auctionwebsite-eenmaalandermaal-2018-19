@@ -23,7 +23,7 @@ body {
     position: static;
 }
 
-body>.grid-container {
+body > .grid-container {
     background-color: #F0F0F0;
     box-shadow: 0 0 5px #a9a9a9;
     padding-top: 20px;
@@ -38,11 +38,22 @@ a:hover {
     color: #FFFFFF !important;
 }
 
+.menu-account {
+    color: white;
+    margin-top: 5px;
+}
 
+.menu-account a.blackHover {
+    margin-top: 1px !important;
+}
+
+.menu a, .menu .button {
+    padding: 0.3rem .5rem !important;
+}
 
 /* -------- Auctions -------- */
 
-.veiling-sluit-index>div>img {
+.veiling-sluit-index > div > img {
     display: block;
     min-height: 100px;
     max-height: 200px;
@@ -61,7 +72,7 @@ a:hover {
     min-height: 400px;
 }
 
-.veiling-sluit-index>div>.timer {
+.veiling-sluit-index > div > .timer {
     color: firebrick;
     font-size: large;
 }
@@ -80,8 +91,6 @@ a:hover {
 }
 
 /* _____________________________ */
-
-
 
 
 /* -------- Header -------- */
@@ -130,7 +139,7 @@ hr {
     border: 1px solid black;
 }
 
-.dropdown.menu>li.is-dropdown-submenu-parent>a::after {
+.dropdown.menu > li.is-dropdown-submenu-parent > a::after {
     display: none;
 }
 
@@ -146,7 +155,6 @@ hr {
 }
 
 /* -------- Header phone -------- */
-
 
 
 /* ____________________________ */
@@ -255,7 +263,7 @@ a.redHover:hover {
     border-radius: 0;
 }
 
-.ecommerce-header .menu>.main-nav-link>a {
+.ecommerce-header .menu > .main-nav-link > a {
     padding: 1.5em 0.85em 1.9em 0.85em;
 }
 
