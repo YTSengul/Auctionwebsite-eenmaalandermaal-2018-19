@@ -8,25 +8,33 @@ $valid = 0;
 $invalid = 1;
 $formulier_validation = $valid;
 $gebruikersnaam_validation = $valid;
-$emailadres_validation = $valid;
 $wachtwoord_validation = $valid;
 // $dbh->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
 
+/* Mailbox definieren voor de check */
+if (!isset($_POST["registreer"])) {
+    if (isset($_GET['emailadres'])) {
+        $emailadres = $_GET['emailadres'];
+    } else {
+        $emailadres = '';
+    }
+
+} else {
+    $emailadres = $_POST["emailadres"];
+}
 
 if (isset($_POST["registreer"])) {
 
-    /* Mailbox definieren voor de check */
-    $emailadres = $_POST["emailadres"];
-    $sql_emailadres_check_query = "select * from gebruiker where mailbox = '$emailadres'";
+    $sql_emailadres_check_query = "select * from emailconfiguratie where mailbox = '$emailadres' and geverifieerd = '1'";
     $sql_emailadres_check = $dbh->prepare($sql_emailadres_check_query);
     $sql_emailadres_check->execute();
     $sql_emailadres_check->fetchAll(PDO::FETCH_NUM);
 
     $rowcount = $sql_emailadres_check->rowCount();
 
-    if ($sql_emailadres_check->rowCount() > 0) {
-        $emailadres_validation = $invalid;
+    if ($sql_emailadres_check->rowCount() == 0) {
         $formulier_validation = $invalid;
+        header('Location:pre-registreer.php?mailadres=leeg');
     }
 
     /* Gebruikersnaam definieren voor de check */
@@ -60,6 +68,76 @@ $sql_landen->execute();
 $sql_landen_data = $sql_landen->fetchAll(PDO::FETCH_NUM);
 
 $aantal_landen = count($sql_landen_data);
+
+if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
+
+    $voornaam = $_POST["voornaam"];
+    $achternaam = $_POST["achternaam"];
+    $adresregel1 = $_POST["adresregel1"];
+    if (!$_POST["adresregel2"]) {
+        $adresregel2 = '';
+    } else {
+        $adresregel2 = $_POST["adresregel2"];
+    }
+    $postcode = $_POST["postcode"];
+    $plaatsnaam = $_POST["plaatsnaam"];
+    $land = $_POST["land"];
+    $geboortedatum = $_POST["geboortedatum"];
+    $wachtwoord1 = $_POST["wachtwoord1"];
+    $veiligheidsvraag = $_POST["veiligheidsvraag"];
+    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
+    $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
+
+    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
+
+    $stmt = $dbh->prepare($sql_registreer);
+
+    if ($stmt) {
+        $stmt->bindParam(":gebruikersnaam", $gebruikersnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":voornaam", $voornaam, PDO::PARAM_STR);
+        $stmt->bindParam(":achternaam", $achternaam, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel1", $adresregel1, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel2", $adresregel2, PDO::PARAM_STR);
+        $stmt->bindParam(":postcode", $postcode, PDO::PARAM_STR);
+        $stmt->bindParam(":plaatsnaam", $plaatsnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":land", $land, PDO::PARAM_STR);
+        $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
+        $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
+        $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
+        $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
+        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord_op_veiligheidsvraag, PDO::PARAM_STR);
+
+
+        try {
+            $gebruiker_registreren = $stmt->execute();
+
+            require("mail/PHPMailer-master/src/PHPMailer.php");
+            require("mail/PHPMailer-master/src/SMTP.php");
+
+            $mail = new PHPMailer\PHPMailer\PHPMailer();
+            $mail->IsSMTP(); // enable SMTP
+
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 465; // or 587
+            $mail->IsHTML(true);
+            $mail->Username = "Iprojec04.eenmaalandermaal@gmail.com";
+            $mail->Password = "Iproject04";
+            $mail->SetFrom("Iprojec04.eenmaalandermaal@gmail.com");
+            $mail->Subject = "Test";
+            $mail->Body = "Welkom bij eenmaalandermaal!";
+            $mail->AddAddress($emailadres);
+            $mail->Send();
+            header('location:login.php?registratie=true');
+        } catch (PDOException $e) {
+            echo "Controleer uw ingevulde gegevens";
+            //echo $e->getMessage();
+        }
+    }
+}
 
 ?>
 
@@ -161,13 +239,9 @@ $aantal_landen = count($sql_landen_data);
                         <input name="geboortedatum" type="date" required>
                     </label>
                     <label>E-mailadres
-                        <input <?php if ($emailadres_validation == $invalid) {
-                            echo 'class="is-invalid-input"';
-                        } ?> name="emailadres" type="email" placeholder="Uw E-mailadres" required>
+                        <input name="emailadres" value="<?PHP echo $emailadres; ?>" type="email"
+                               placeholder="Uw E-mailadres" required>
                     </label>
-                    <?php if ($emailadres_validation == $invalid) {
-                        echo '<span class="form-error is-visible" id="exemple2Error">Er bestaat al een account met deze emailadres.</span>';
-                    } ?>
                     <label>Veiligheidsvraag
                         <select name="veiligheidsvraag" required>
                             <option value="1">Wat is de naam van je eerste huisdier?</option>
@@ -185,79 +259,6 @@ $aantal_landen = count($sql_landen_data);
         </div>
     </div>
 </div>
-
-<?php
-
-if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
-
-    $voornaam = $_POST["voornaam"];
-    $achternaam = $_POST["achternaam"];
-    $adresregel1 = $_POST["adresregel1"];
-    if (!$_POST["adresregel2"]) {
-        $adresregel2 = '';
-    } else {
-        $adresregel2 = $_POST["adresregel2"];
-    }
-    $postcode = $_POST["postcode"];
-    $plaatsnaam = $_POST["plaatsnaam"];
-    $land = $_POST["land"];
-    $geboortedatum = $_POST["geboortedatum"];
-    $emailadres = $_POST["emailadres"];
-    $wachtwoord1 = $_POST["wachtwoord1"];
-    $veiligheidsvraag = $_POST["veiligheidsvraag"];
-    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
-
-    $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
-
-
-//    print($gebruikersnaam) . "<br>";
-//    print($voornaam) . "<br>";
-//    print($achternaam) . "<br>";
-//    print($adresregel1) . "<br>";
-//    print($adresregel2) . "<br>";
-//    print($postcode) . "<br>";
-//    print($plaatsnaam) . "<br>";
-//    print($land) . "<br>";
-//    print($geboortedatum) . "<br>";
-//    print($emailadres) . "<br>";
-//    print($wachtwoord1) . "<br>";
-//    print($veiligheidsvraag) . "<br>";
-//    print($antwoord_op_veiligheidsvraag) . "<br>";
-
-
-    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
-
-    $stmt = $dbh->prepare($sql_registreer);
-
-    if ($stmt) {
-        $stmt->bindParam(":gebruikersnaam", $gebruikersnaam, PDO::PARAM_STR);
-        $stmt->bindParam(":voornaam", $voornaam, PDO::PARAM_STR);
-        $stmt->bindParam(":achternaam", $achternaam, PDO::PARAM_STR);
-        $stmt->bindParam(":adresregel1", $adresregel1, PDO::PARAM_STR);
-        $stmt->bindParam(":adresregel2", $adresregel2, PDO::PARAM_STR);
-        $stmt->bindParam(":postcode", $postcode, PDO::PARAM_STR);
-        $stmt->bindParam(":plaatsnaam", $plaatsnaam, PDO::PARAM_STR);
-        $stmt->bindParam(":land", $land, PDO::PARAM_STR);
-        $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
-        $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
-        $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
-        $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
-        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord_op_veiligheidsvraag, PDO::PARAM_STR);
-
-
-        try {
-            $gebruiker_registreren = $stmt->execute();
-            echo "<br>succesvol toegevoegd aan database";
-            header('location:login.php?registratie=true');
-        } catch (PDOException $e) {
-            echo "Controleer uw ingevulde gegevens";
-            //echo $e->getMessage();
-        }
-    }
-}
-
-
-?>
 
 <?php include "components/scripts.html"; ?>
 

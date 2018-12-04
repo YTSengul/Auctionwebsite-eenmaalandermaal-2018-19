@@ -11,7 +11,7 @@ if (isset($_GET['rubriek_hernoem'])) {
     $nummer_van_hernoem_rubriek = $_GET['nummer_van_hernoem_rubriek'];
 
     $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
-    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubri21qek_query);
+    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
 
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
@@ -32,7 +32,7 @@ if (isset($_GET['rubriek_hernoem'])) {
 // Het versturen van de nieuwe Subrubriek naar de database
 if (isset($_GET["subrubriek_voegtoe"])) {
 
-    $sql_neem_hoogste_rubrieknummer = "select MAX(Rubrieknummer) from Rubriek";
+    $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek";
     $sql_hoogste_rubrieknummer = $dbh->prepare($sql_neem_hoogste_rubrieknummer);
     $sql_hoogste_rubrieknummer->execute();
     $hoogste_rubrieknummer_data = $sql_hoogste_rubrieknummer->fetchAll(PDO::FETCH_NUM);
@@ -49,7 +49,7 @@ if (isset($_GET["subrubriek_voegtoe"])) {
     $nieuw_volgnummer = 0;
 
     /* De nieuwe subrubriek wordt met een query in de database opgeslagen */
-    $sql_voeg_nieuwe_subrubriek_toe = "insert into rubriek ([Rubrieknummer], [Rubrieknaam], [Rubriek], [Volgnr]) values (:nieuw_hoogste_rubrieknummer, :nieuw_rubrieknaam, :nieuw_rubriek, :nieuw_volgnummer)";
+    $sql_voeg_nieuwe_subrubriek_toe = "insert into Rubriek ([RubriekNummer], [RubriekNaam], [VorigeRubriek], [Populariteit]) values (:nieuw_hoogste_rubrieknummer, :nieuw_rubrieknaam, :nieuw_rubriek, :nieuw_volgnummer)";
     $voeg_nieuwe_subrubriek_toe = $dbh->prepare($sql_voeg_nieuwe_subrubriek_toe);
 
 
@@ -74,7 +74,7 @@ if (isset($_GET["subrubriek_voegtoe"])) {
 }
 
 // De bestaande rubrieken in een array stoppen
-$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE Rubriek = -1";
+$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE VorigeRubriek = -1";
 $sql_alle_rubrieken = $dbh->prepare($alle_rubrieken_query);
 $sql_alle_rubrieken->execute();
 $alle_hoofdrubrieken_data = $sql_alle_rubrieken->fetchAll(PDO::FETCH_NUM);
@@ -119,9 +119,9 @@ for ($x = 0; $x < 10; $x++) {
     <link rel="stylesheet" href="foundation/css/app.css">
 </head>
 
-<body>
-
 <?php include_once 'components/header.php'; ?>
+
+<body>
 
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
@@ -174,7 +174,7 @@ for ($x = 0; $x < 10; $x++) {
                 ${'zoek_' . $loop_teller_plus . '_nummer'} = ${'zoek_' . $loop_teller_plus . '_rubrieken_data'}[0][0];
                 $help_de_variabele = ${'zoek_' . $loop_teller_plus . '_nummer'};
 
-                ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE Rubriek = '$help_de_variabele'";
+                ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE VorigeRubriek = '$help_de_variabele'";
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller_plus . "_rubrieken_query"});
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
                 ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);
@@ -249,6 +249,10 @@ for ($x = 0; $x < 10; $x++) {
     }
 
     ?>
+
+</div>
+
+<?php include "components/scripts.html"; ?>
 
 </body>
 </html>

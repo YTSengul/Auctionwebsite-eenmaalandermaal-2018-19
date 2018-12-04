@@ -14,7 +14,7 @@ if (isset($_POST["login"])) {
     $wachtwoord = $_POST['wachtwoord'];
 
     $sql_login_check_query = "select * from gebruiker where gebruikersnaam = '$gebruikersnaam'";
-    $sql_login_check = $db->prepare($sql_login_check_query);
+    $sql_login_check = $dbh->prepare($sql_login_check_query);
     $sql_login_check->execute();
     $sql_login_data = $sql_login_check->fetchAll(PDO::FETCH_ASSOC);
 
