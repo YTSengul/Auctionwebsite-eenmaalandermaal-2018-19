@@ -2,6 +2,14 @@
 USE iproject4
 GO
 
+CREATE TABLE Categorieen (
+	ID INT NOT NULL,
+	Name VARCHAR(100) NOT NULL,
+	Parent INT NULL
+	CONSTRAINT pk_categorieen PRIMARY KEY (ID)
+)
+GO
+
 INSERT Categorieen (ID,Name,Parent) VALUES
 (-1,'Root',NULL),
 (1,'Verzamelen',-1),
@@ -3412,6 +3420,8 @@ INSERT Categorieen (ID,Name,Parent) VALUES
 GO
 
 DELETE FROM Rubriek
+
+DELETE FROM Voorwerp
 GO
 
 INSERT INTO Rubriek
@@ -3425,7 +3435,42 @@ GO
 DROP TABLE Categorieen
 GO
 
-insert into vraag values (1, 'Wat is de naam van je eerste huisdier?'),
+insert into vraag values 
+(1, 'Wat is de naam van je eerste huisdier?'),
 (2, 'Op welk basisschool heb je gezeten?'),
 (3, 'Wat is de meisjesnaam van je moeder?')
 GO
+
+INSERT Voorwerp (Titel, Beschrijving, Startprijs, Betalingswijze, Plaatsnaam, Land, Verkoper, AfbeeldingNaam) values
+('Fiets bijna nieuw', 'Geen Beschrijving', 2, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', '6KU-FIXIE-SINGLE-SPEED-BIKE-DETROIT-.jpeg'),
+('Racefiets', 'Geen Beschrijving', 3, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', '6KU-FIXIE-SINGLE-SPEED-BIKE-DETROIT-.jpeg'),
+('Wielrenfiets niet gebruikt', 'Geen Beschrijving', 50, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', '6KU-FIXIE-SINGLE-SPEED-BIKE-DETROIT-.jpeg'),
+('Fiets', 'Geen Beschrijving', 500, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', '6KU-FIXIE-SINGLE-SPEED-BIKE-DETROIT-.jpeg'),
+('Geen scam', 'Geen Beschrijving', 300000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'apple-fruit.jpg'),
+('Houd de dokter weg!', 'Geen Beschrijving', 2, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'apple-fruit.jpg'),
+('Appels', 'Geen Beschrijving', 3, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'apple-fruit.jpg'),
+('Appel', 'Geen Beschrijving', 4, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'apple-fruit.jpg'),
+('Fiets 2 jaar gebruikt', 'Geen Beschrijving', 200, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Bike.jpg'),
+('Racefiets goed geolied', 'Geen Beschrijving', 500, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Bike.jpg'),
+('Racefiets alsnieuw', 'Geen Beschrijving', 3000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Bike.jpg'),
+('snelle fiets', 'Geen Beschrijving', 20, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Bike.jpg'),
+('BMW 2 series', 'Geen Beschrijving', 20000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'BMW-2-series.jpg'),
+('Snelle auto', 'Geen Beschrijving', 15000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'BMW-2-series.jpg'),
+('BMW ongebruikt', 'Geen Beschrijving', 40000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'BMW-2-series.jpg'),
+('BMW 500pk', 'Geen Beschrijving', 20001, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'BMW-2-series.jpg'),
+('Samsung 360', 'Geen Beschrijving', 202, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'f8bb1886-fb1a-4bd4-8b0c-3107bdd8c9aa_1.25d0865f300a0ec45affe204985f243b.jpeg'),
+('Telefoon nieuw', 'Geen Beschrijving', 140, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'f8bb1886-fb1a-4bd4-8b0c-3107bdd8c9aa_1.25d0865f300a0ec45affe204985f243b.jpeg'),
+('Ipad', 'Geen Beschrijving', 3013, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'f8bb1886-fb1a-4bd4-8b0c-3107bdd8c9aa_1.25d0865f300a0ec45affe204985f243b.jpeg'),
+('Apple telefoon', 'Geen Beschrijving', 10, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'f8bb1886-fb1a-4bd4-8b0c-3107bdd8c9aa_1.25d0865f300a0ec45affe204985f243b.jpeg'),
+('Crossfiets', 'Geen Beschrijving', 30, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'flybikes-orion-21inch-tt-lhd-complete-bmx-bike-2018-flat-metallic-brown-TRPL007063-new.jpg'),
+('Stunfiets', 'Geen Beschrijving', 29, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'flybikes-orion-21inch-tt-lhd-complete-bmx-bike-2018-flat-metallic-brown-TRPL007063-new.jpg'),
+('Fietsje', 'Geen Beschrijving', 60, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'flybikes-orion-21inch-tt-lhd-complete-bmx-bike-2018-flat-metallic-brown-TRPL007063-new.jpg'),
+('Crossfiets bijna nieuw', 'Geen Beschrijving', 250, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'flybikes-orion-21inch-tt-lhd-complete-bmx-bike-2018-flat-metallic-brown-TRPL007063-new.jpg'),
+('Auto', 'Geen Beschrijving', 1000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'ICAR_800x400.png'),
+('Auto alsnieuw', 'Geen Beschrijving', 2020, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'ICAR_800x400.png'),
+('Racewagen', 'Geen Beschrijving', 603, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'ICAR_800x400.png'),
+('Formule 2 wagen', 'Geen Beschrijving', 100000, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'ICAR_800x400.png'),
+('Jaguar', 'Geen Beschrijving', 2345, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Jaguar_I-PACE_S_Indus-Silver_065.jpg'),
+('Jaguar I-Pace', 'Geen Beschrijving', 2098, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Jaguar_I-PACE_S_Indus-Silver_065.jpg'),
+('Snelle auto', 'Geen Beschrijving', 40, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Jaguar_I-PACE_S_Indus-Silver_065.jpg'),
+('Auto bijna nieuw', 'Geen Beschrijving', 4, 'Rabobank', 'Arnhem', 'Nederland', 'Iemand', 'Jaguar_I-PACE_S_Indus-Silver_065.jpg')

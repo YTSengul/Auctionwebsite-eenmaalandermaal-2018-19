@@ -4,14 +4,18 @@
             <div class="medium-12 cell header">
                 <h1><a href="index.php">Eenmaal Andermaal</a></h1>
                 <ul class="menu align-right">
-                    <?php if (!isset($_SESSION['ingelogde_gebruiker'])) {
-                  echo '<li ><a class="specialheader" href = "login.php" > Inloggen</a ></li >
-                        <li ><p >of</p ></li >
-                        <li ><a class="specialheader" href = "registreren.php" > Registreren</a ></li >';
-              } else {
-                  echo '<li ><a class="specialheader" href = "logout.php" > uitloggen</a ></li >';
-              }
-              ?>
+                    <?php
+                        if (!isset($_SESSION['ingelogde_gebruiker'])) {
+                            echo '
+                                <li><a class="blackHover" href="login.php"> Inloggen</a></li>
+                                <li><p>of</p></li>
+                                <li><a class="blackHover" href="registreren.php"> Registreren</a></li>
+                            ';
+                        }
+                        else {
+                            echo '<li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
+                        }
+                    ?>
                 </ul>
             </div>
         </div>
@@ -22,8 +26,8 @@
 
 <div class="off-canvas-content data-off-canvas-content">
     <div class="ecommerce-header-mobile hide-for-medium">
-        <div class="ecommerce-header-mobile-left centerText aaa">
-            <h1 class="noPadding alalalala">EenmaalAndermaal</h1>
+        <div class="ecommerce-header-mobile-left spreadContents">
+            <h1 class="noPadding HeaderPhoneSpacings">EenmaalAndermaal</h1>
             <button class="menu-icon" type="button" data-toggle="ecommerce-header"></button>
         </div>
     </div>
@@ -37,20 +41,24 @@
     </button>
 
     <ul class="vertical menu">
-        <li><a class="specialsomething" href="#">EenmaalAndermaal</a></li>
+        <li><a href="#">EenmaalAndermaal</a></li>
     </ul>
 
     <hr>
 
     <ul class="vertical menu">
-        <?php if (!isset($_SESSION['ingelogde_gebruiker'])) {
-        echo '<li ><a class="specialsomething" href = "login.php"> Inloggen</a ></li>
-              <li ><a class="specialsomething" href = "registreren.php"> Registreren</a></li >';
-    } else {
-        echo '<li ><a class="specialsomething" href = "logout.php" > uitloggen</a ></li >';
-    }
-    ?>
-        <li><a class="specialsomething" href="#">Rubriekenboom</a></li>
+        <?php
+            if (!isset($_SESSION['ingelogde_gebruiker'])) {
+                echo '
+                    <li><a href="login.php"> Inloggen</a></li>
+                    <li><a href="registreren.php"> Registreren</a></li>
+                ';
+            }
+            else {
+                echo '<li><a href="logout.php"> uitloggen</a></li>';
+            }
+        ?>
+        <li><a href="#">Rubriekenboom</a></li>
     </ul>
 
 </div>
