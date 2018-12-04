@@ -79,7 +79,7 @@
 ?>
 
 <!doctype html>
-<html class="" lang="nl" dir="ltr">
+<html class="" lang="en" dir="ltr">
 
     <head>
         <meta charset="utf-8">
