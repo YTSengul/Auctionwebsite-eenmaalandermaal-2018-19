@@ -3,15 +3,15 @@ body {
 }
 
 .noPadding {
-    padding: 0px !important;
+    padding: 0 !important;
 }
 
 .noMargins {
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 .noBorder {
-    border: 0px;
+    border: 0;
 }
 
 .spreadContents {
@@ -25,7 +25,7 @@ body {
 
 body>.grid-container {
     background-color: #F0F0F0;
-    box-shadow: 0px 0px 5px #a9a9a9;
+    box-shadow: 0 0 5px #a9a9a9;
     padding-top: 20px;
     padding-bottom: 20px;
 }
@@ -56,7 +56,7 @@ a:hover {
     margin: 5px;
     padding: 10px;
     background-color: #FFFFFF;
-    box-shadow: 0px 0px 5px #F2552C;
+    box-shadow: 0 0 5px #7b7b7b;
     border-radius: 3px;
     min-height: 400px;
 }
@@ -132,13 +132,13 @@ hr {
 
 .HeaderASpacings {
     padding: 10px !important;
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 /* ____________________________ */
 
 .HeaderPhoneSpacings {
-    margin: 15px 0px 0px 0px;
+    margin: 15px 0 0 0;
 }
 
 /* -------- Header phone -------- */
@@ -225,7 +225,7 @@ a.redHover:hover {
 }
 
 .ecommerce-header input {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 @media screen and (max-width: 74.9375em) {
@@ -248,7 +248,7 @@ a.redHover:hover {
     background-position: center center;
     padding-left: 0;
     padding-right: 0;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .ecommerce-header .menu>.main-nav-link>a {
@@ -326,7 +326,7 @@ a.redHover:hover {
 .ecommerce-header-mobile-right,
 .ecommerce-header-mobile-center {
     -webkit-flex: 1 0 0;
-    -ms-flex: 1 0 0px;
+    -ms-flex: 1 0 0;
     flex: 1 0 0;
 }
 
@@ -367,7 +367,7 @@ a.redHover:hover {
 }
 
 .ecommerce-header-mobile-right .fa {
-    color: x;
+    color: x; /*what is this?*/
     font-size: 1.5rem;
 }
 

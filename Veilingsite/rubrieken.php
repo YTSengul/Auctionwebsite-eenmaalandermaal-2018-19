@@ -20,3 +20,4 @@ include_once "components/connect.php";
 <!-- Include the header into the page -->
 <?php include_once 'components/header.php'; ?>
 <!-- ________________________________ -->
+
