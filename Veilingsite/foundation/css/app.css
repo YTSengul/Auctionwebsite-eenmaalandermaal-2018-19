@@ -56,7 +56,7 @@ a:hover {
 .veiling-sluit-index > div > img {
     display: block;
     min-height: 100px;
-    max-height: 200px;
+    max-height: 250px;
     max-width: 100%;
 }
 
@@ -88,6 +88,10 @@ a:hover {
 
 .veiling-sluit-index .button {
     background-color: #F2552C;
+}
+
+.card-body{
+    margin-top: 5vh;
 }
 
 /* _____________________________ */

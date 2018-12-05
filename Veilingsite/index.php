@@ -47,24 +47,30 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
 
 
         echo '
-                    <div class="veiling-sluit-index"> <!--hele kaartje-->
-                        <div><!--image gedeelte van kaartje-->
+                    <div class="veiling-sluit-index"> 
+                        <div>
                             <img class="thumbnail" src="img/' . $auction['AfbeeldingNaam'] . '" alt="Foto van een veiling">
                         </div>
-                        <div><!--onderste gedeelte van kaartje-->
-                            <div class="grid-x grid-padding-x"><!--tekst gedeelte van kaartje-->
-                                <div class="cell">
-                                    <h5>' . $auction['Titel'] . '</h5>
+                        <div class="card-body">
+                            <div class="grid-x ">
+                                <div class="cell small-6">
+                                    <div class="grid-x grid-padding-x">
+                                        <div class="cell">
+                                            <h5>' . $auction['Titel'] . '</h5>
+                                        </div>
+                                        <div class="cell timer">
+                                            <h5>' . $time . '</h5>
+                                        </div>
+                                        <div class="cell">
+                                        <p>Startprijs: €' . $auction['Startprijs'] . ',-</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="cell timer">
-                                    <h5>' . $time . '</h5>
+                                <div class="cell small-6">
+                                    <div class="button-left">
+                                     <a href="#" class="button expanded">Bied nu!</a>
+                                    </div>
                                 </div>
-                                <div class="cell">
-                                <p>Startprijs: €' . $auction['Startprijs'] . ',-</p>
-                                </div>
-                            </div>
-                            <div class="button-left"><!--button gedeelte van kaartje-->
-                             <a href="#" class="button expanded">Bied nu!</a>
                             </div>
                         </div>
                     </div>
