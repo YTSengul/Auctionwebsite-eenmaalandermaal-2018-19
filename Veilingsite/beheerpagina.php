@@ -103,9 +103,8 @@ for ($x = 0; $x < 10; $x++) {
         //echo '<br><br>456<br><br>';
     }
 }
-    include_once "components/meta.php";
+include_once "components/meta.php";
 ?>
-
 
 
 <body>

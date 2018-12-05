@@ -13,7 +13,7 @@ include_once "components/meta.php"
 ?>
 
 <body>
-<?php include_once "components/header.php"?>
+<?php include_once "components/header.php" ?>
 
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
