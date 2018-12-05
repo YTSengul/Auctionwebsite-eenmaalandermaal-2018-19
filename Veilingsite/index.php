@@ -47,23 +47,23 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
 
 
         echo '
-                    <div class="veiling-sluit-index">
-                        <div>
+                    <div class="veiling-sluit-index"> <!--hele kaartje-->
+                        <div><!--image gedeelte van kaartje-->
                             <img class="thumbnail" src="img/' . $auction['AfbeeldingNaam'] . '" alt="Foto van een veiling">
                         </div>
-                        <div>
-                            <div class="grid-x grid-padding-x">
+                        <div><!--onderste gedeelte van kaartje-->
+                            <div class="grid-x grid-padding-x"><!--tekst gedeelte van kaartje-->
                                 <div class="cell">
                                     <h5>' . $auction['Titel'] . '</h5>
                                 </div>
                                 <div class="cell timer">
                                     <h5>' . $time . '</h5>
                                 </div>
+                                <div class="cell">
+                                <p>Startprijs: €' . $auction['Startprijs'] . ',-</p>
+                                </div>
                             </div>
-                            <div>
-                            <p>Startprijs: €' . $auction['Startprijs'] . ',-</p>
-                            </div>
-                            <div class="button-left">
+                            <div class="button-left"><!--button gedeelte van kaartje-->
                              <a href="#" class="button expanded">Bied nu!</a>
                             </div>
                         </div>
