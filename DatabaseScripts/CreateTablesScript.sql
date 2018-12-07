@@ -20,10 +20,12 @@ GO
 drop table Vraag
 GO
 
+select Rubrieknaam from Rubriek order by LEN(Rubrieknaam) DESC
+
 CREATE TABLE Rubriek
 (
 	RubriekNummer INT NOT NULL, --Gekregen rubrieken gaan niet boven 200000 dus kan geen smallint dus moet int. miljoen is voldoende
-	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karacters dus zal wel lukken.
+	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karacters (Langste is 30) dus zal wel lukken.
 	VorigeRubriek INT NULL, --Ditto.
 	Populariteit TINYINT NOT NULL DEFAULT 0, --0 tot 255, zou genoeg moeten zijn. hoog nummer betekend populairder.
 
