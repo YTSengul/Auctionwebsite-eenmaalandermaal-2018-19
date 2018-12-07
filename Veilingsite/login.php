@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once "components/connect.php";
 if ($_GET["registratie"] = !null) {
     $new_registered = $_GET["registratie"];
@@ -30,24 +29,10 @@ if (isset($_POST["login"])) {
         $login_verification = $invalid;
     }
 }
-
-?>
-
-<!doctype html>
-<html class="" lang="nl" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EenmaalAndermaal</title>
-    <link rel="stylesheet" href="foundation/css/foundation.css">
-    <link rel="stylesheet" href="foundation/css/app.css">
-</head>
+include_once 'components/meta.php'; ?>
 
 <body>
-<!-- Include the header into the page -->
 <?php include_once 'components/header.php'; ?>
-<!-- ________________________________ -->
 <div class="grid-container">
 
 

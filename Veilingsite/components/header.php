@@ -7,9 +7,11 @@
                     <?php
                         if (!isset($_SESSION['ingelogde_gebruiker'])) {
                             echo '
+                                <div class="menu menu-account">
                                 <li><a class="blackHover" href="login.php"> Inloggen</a></li>
-                                <li><p>of</p></li>
+                                <li><p>|</p></li>
                                 <li><a class="blackHover" href="registreren.php"> Registreren</a></li>
+                                </div>
                             ';
                         }
                         else {

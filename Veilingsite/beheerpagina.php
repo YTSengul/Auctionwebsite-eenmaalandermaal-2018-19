@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 include_once "components/connect.php";
 
 // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
@@ -105,24 +103,12 @@ for ($x = 0; $x < 10; $x++) {
         //echo '<br><br>456<br><br>';
     }
 }
-
+include_once "components/meta.php";
 ?>
 
-<!doctype html>
-<html class="" lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EenmaalAndermaal</title>
-    <link rel="stylesheet" href="foundation/css/foundation.css">
-    <link rel="stylesheet" href="foundation/css/app.css">
-</head>
-
-<?php include_once 'components/header.php'; ?>
 
 <body>
-
+<?php include_once 'components/header.php'; ?>
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="medium-12 large-12 cell">

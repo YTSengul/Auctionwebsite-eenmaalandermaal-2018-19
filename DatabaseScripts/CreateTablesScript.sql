@@ -90,7 +90,7 @@ CREATE TABLE Gebruiker
 	mailbox VARCHAR(50) NOT NULL UNIQUE,
 	wachtwoord VARCHAR(255) NOT NULL,
 	vraagnummer TINYINT NOT NULL, --0 tot 255 zou genoeg moeten.
-	antwoordtekst VARCHAR(25) NOT NULL,
+	antwoordtekst VARCHAR(255) NOT NULL,
 	Verkoper BIT NOT NULL DEFAULT 0, --Bij registratie is een gebruiker nog geen verkoper.
 
 	CONSTRAINT PK_Gebruiker PRIMARY KEY (gebruikersnaam),
