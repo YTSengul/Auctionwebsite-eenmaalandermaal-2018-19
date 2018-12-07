@@ -19,13 +19,17 @@ drop table Gebruiker
 GO
 drop table Vraag
 GO
+drop table emailconfiguratie
+GO
+drop table tblIMAOLand
+GO
 
-select Rubrieknaam from Rubriek order by LEN(Rubrieknaam) DESC
+
 
 CREATE TABLE Rubriek
 (
 	RubriekNummer INT NOT NULL, --Gekregen rubrieken gaan niet boven 200000 dus kan geen smallint dus moet int. miljoen is voldoende
-	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karacters (Langste is 30) dus zal wel lukken.
+	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karacters dus zal wel lukken.
 	VorigeRubriek INT NULL, --Ditto.
 	Populariteit TINYINT NOT NULL DEFAULT 0, --0 tot 255, zou genoeg moeten zijn. hoog nummer betekend populairder.
 
@@ -85,7 +89,7 @@ CREATE TABLE Gebruiker
 	adresregel2 VARCHAR(50) NULL,
 	postcode VARCHAR (7) NOT NULL,
 	plaatsnaam VARCHAR(85) NOT NULL,
-	land VARCHAR(50) NOT NULL,
+	land int NOT NULL,
 	datum DATE NOT NULL,
 	mailbox VARCHAR(50) NOT NULL UNIQUE,
 	wachtwoord VARCHAR(255) NOT NULL,
@@ -116,5 +120,26 @@ CREATE TABLE Beheerder
 
 	CONSTRAINT PK_Beheerder PRIMARY KEY (gebruikersnaam)
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
+)
+GO
+
+create table emailconfiguratie (
+mailbox varchar(50) UNIQUE,
+verificatiecode varchar(10),
+geverifieerd bit DEFAULT 0
+)
+GO
+
+CREATE TABLE tblIMAOLand
+(
+  GBA_CODE CHAR(4) NOT NULL,
+  NAAM_LAND VARCHAR(40) NOT NULL,
+  BEGINDATUM DATE NULL,
+  EINDDATUM DATE NULL,
+  EER_Lid BIT NOT NULL DEFAULT 0,
+  CONSTRAINT PK_tblIMAOLand PRIMARY KEY (NAAM_LAND),
+  CONSTRAINT UQ_tblIMAOLand UNIQUE (GBA_CODE),
+  CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
+  CONSTRAINT CHK_DATUM CHECK ( BEGINDATUM < EINDDATUM )
 )
 GO

@@ -62,7 +62,7 @@ if (isset($_POST["registreer"])) {
     }
 }
 
-$sql_landen_query = "select * from landen";
+$sql_landen_query = "select * from tblIMAOLand";
 $sql_landen = $dbh->prepare($sql_landen_query);
 $sql_landen->execute();
 $sql_landen_data = $sql_landen->fetchAll(PDO::FETCH_NUM);
@@ -209,14 +209,12 @@ include_once "components/meta.php"
                     <label>Selecteer je land
                         <select name="land">
                             <?php
-                            foreach ($sql_landen_data as $landen_head) {
-                                foreach ($landen_head as $land) {
-                                    if ($land == 'Nederland') {
-                                        echo '<option value="' . $land . '" selected="selected" >' . $land . '</option>';
+                            foreach ($sql_landen_data as $landen) {
+                                    if ($landen[1] == 'Nederland') {
+                                        echo '<option value="' . $landen[0] . '" selected="selected" >' . $landen[1] . '</option>';
                                     } else {
-                                        echo '<option value="' . $land . '">' . $land . '</option>';
+                                        echo '<option value="' . $landen[0] . '">' . $landen[1] . '</option>';
                                     }
-                                }
                             }
                             ?>
                         </select>
