@@ -21,6 +21,23 @@ if (!isset($_POST["registreer"])) {
 
 } else {
     $emailadres = $_POST["emailadres"];
+
+    $voornaam = $_POST["voornaam"];
+    $achternaam = $_POST["achternaam"];
+    $adresregel1 = $_POST["adresregel1"];
+    if (!$_POST["adresregel2"]) {
+        $adresregel2 = '';
+    } else {
+        $adresregel2 = $_POST["adresregel2"];
+    }
+    $postcode = $_POST["postcode"];
+    $plaatsnaam = $_POST["plaatsnaam"];
+    $land = $_POST["land"];
+    $geboortedatum = $_POST["geboortedatum"];
+    $wachtwoord1 = $_POST["wachtwoord1"];
+    $veiligheidsvraag = $_POST["veiligheidsvraag"];
+    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
 }
 
 if (isset($_POST["registreer"])) {
@@ -71,21 +88,7 @@ $aantal_landen = count($sql_landen_data);
 
 if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
 
-    $voornaam = $_POST["voornaam"];
-    $achternaam = $_POST["achternaam"];
-    $adresregel1 = $_POST["adresregel1"];
-    if (!$_POST["adresregel2"]) {
-        $adresregel2 = '';
-    } else {
-        $adresregel2 = $_POST["adresregel2"];
-    }
-    $postcode = $_POST["postcode"];
-    $plaatsnaam = $_POST["plaatsnaam"];
-    $land = $_POST["land"];
-    $geboortedatum = $_POST["geboortedatum"];
-    $wachtwoord1 = $_POST["wachtwoord1"];
-    $veiligheidsvraag = $_POST["veiligheidsvraag"];
-    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
+
 
     $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
 
@@ -160,7 +163,7 @@ include_once "components/meta.php"
                     <label>Gebruikersnaam
                         <input <?php if ($gebruikersnaam_validation == $invalid) {
                             echo 'class="is-invalid-input"';
-                        } ?> name="gebruikersnaam" type="text" placeholder="Uw gebruikersnaam" required>
+                        } if(isset($gebruikersnaam)){echo "value='$gebruikersnaam'";} ?> name="gebruikersnaam" type="text" placeholder="Uw gebruikersnaam" required>
                     </label>
                     <?php if ($gebruikersnaam_validation == $invalid) {
                         echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam bestaat al.</span>';
@@ -185,25 +188,25 @@ include_once "components/meta.php"
                         <h4>Persoonsgegevens</h4>
                     </div>
                     <label>Voornaam
-                        <input name="voornaam" type="text" placeholder="Uw voornaam" required>
+                        <input name="voornaam" type="text" <?PHP if(isset($voornaam)){echo "value='$voornaam'";} ?> placeholder="Uw voornaam" required>
                     </label>
                     <label>Achternaam
-                        <input name="achternaam" type="text" placeholder="Uw achternaam" required>
+                        <input name="achternaam" type="text" <?PHP if(isset($achternaam)){echo "value='$achternaam'";} ?> placeholder="Uw achternaam" required>
                     </label>
                     <label>Adresregel1
-                        <input name="adresregel1" type="text" placeholder="Uw adresregel1" required>
+                        <input name="adresregel1" type="text" <?PHP if(isset($adresregel1)){echo "value='$adresregel1'";} ?> placeholder="Uw adresregel1" required>
                     </label>
                     <label>Adresregel2
-                        <input name="adresregel2" type="text" placeholder="Uw adresregel2">
+                        <input name="adresregel2" type="text" <?PHP if(isset($adresregel2)){echo "value='$adresregel2'";} ?> placeholder="Uw adresregel2">
                     </label>
                     <div class="medium-6 small-6 cell">
                         <label>Plaatsnaam
-                            <input name="plaatsnaam" type="text" placeholder="Uw plaatsnaam" required>
+                            <input name="plaatsnaam" type="text" <?PHP if(isset($plaatsnaam)){echo "value='$plaatsnaam'";} ?> placeholder="Uw plaatsnaam" required>
                         </label>
                     </div>
                     <div class="medium-6 small-6 cell">
                         <label>Postcode
-                            <input name="postcode" type="text" placeholder="Uw postcode" required>
+                            <input name="postcode" type="text" <?PHP if(isset($postcode)){echo "value='$postcode'";} ?> placeholder="Uw postcode" required>
                         </label>
                     </div>
                     <label>Selecteer je land
@@ -220,7 +223,7 @@ include_once "components/meta.php"
                         </select>
                     </label>
                     <label>Geboortedatum
-                        <input name="geboortedatum" type="date" required>
+                        <input name="geboortedatum" <?PHP if(isset($geboortedatum)){echo "value='$geboortedatum'";} ?> type="date" required>
                     </label>
                     <label>E-mailadres
                         <input name="emailadres" value="<?PHP echo $emailadres; ?>" type="email"
@@ -228,13 +231,13 @@ include_once "components/meta.php"
                     </label>
                     <label>Veiligheidsvraag
                         <select name="veiligheidsvraag" required>
-                            <option value="1">Wat is de naam van je eerste huisdier?</option>
-                            <option value="2">Op welk basisschool heb je gezeten?</option>
-                            <option value="3">Wat is de meisjesnaam van je moeder?</option>
+                            <option value="1" <?PHP if(isset($veiligheidsvraag) == 1){if($veiligheidsvraag == 1){echo "selected";}} ?> >Wat is de naam van je eerste huisdier?</option>
+                            <option value="2" <?PHP if(isset($veiligheidsvraag) == 2){if($veiligheidsvraag == 2){echo "selected";}} ?>>Op welk basisschool heb je gezeten?</option>
+                            <option value="3" <?PHP if(isset($veiligheidsvraag) == 3){if($veiligheidsvraag == 3){echo "selected";}} ?>>Wat is de meisjesnaam van je moeder?</option>
                         </select>
                     </label>
                     <label>Antwoord
-                        <input name="antwoord_op_veiligheidsvraag" type="text"
+                        <input name="antwoord_op_veiligheidsvraag" type="text"  <?PHP if(isset($antwoord_op_veiligheidsvraag)){echo "value='$antwoord_op_veiligheidsvraag'";} ?>
                                placeholder="Uw antwoord op de veiligheidsvraag" required>
                     </label>
                 </div>

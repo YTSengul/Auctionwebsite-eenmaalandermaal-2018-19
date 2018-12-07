@@ -1,5 +1,6 @@
 <?php
 include_once "components/connect.php";
+include_once "components/meta.php";
 
 Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Startprijs", $upOrDown = "DESC")
 {
@@ -81,7 +82,7 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
     }
 }
 
-include_once "components/meta.php";
+
 ?>
 
 <body>

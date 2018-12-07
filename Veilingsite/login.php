@@ -1,5 +1,6 @@
 <?php
 include_once "components/connect.php";
+include_once 'components/meta.php';
 if ($_GET["registratie"] = !null) {
     $new_registered = $_GET["registratie"];
 }
@@ -28,8 +29,7 @@ if (isset($_POST["login"])) {
     } else {
         $login_verification = $invalid;
     }
-}
-include_once 'components/meta.php'; ?>
+} ?>
 
 <body>
 <?php include_once 'components/header.php'; ?>
