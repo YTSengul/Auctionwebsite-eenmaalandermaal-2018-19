@@ -1,3 +1,9 @@
+/* Jenn test */
+
+/** {*/
+    /*border: 1px solid #FF0000;*/
+/*}*/
+
 body {
     background-color: #FFF;
 }
@@ -28,6 +34,10 @@ body > .grid-container {
     box-shadow: 0 0 5px #a9a9a9;
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+h1, h2, h3 {
+    color: #000;
 }
 
 a {
@@ -418,6 +428,39 @@ a.redHover:hover {
 
 .close-button {
     z-index: 1;
+}
+
+/*detailpagina*/
+
+.productdetails {
+    padding: 20px;
+}
+
+.detailfoto, .detailsubfoto {
+    display: block;
+    box-shadow: 0 0 5px #7b7b7b;
+}
+
+.detailsubfoto {
+    margin-top: 10px;
+    margin-right: 1em;
+    max-width: 100px;
+}
+
+.detailpagina .omschrijving, .detail-biedingen {
+    background-color: white;
+    box-shadow: 0 0 5px #7b7b7b;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 50px;
+}
+
+.detailpagina p {
+    margin-top: 10px;
+}
+
+.detailpagina-test {
+    display: flex;
 }
 
 /* ______________________________________________________ */
