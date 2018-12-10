@@ -209,6 +209,55 @@ a.redHover:hover {
     width: -moz-available !important;
 }
 
+
+/* -------- detailpagina -------- */
+
+.productdetails {
+    padding: 20px;
+    /* z-index: 0; */
+    /* margin-right: 20px; */
+}
+
+.detailsubfoto {
+    margin-top: 10px;
+    margin-right: 1em;
+    max-width: 100px;
+}
+
+.detailpagina-omschrijving, .detail-biedingen, .productdetails {
+    background-color: white;
+    box-shadow: 0 0 5px #7b7b7b;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 50px;
+}
+
+.detailpagina p {
+    margin-top: 10px;
+}
+
+.detailpagina-subfotos {
+    display: flex;
+}
+
+.horizontaal {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detailpagina .button {
+    background-color: #F2552C;
+}
+
+.spacingaaa{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* ____________________________ */
+
+
+
 /* This whole part is for the drop right menu for phones  */
 /* ______________________________________________________ */
 /* ______________________________________________________ */
@@ -423,44 +472,6 @@ a.redHover:hover {
 
 .close-button {
     z-index: 1;
-}
-
-/*detailpagina*/
-
-.productdetails {
-    padding: 20px;
-    z-index: 1;
-}
-
-.detailsubfoto {
-    margin-top: 10px;
-    margin-right: 1em;
-    max-width: 100px;
-}
-
-.detailpagina-omschrijving, .detail-biedingen, .productdetails {
-    background-color: white;
-    box-shadow: 0 0 5px #7b7b7b;
-    padding: 10px;
-    border-radius: 3px;
-    margin-bottom: 50px;
-}
-
-.detailpagina p {
-    margin-top: 10px;
-}
-
-.detailpagina-subfotos {
-    display: flex;
-}
-
-.horizontaal {
-    display: flex;
-    justify-content: space-between;
-}
-
-.detailpagina .button {
-    background-color: #F2552C;
 }
 
 /* ______________________________________________________ */
