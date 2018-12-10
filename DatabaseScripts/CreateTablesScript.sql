@@ -40,36 +40,6 @@ DROP FUNCTION dbo.HoogsteBieder
 GO
 
 
-CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer INT)
-RETURNS NUMERIC(18,2)
-AS
-BEGIN
-RETURN
-	(
-		Select TOP 1 Bodbedrag
-		FROM Bod 
-		WHERE Bod.Voorwerp = @Voorwerpnummer
-		ORDER BY Bodbedrag DESC
-	)
-END
-
-GO
-
-CREATE FUNCTION dbo.HoogsteBieder (@Voorwerpnummer BIGINT)
-RETURNS VARCHAR(30)
-AS 
-BEGIN
-RETURN 
-	(
-		SELECT TOP 1 Gebruikersnaam
-		FROM Bod
-		WHERE Bod.Voorwerp = @Voorwerpnummer
-		ORDER BY Bodbedrag DESC
-	)
-END
-GO
-
-
 
 /*
 ======================================================================
@@ -250,11 +220,9 @@ CREATE TABLE Voorwerp
 	VeilingGesloten AS CASE WHEN GETDATE() > DATEADD(DAY, Looptijd, BeginMoment)
 					THEN 1
 					ELSE 0 END,
-	Verkoopprijs AS dbo.HoogsteBod(Voorwerpnummer),
 	Verzendkosten NUMERIC(7,2) NULL, --Tot 99999 euro verzendkosten (Grote dingen, schepen? auto's? tanks?)
 	Verzendinstructies VARCHAR(400) NULL, --Helft van een beschrijving zou genoeg moeten zijn.
 	Verkoper VARCHAR(30) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam)
-	Koper AS dbo.HoogsteBieder(Voorwerpnummer), --Zie tabel Gebruiker(Gebruikersnaam)
 
 	CONSTRAINT PK_Voorwerp PRIMARY KEY (Voorwerpnummer),
 	CONSTRAINT FK_Voorwerp_Land_Land_Landnaam FOREIGN KEY (Land) REFERENCES Land(Landnaam),
@@ -339,4 +307,39 @@ CREATE TABLE VoorwerpInRubriek
 	CONSTRAINT PK_VoorwerpInRubriek PRIMARY KEY(Voorwerp, RubriekOpLaagsteNiveau),
 	CONSTRAINT FK_VoorwerpInRubriek_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
 )
+GO
+
+CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer INT)
+RETURNS NUMERIC(18,2)
+AS
+BEGIN
+RETURN
+	(
+		Select TOP 1 Bodbedrag
+		FROM Bod 
+		WHERE Bod.Voorwerp = @Voorwerpnummer
+		ORDER BY Bodbedrag DESC
+	)
+END
+
+GO
+
+CREATE FUNCTION dbo.HoogsteBieder (@Voorwerpnummer BIGINT)
+RETURNS VARCHAR(30)
+AS 
+BEGIN
+RETURN 
+	(
+		SELECT TOP 1 Gebruikersnaam
+		FROM Bod
+		WHERE Bod.Voorwerp = @Voorwerpnummer
+		ORDER BY Bodbedrag DESC
+	)
+END
+GO
+
+ALTER TABLE Voorwerp
+	ADD 
+		Verkoopprijs AS CASE WHEN (CURRENT_TIMESTAMP > DATEADD(DAY, looptijd, BeginMoment)) then dbo.HoogsteBod(Voorwerpnummer) end,
+		Koper AS CASE WHEN	(CURRENT_TIMESTAMP > DATEADD(DAY, looptijd, BeginMoment)) then dbo.HoogsteBieder(Voorwerpnummer) end
 GO
