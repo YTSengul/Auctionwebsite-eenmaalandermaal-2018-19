@@ -11,4 +11,5 @@ session_start();
         <title>EenmaalAndermaal</title>
         <link rel="stylesheet" href="foundation/css/foundation.css">
         <link rel="stylesheet" href="foundation/css/app.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>

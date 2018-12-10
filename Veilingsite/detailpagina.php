@@ -1,6 +1,5 @@
 <?php
 include_once "components/connect.php";
-
 include_once "components/meta.php"; ?>
 <body>
 <?php include_once "components/header.php"; ?>
@@ -52,7 +51,7 @@ include_once "components/meta.php"; ?>
     <div class="detailpagina-omschrijving">
         <ul class="tabs" data-tabs id="example-tabs">
             <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
-            <li class="tabs-title"><a href="#panel2">Informatie</a></li>
+            <li class="tabs-title"><a href="#panel2">Informatie</a></li> <!--tabs-title zorgt voor de styling-->
         </ul>
         <hr>
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
@@ -69,11 +68,19 @@ include_once "components/meta.php"; ?>
             laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper
             ultricies
             nisi. Nam eget dui.</p>
+        <div class="tabs-panel" id="panel2">
+            <p>Tab 2 test Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut
+                metus varius
+                laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper
+                ultricies
+                nisi. Nam eget dui.</p>
+        </div>
     </div>
-</div>
-
-<?php include "components/scripts.html"; ?>
-
+    <?php include "components/scripts.html"; ?>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
+    <script>
+        $(document).foundation();
+    </script>
 </body>
-
 </html>
