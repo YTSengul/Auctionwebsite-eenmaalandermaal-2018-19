@@ -21,18 +21,19 @@ include_once "components/meta.php"; ?>
         </div>
     </div>
     <div class="cell large-5 detail-biedingen">
-        <div>
+        <div class="horizontaal">
             <h3>Doe een bod</h3>
             <h3>00:00</h3>
-            <hr>
         </div>
+        <hr>
+
         <div>
             <p>Hier kunt u bieden. Lorem ipsum bla die bla test tekst.</p>
         </div>
         <div>
-            <form>
+            <form class="horizontaal">
                 <input type="number" placeholder="Vul bedrag in...">
-                <input type="submit" value="Bieden">
+                <input class="button" type="submit" value="Bieden">
             </form>
         </div>
         <div>
@@ -43,13 +44,16 @@ include_once "components/meta.php"; ?>
             <h4>&euro; 0,-</h4>
         </div>
         <div>
-            <h4>Hoogste bieding</h4>
-            <h4>Aantal biedingen</h4>
-            <h4>Resterende tijd</h4>
+            <h5>Hoogste bieding: 0</h5>
+            <h5>Aantal biedingen: 0</h5>
+            <h5>Resterende tijd: 0</h5>
         </div>
     </div>
-    <div class="omschrijving">
-        <h3>Omschrijving</h3>
+    <div class="detailpagina-omschrijving">
+        <ul class="tabs" data-tabs id="example-tabs">
+            <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
+            <li class="tabs-title"><a href="#panel2">Informatie</a></li>
+        </ul>
         <hr>
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
             Cum

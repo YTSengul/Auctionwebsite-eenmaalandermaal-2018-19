@@ -181,10 +181,6 @@ hr {
     color: #FFFFFF !important;
 }
 
-.header a:active {
-    color: #FF9122 !important;
-}
-
 a.blackHover:hover {
     color: #000000 !important;
 }
@@ -393,7 +389,6 @@ a.redHover:hover {
 }
 
 .ecommerce-header-mobile-right .fa {
-    color: x; /*what is this?*/
     font-size: 1.5rem;
 }
 
@@ -434,11 +429,7 @@ a.redHover:hover {
 
 .productdetails {
     padding: 20px;
-}
-
-.detailfoto, .detailsubfoto {
-    display: block;
-    box-shadow: 0 0 5px #7b7b7b;
+    z-index: 1;
 }
 
 .detailsubfoto {
@@ -447,7 +438,7 @@ a.redHover:hover {
     max-width: 100px;
 }
 
-.detailpagina .omschrijving, .detail-biedingen {
+.detailpagina-omschrijving, .detail-biedingen, .productdetails {
     background-color: white;
     box-shadow: 0 0 5px #7b7b7b;
     padding: 10px;
@@ -459,8 +450,17 @@ a.redHover:hover {
     margin-top: 10px;
 }
 
-.detailpagina-test {
+.detailpagina-subfotos {
     display: flex;
+}
+
+.horizontaal {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detailpagina .button {
+    background-color: #F2552C;
 }
 
 /* ______________________________________________________ */

@@ -11,7 +11,7 @@ try {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
-  //die ( "Fout met de database: {$e->getMessage()} " );
+  die ( "Fout met de database: {$e->getMessage()} " );
 }
 
 ?>

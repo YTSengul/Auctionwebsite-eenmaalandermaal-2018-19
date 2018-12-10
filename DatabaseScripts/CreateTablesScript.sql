@@ -39,9 +39,9 @@ GO
 CREATE TABLE Rubriek
 (
 	RubriekNummer INT NOT NULL, --Gekregen rubrieken gaan niet boven 200000 dus kan geen smallint dus moet int. miljoen is voldoende
-	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karacters dus zal wel lukken.
+	RubriekNaam VARCHAR(40) NOT NULL, --Gekregen rubrieknamen gaan niet boven 40 karakters dus zal wel lukken.
 	VorigeRubriek INT NULL, --Zelfde als Rubrieknummer.
-	Volgnummer TINYINT NOT NULL DEFAULT 1, --0 tot 255, zou genoeg moeten zijn. hoog nummer betekend populairder. Default op 1. zodat heel specifieke rubrieken toch nog onder anderen geplaatst kunnen worden. (rubriek "Overigen")
+	Volgnummer TINYINT NOT NULL DEFAULT 1, --0 tot 255, zou genoeg moeten zijn. hoog nummer betekent populairder. Default op 1 zodat heel specifieke rubrieken toch nog onder anderen geplaatst kunnen worden. (rubriek "Overigen")
 
 	CONSTRAINT PK_Rubriek PRIMARY KEY (Rubrieknummer),
 	CONSTRAINT FK_Rubriek_Rubrieknummer_Rubriek_Rubriek FOREIGN KEY (VorigeRubriek) REFERENCES Rubriek (Rubrieknummer),
@@ -57,7 +57,7 @@ CREATE TABLE Betalingswijzen
 	Betalingswijze VARCHAR(30) NOT NULL,
 
 	CONSTRAINT PK_Betalingswijzen PRIMARY KEY (Betalingswijzenummer),
-	CONSTRAINT CHK_Betalingswijzen_Betalingswijze CHECK (LEN(RTRIM(LTRIM(Betalingswijze))) >= 3), --Min 3 Characters, geen spaties.
+	CONSTRAINT CHK_Betalingswijzen_Betalingswijze CHECK (LEN(RTRIM(LTRIM(Betalingswijze))) >= 3), --Min 3 karakters, geen spaties.
 )
 GO
 
@@ -128,7 +128,7 @@ CREATE TABLE Gebruiker
 	Plaatsnaam VARCHAR(85) NOT NULL,
 	Land int NOT NULL,
 	Datum DATE NOT NULL,
-	Mailbox VARCHAR(50) NOT NULL UNIQUE, --Normaal email adres heeft niet meer dan 50 karakters.
+	Mailbox VARCHAR(50) NOT NULL UNIQUE, --Normaal e-mailadres heeft niet meer dan 50 karakters.
 	Wachtwoord VARCHAR(255) NOT NULL,
 	Vraagnummer TINYINT NOT NULL, --Zie tabel Vraag(vraagnummer)
 	Antwoordtekst VARCHAR(255) NOT NULL,
