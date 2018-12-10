@@ -19,7 +19,7 @@
             ';
 
             /** Query to select the first 3 sub categories from the main categories. Ordered by popularity and then alphabet. */
-            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam FROM Rubriek WHERE VorigeRubriek = '$hoofdRubriek[Rubrieknummer]' ORDER BY Populariteit, Rubrieknaam ASC";
+            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam FROM Rubriek WHERE VorigeRubriek = '$hoofdRubriek[Rubrieknummer]' ORDER BY Volgnummer, Rubrieknaam ASC";
 
             $subRubrieken = $dbh->prepare($querySubCategories);
             $subRubrieken->execute();
@@ -40,7 +40,7 @@
         /** Amounf of main categories to be shown on the website */
         $amountOfMainCategoriesShown = 7;
         /** Query to select all main categories from the database. Ordered by popularity and then alphabet. */
-        $queryMainCategories = "SELECT top $amountOfMainCategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = $previousCategory ORDER BY Populariteit, Rubrieknaam ASC";
+        $queryMainCategories = "SELECT top $amountOfMainCategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = $previousCategory ORDER BY Volgnummer, Rubrieknaam ASC";
 
         $hoofdRubrieken = $dbh->prepare($queryMainCategories);
         $hoofdRubrieken->execute();
