@@ -1,7 +1,7 @@
 /* Jenn test */
 
 /** {*/
-    /*border: 1px solid #FF0000;*/
+/*border: 1px solid #FF0000;*/
 /*}*/
 
 body {
@@ -100,7 +100,7 @@ a:hover {
     background-color: #F2552C;
 }
 
-.card-body{
+.card-body {
     margin-top: 5vh;
 }
 
@@ -214,13 +214,10 @@ a.redHover:hover {
 
 .productdetails {
     padding: 20px;
-    /* z-index: 0; */
-    /* margin-right: 20px; */
 }
 
 .detailsubfoto {
     margin-top: 10px;
-    margin-right: 1em;
     max-width: 100px;
 }
 
@@ -236,8 +233,14 @@ a.redHover:hover {
     margin-top: 10px;
 }
 
+.detailpagina img {
+    border: solid #b5b3b2 1px;
+    border-radius: 5px;
+}
+
 .detailpagina-subfotos {
     display: flex;
+    justify-content: space-between;
 }
 
 .horizontaal {
@@ -249,13 +252,17 @@ a.redHover:hover {
     background-color: #F2552C;
 }
 
-.spacingaaa{
+.detail-bedragen {
     margin-left: 20px;
     margin-right: 20px;
 }
 
-/* ____________________________ */
+.detail-bedragen hr {
+    border-color: #F0F0F0;
+    margin-bottom: 5px;
+}
 
+/* ____________________________ */
 
 
 /* This whole part is for the drop right menu for phones  */
