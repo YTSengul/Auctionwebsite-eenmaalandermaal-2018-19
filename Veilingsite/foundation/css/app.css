@@ -45,7 +45,7 @@ a {
 }
 
 a:hover {
-    color: #FFFFFF !important;
+    color: #FFFFFF;
 }
 
 .menu-account {
@@ -237,11 +237,6 @@ a.redHover:hover {
 .detailpagina img {
     border: solid #b5b3b2 1px;
     border-radius: 5px;
-}
-
-.detailpagina-subfotos {
-    display: flex;
-    justify-content: space-between;
 }
 
 .horizontaal {

@@ -11,10 +11,8 @@ include_once "components/meta.php";
             <h2>Hier komt de titel van de veiling</h2>
         </div>
         <div class="cell large-7 productdetails">
-            <!--            <div>-->
             <img class='detailfoto' src="img/gouden_schoen.jpg" alt="Foto van een product">
-            <!--            </div>-->
-            <div class="detailpagina-subfotos">
+            <div class="horizontaal">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
