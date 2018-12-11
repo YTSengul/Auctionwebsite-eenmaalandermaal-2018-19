@@ -22,6 +22,7 @@ if (isset($_POST['rubriek_sorteer'])) {
     $nieuwe_string_na_sorteren = strstr($s, '?', true);
     header('Location:'.$nieuwe_string_na_sorteren);
 }
+
 // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
 else if (isset($_GET['rubriek_hernoem'])) {
 
@@ -211,9 +212,9 @@ for ($x = 0; $x < 10; $x++) {
 
         }
 
-        //        echo '<pre>';
-        //        print_r(get_defined_vars());
-        //        echo '</pre>';
+//        echo '<pre>';
+//        print_r(get_defined_vars());
+//        echo '</pre>';
 
         ?>
 
