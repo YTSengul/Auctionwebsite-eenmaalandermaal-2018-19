@@ -20,9 +20,14 @@ body {
     border: 0;
 }
 
-.spreadContents {
+.spaceAround {
     display: flex !important;
     justify-content: space-around !important;
+}
+
+.spaceBetween {
+    display: flex;
+    justify-content: space-between;
 }
 
 .makeStatic {
@@ -222,7 +227,9 @@ a.redHover:hover {
     max-width: 100px;
 }
 
-.detailpagina-omschrijving, .detail-biedingen, .productdetails {
+.detailpagina-omschrijving,
+.detail-biedingen,
+.productdetails {
     background-color: white;
     box-shadow: 0 0 5px #7b7b7b;
     padding: 10px;
@@ -237,11 +244,6 @@ a.redHover:hover {
 .detailpagina img {
     border: solid #b5b3b2 1px;
     border-radius: 5px;
-}
-
-.horizontaal {
-    display: flex;
-    justify-content: space-between;
 }
 
 .detailpagina .button {
@@ -479,10 +481,6 @@ a.redHover:hover {
 
 .close-button {
     z-index: 1;
-}
-
-.veilingen-veiling-info {
-    width: 100%;
 }
 
 /* ______________________________________________________ */

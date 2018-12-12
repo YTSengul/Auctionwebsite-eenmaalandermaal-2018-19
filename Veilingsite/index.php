@@ -8,7 +8,7 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
 
     $i = 1;
 
-    $querySelectionAuctions = "SELECT TOP $amountOfActions Titel, AfbeeldingNaam, Startprijs, EindMoment FROM Voorwerp WHERE VeilingGesloten = 0 ORDER BY $sortByThis $upOrDown";
+    $querySelectionAuctions = "SELECT TOP $amountOfActions Titel, Startprijs, EindMoment FROM Voorwerp WHERE VeilingGesloten = 0 ORDER BY $sortByThis $upOrDown";
 
     $auctions = $dbh->prepare($querySelectionAuctions);
     $auctions->execute();
@@ -48,9 +48,9 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
 
 
         echo '
-                    <div class="veiling-sluit-index"> 
+                    <div class="veiling-sluit-index">
                         <div>
-                            <img class="thumbnail" src="img/' . $auction['AfbeeldingNaam'] . '" alt="Foto van een veiling">
+                            // <img class="thumbnail" src="img/' . $auction['AfbeeldingNaam'] . '" alt="Foto van een veiling">
                         </div>
                         <div class="card-body">
                             <div class="grid-x ">
@@ -96,7 +96,7 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
             <h4>Veilingen aan het sluiten</h4>
         </div>
 
-        <?php auctionBoxes("Big", 4, 1, "EindMoment"); ?>
+        <?php //auctionBoxes("Big", 4, 1, "EindMoment"); ?>
     </div>
 
     <div class="grid-x grid-padding-x home-veilingen-box">
@@ -104,7 +104,7 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
             <h4>Exclusief</h4>
         </div>
 
-        <?php auctionBoxes("Small", 8, 2, "Startprijs"); ?>
+        <?php //auctionBoxes("Small", 8, 2, "Startprijs"); ?>
     </div>
 
     <div class="grid-x grid-padding-x home-veilingen-box">
@@ -112,7 +112,7 @@ Function auctionBoxes($size, $amountOfActions, $amountHidden, $sortByThis = "Sta
             <h4>Koopjes</h4>
         </div>
 
-        <?php auctionBoxes("Small", 8, 2, "Startprijs", "ASC"); ?>
+        <?php //auctionBoxes("Small", 8, 2, "Startprijs", "ASC"); ?>
     </div>
 
 </div>
