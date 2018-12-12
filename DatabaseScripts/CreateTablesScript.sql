@@ -55,7 +55,7 @@ CREATE TABLE Rubriek
 	VorigeRubriek INT NULL, --Zelfde als Rubrieknummer.
 	Volgnummer TINYINT NOT NULL DEFAULT 1, --0 tot 255, zou genoeg moeten zijn. hoog nummer betekent populairder. Default op 1 zodat heel specifieke rubrieken toch nog onder anderen geplaatst kunnen worden. (rubriek "Overigen")
 
-	CONSTRAINT PK_Rubriek PRIMARY KEY (Rubrieknummer),
+	CONSTRAINT PK_Rubriek_Rubrieknummer PRIMARY KEY (Rubrieknummer),
 	CONSTRAINT FK_Rubriek_Rubrieknummer_Rubriek_Rubriek FOREIGN KEY (VorigeRubriek) REFERENCES Rubriek (Rubrieknummer),
 	/*
 	CONSTRAINT CHK_Rubriek_RubriekNaam CHECK (LEN(RTRIM(LTRIM(RubriekNaam))) >= 4), --Min 4 Characters, geen spaties.
@@ -74,7 +74,7 @@ CREATE TABLE Betalingswijzen
 (
 	Betalingswijze VARCHAR(30) NOT NULL,
 
-	CONSTRAINT PK_Betalingswijzen PRIMARY KEY (Betalingswijze),
+	CONSTRAINT PK_Betalingswijzen_Betalingswijze PRIMARY KEY (Betalingswijze),
 	CONSTRAINT CHK_Betalingswijzen_Betalingswijze CHECK (LEN(RTRIM(LTRIM(Betalingswijze))) >= 3), --Min 3 karakters, geen spaties.
 )
 GO
@@ -93,7 +93,7 @@ CREATE TABLE Land
 	Begindatum DATE NULL,
 	Einddatum DATE NULL,
 	EER_Lid BIT NOT NULL DEFAULT 0,
-	CONSTRAINT PK_Land PRIMARY KEY (Landnaam),
+	CONSTRAINT PK_Land_Landnaam PRIMARY KEY (Landnaam),
 	CONSTRAINT UQ_Land_GBA_CODE UNIQUE (GBA_CODE),
 	CONSTRAINT CHK_CODE CHECK ( LEN(GBA_CODE) = 4 ),
 	CONSTRAINT CHK_DATUM CHECK ( Begindatum < Einddatum )
@@ -110,9 +110,9 @@ GO
 CREATE TABLE Vraag
 (
 	Vraagnummer TINYINT NOT NULL, --maximaal 255 vragen.
-	TekstVraag VARCHAR(50) NOT NULL, --korte vragen.
+	TekstVraag VARCHAR(70) NOT NULL, --Niet te lange vragen.
 
-	CONSTRAINT PK_vraagnummer PRIMARY KEY (vraagnummer)
+	CONSTRAINT PK_Vraag_Vraagnummer PRIMARY KEY (Vraagnummer)
 )
 GO
 
@@ -125,24 +125,25 @@ GO
 
 CREATE TABLE Gebruiker
 (
-	Gebruikersnaam VARCHAR(30) NOT NULL,
+	Gebruikersnaam VARCHAR(40) NOT NULL,
 	Voornaam VARCHAR(30) NOT NULL,
 	Achternaam VARCHAR(30) NOT NULL,
 	Adresregel1 VARCHAR(50) NOT NULL,
 	Adresregel2 VARCHAR(50) NULL,
 	Postcode VARCHAR (7) NOT NULL,
 	Plaatsnaam VARCHAR(85) NOT NULL,
-	Land int NOT NULL,
+	Land VARCHAR(40) NOT NULL,
 	Datum DATE NOT NULL,
-	Mailbox VARCHAR(50) NOT NULL UNIQUE, --Normaal e-mailadres heeft niet meer dan 50 karakters.
+	Mailbox VARCHAR(50) NOT NULL, --Normaal e-mailadres heeft niet meer dan 50 karakters.
 	Wachtwoord VARCHAR(255) NOT NULL,
 	Vraagnummer TINYINT NOT NULL, --Zie tabel Vraag(vraagnummer)
 	Antwoordtekst VARCHAR(255) NOT NULL,
 	Verkoper BIT NOT NULL DEFAULT 0, --Bij registratie is een gebruiker nog geen verkoper.
 
-	CONSTRAINT PK_Gebruiker PRIMARY KEY (Gebruikersnaam),
-	CONSTRAINT FK_Gebruiker_vraagnummer_Vraag_vraagnummer FOREIGN KEY (Vraagnummer) REFERENCES Vraag(Vraagnummer),
-	CONSTRAINT CHK_Gebruiker_Gebruikersnaam CHECK (LEN(RTRIM(LTRIM(Gebruikersnaam))) >= 4), --Min 4 Characters, geen spaties.
+	CONSTRAINT PK_Gebruiker_Gebruikersnaam PRIMARY KEY (Gebruikersnaam),
+	CONSTRAINT FK_Gebruiker_Vraagnummer_Vraag_Vraagnummer FOREIGN KEY (Vraagnummer) REFERENCES Vraag(Vraagnummer),
+	CONSTRAINT FK_Gebruiker_Land_Land_Landnaam FOREIGN KEY (Land) REFERENCES Land(Landnaam),
+	CONSTRAINT CHK_Gebruiker_Gebruikersnaam CHECK (LEN(RTRIM(LTRIM(Gebruikersnaam))) >= 3), --Min 4 Characters, geen spaties.
 )
 GO
 
@@ -156,10 +157,10 @@ GO
 CREATE TABLE Gebruikerstelefoon
 (
 	Volgnr INT NOT NULL UNIQUE,
-	Gebruikersnaam VARCHAR(30) NOT NULL UNIQUE,
+	Gebruikersnaam VARCHAR(40) NOT NULL UNIQUE,
 	Telefoonnummer VARCHAR(11) NOT NULL UNIQUE,
 	
-	CONSTRAINT PK_Gebruikerstelefoon PRIMARY KEY (volgnr, gebruikersnaam),
+	CONSTRAINT PK_Gebruikerstelefoon_Volgnr_Gebruikersnaam PRIMARY KEY (volgnr, gebruikersnaam),
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruikerstelefoon FOREIGN KEY (gebruikersnaam) REFERENCES Gebruiker (gebruikersnaam)
 )
 GO
@@ -173,10 +174,10 @@ GO
 
 CREATE TABLE Beheerder
 (
-	Gebruikersnaam VARCHAR(30) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
+	Gebruikersnaam VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
 	BeheerWachtwoord VARCHAR(20) NOT NULL
 
-	CONSTRAINT PK_Beheerder PRIMARY KEY (Gebruikersnaam)
+	CONSTRAINT PK_Beheerder_Gebruikersnaam PRIMARY KEY (Gebruikersnaam)
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
 )
 GO
@@ -193,7 +194,7 @@ create table EmailConfiguratie (
 	Verificatiecode varchar(10) NOT NULL,
 	Geverifieerd bit DEFAULT 0 NOT NULL,
 
-	CONSTRAINT PK_emailconfiguratie PRIMARY KEY (mailbox)
+	CONSTRAINT PK_EmailConfiguratie_Mailbox PRIMARY KEY (mailbox)
 )
 GO
 
@@ -207,8 +208,8 @@ GO
 CREATE TABLE Voorwerp
 (
 	Voorwerpnummer INT IDENTITY NOT NULL, --App c genereert zelf een nummer.
-	Titel VARCHAR(45) NOT NULL, --Minder dan marktplaats: 60
-	Beschrijving VARCHAR(800) NOT NULL,
+	Titel VARCHAR(90) NOT NULL, --Minder dan marktplaats: 60 Moet 45 worden
+	Beschrijving VARCHAR(MAX) NOT NULL, --Moet 800 worden
 	Startprijs NUMERIC(18,2) NOT NULL, --Bedragen tot 100 miljoen.
 	Betalingswijze VARCHAR(30) NOT NULL, --Zie tabel Betalingswijzen(Betalingswijze)
 	Betalingsinstructie VARCHAR(400) NULL, --Helft van een beschrijving zou genoeg moeten zijn.
@@ -222,9 +223,9 @@ CREATE TABLE Voorwerp
 					ELSE 0 END,
 	Verzendkosten NUMERIC(7,2) NULL, --Tot 99999 euro verzendkosten (Grote dingen, schepen? auto's? tanks?)
 	Verzendinstructies VARCHAR(400) NULL, --Helft van een beschrijving zou genoeg moeten zijn.
-	Verkoper VARCHAR(30) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam)
+	Verkoper VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam)
 
-	CONSTRAINT PK_Voorwerp PRIMARY KEY (Voorwerpnummer),
+	CONSTRAINT PK_Voorwerp_Voorwerpnummer PRIMARY KEY (Voorwerpnummer),
 	CONSTRAINT FK_Voorwerp_Land_Land_Landnaam FOREIGN KEY (Land) REFERENCES Land(Landnaam),
 	CONSTRAINT FK_Voorwerp_Verkoper_Gebruiker_Gebruikersnaam FOREIGN KEY (Verkoper) REFERENCES Gebruiker(Gebruikersnaam),
 	Constraint FK_Voorwerp_Betalingswijze_Betalingswijzen_BetalingswijzeNummer FOREIGN KEY (Betalingswijze) REFERENCES Betalingswijzen(Betalingswijze),
@@ -244,10 +245,10 @@ GO
 
 CREATE TABLE Bestand
 (
-	Filenaam INT IDENTITY NOT NULL, --elke foto moet een andere naam hebben. Daarom deze keuze. 
+	Filenaam VARCHAR(50) NOT NULL, --Bestand namen gaan waarschijnlijk niet boven 50 karakters. 
 	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 
-	CONSTRAINT PK_Bestand PRIMARY KEY(Filenaam),
+	CONSTRAINT PK_Bestand_Filenaam PRIMARY KEY(Filenaam),
 	CONSTRAINT FK_Bestand_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
 )
 GO
@@ -263,10 +264,10 @@ CREATE TABLE Bod
 (
 	Bodbedrag NUMERIC(18,2) NOT NULL, --Zie tabel Voorwerp(Startprijs).
 	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
-	Gebruikersnaam VARCHAR(30) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
+	Gebruikersnaam VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
 	Tijd DATETIME NOT NULL,
 
-	CONSTRAINT PK_Bod PRIMARY KEY(Bodbedrag, Voorwerp),
+	CONSTRAINT PK_Bod_Bodbedrag_Voorwerp PRIMARY KEY(Bodbedrag, Voorwerp),
 	CONSTRAINT FK_Bod_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer),
 	CONSTRAINT FK_Bod_Gebruikersnaam_Gebruiker_Gebruikersnaam FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(gebruikersnaam)
 )
@@ -287,7 +288,7 @@ CREATE TABLE Feedback
 	KoperOfVerkoper BIT DEFAULT 1 NOT NULL,
 	Tijd DATETIME NOT NULL,
 	Commentaar VARCHAR(100) NOT NULL,
-	CONSTRAINT PK_Feedback PRIMARY KEY(Voorwerp, SoortGebruiker),
+	CONSTRAINT PK_Feedback_Voorwerp_SoortGebruiker PRIMARY KEY(Voorwerp, SoortGebruiker),
 	CONSTRAINT FK_Feedback_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
 )
 GO
@@ -304,7 +305,7 @@ CREATE TABLE VoorwerpInRubriek
 	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 	RubriekOpLaagsteNiveau INT NOT NULL, --Zie tabel Rubriek(Rubrieknummer).
 
-	CONSTRAINT PK_VoorwerpInRubriek PRIMARY KEY(Voorwerp, RubriekOpLaagsteNiveau),
+	CONSTRAINT PK_VoorwerpInRubriek_Voorwerp_RubriekOpLaagsteNiveau PRIMARY KEY(Voorwerp, RubriekOpLaagsteNiveau),
 	CONSTRAINT FK_VoorwerpInRubriek_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
 )
 GO
@@ -325,7 +326,7 @@ END
 GO
 
 CREATE FUNCTION dbo.HoogsteBieder (@Voorwerpnummer BIGINT)
-RETURNS VARCHAR(30)
+RETURNS VARCHAR(40)
 AS 
 BEGIN
 RETURN 
