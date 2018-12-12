@@ -8,7 +8,18 @@ include_once "components/meta.php";
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="hide-for-small-only medium-12 large-12 float-center cell">
-            <p class="float-left">> Breadcrumbs > Breadcrumbs > Breadcrumbs > Breadcrumbs</p>
+            <!--- Breadcrumbs -->
+            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs" >
+                <ul class="breadcrumbs">
+                    <li><a href="#">Cat 1</a></li>
+                    <li><a href="#">Cat 2</a></li>
+                    <li><a href="#">Cat 3</a></li>
+                    <li>
+                        <span class="show-for-sr">Current: </span> Huidige cat.
+                    </li>
+                </ul>
+            </nav>
+
             <select class="float-right veilingen-filter-hoofd ">
                 <option>Optie 1</option>
                 <option>Optie 2</option>

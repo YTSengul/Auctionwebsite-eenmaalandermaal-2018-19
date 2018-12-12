@@ -486,7 +486,8 @@ a.redHover:hover {
 .product-filters {
     padding: 0.5rem 1.5rem;
     background-color: #fefefe;
-    margin-top: 2.5rem;
+    /* Dit is voor de afstand tussen de filter en de breadcrumbs */
+    /*margin-top: 2.5rem;*/
 }
 
 .product-filters label {
@@ -554,4 +555,14 @@ a.redHover:hover {
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
     border-bottom: solid 2px lightgrey;
+}
+
+.veilingen-breadcrumbs {
+     display: inline-block;
+ }
+
+.veilingen-breadcrumbs > ul {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 1px grey solid;
 }
