@@ -5,7 +5,6 @@ include_once "components/connect.php";
 include_once "components/meta.php";
 
 // Op deze plaats worden de nieuwe volgnummers naar de database gestuurd indie die zij uitgevoerd
-echo$_SESSION["formulier_count"];
 if (isset($_POST['rubriek_sorteer'])) {
     $sql_wijzig_volgnummer_query = 'update rubriek set Volgnummer = :volgnummer where Rubrieknummer = :rubrieknummer ';
     $sql_wijzig_volgnummer = $dbh->prepare($sql_wijzig_volgnummer_query);
