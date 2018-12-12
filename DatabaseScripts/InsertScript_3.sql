@@ -137,21 +137,40 @@ GO
 
 */
 
-INSERT INTO Voorwerp (Titel, Beschrijving, Startprijs, Betalingswijze, Plaatsnaam, Land, Verkoper)
-SELECT  Items.Titel,																									--AS Titel
+SET IDENTITY_INSERT Voorwerp ON
+
+INSERT INTO Voorwerp (Voorwerpnummer, Titel, Beschrijving, Startprijs, Betalingswijze, Plaatsnaam, Land, Verkoper, Thumbnail)
+SELECT  ID,																												--AS Voorwerpnummer
+		Items.Titel,																									--AS Titel
 		Items.Beschrijving,																								--AS Beschrijving
 		CASE WHEN CAST(Items.Prijs AS NUMERIC(18,2)) >= 1.00 THEN CAST(Items.Prijs AS NUMERIC(18,2)) ELSE 1  END,		--AS Startprijs
 		'Creditcard',																									--AS Betalingswijze
 		'Arnhem',																										--AS Plaatsnaam
 		'Nederland',																									--AS Land
-		Items.Verkoper																									--AS Verkoper
+		Items.Verkoper,																									--AS Verkoper
+		Thumbnail																										--AS Thumbnail
 FROM Items
 GO
 
-Select * from Voorwerp
+SET IDENTITY_INSERT Voorwerp OFF
 
-Select * from Items
-Select * from Illustraties
+INSERT INTO Bestand (Filenaam, Voorwerp)
+SELECT	IllustratieFile,
+		ItemID
+FROM Items
+CROSS APPLY
+(
+SELECT TOP 4 * 
+FROM Illustraties
+WHERE ItemID = Items.ID
+) X
+GO
+
+INSERT INTO VoorwerpInRubriek (Voorwerp, RubriekOpLaagsteNiveau)
+SELECT  ID,			--AS Voorwerp
+		Categorie	--AS RubriekOpLaagsteNiveau
+FROM Items
+GO
 
 DROP TABLE Illustraties
 GO
