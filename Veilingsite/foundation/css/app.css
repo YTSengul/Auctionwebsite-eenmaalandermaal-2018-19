@@ -544,3 +544,14 @@ a.redHover:hover {
 .veilingen-filter-hoofd {
     width: auto;
 }
+
+.veilingen-veiling-omschrijving {
+    display: inline-block;
+    width: 100%;
+}
+
+.veilingen-veiling-box {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: solid 2px lightgrey;
+}

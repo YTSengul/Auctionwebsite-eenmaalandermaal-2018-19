@@ -224,7 +224,7 @@ include_once "components/meta.php";
                 <div class="media-object-section veilingen-veiling-info">
                     <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
                     <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -232,9 +232,9 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -242,9 +242,9 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -252,9 +252,9 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -262,9 +262,9 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -272,9 +272,9 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <div class="media-object veilingen-veiling-box ">
@@ -282,9 +282,29 @@ include_once "components/meta.php";
                     <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
                 </div>
                 <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5><h5
-                            class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only">I'm going to improvise. Listen, there's something you should </p>
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
+                </div>
+            </div>
+            <div class="media-object veilingen-veiling-box ">
+                <div class="media-object-section">
+                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
+                </div>
+                <div class="media-object-section veilingen-veiling-info">
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
+                </div>
+            </div>
+            <div class="media-object veilingen-veiling-box ">
+                <div class="media-object-section">
+                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
+                </div>
+                <div class="media-object-section veilingen-veiling-info">
+                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
+                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
+                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
                 </div>
             </div>
             <!--    Hier kun je dingen plaatsen voor onderin in de pagina. ik zou hier een knop plaatsen voor de nav pagina's-->
