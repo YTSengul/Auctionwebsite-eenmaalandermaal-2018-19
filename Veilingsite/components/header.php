@@ -28,7 +28,7 @@
 
 <div class="off-canvas-content data-off-canvas-content">
     <div class="ecommerce-header-mobile hide-for-medium">
-        <div class="ecommerce-header-mobile-left spreadContents">
+        <div class="ecommerce-header-mobile-left spaceAround">
             <h1 class="noPadding HeaderPhoneSpacings">EenmaalAndermaal</h1>
             <button class="menu-icon" type="button" data-toggle="ecommerce-header"></button>
         </div>
