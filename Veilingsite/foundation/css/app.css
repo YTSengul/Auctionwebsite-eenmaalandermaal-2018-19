@@ -45,7 +45,7 @@ a {
 }
 
 a:hover {
-    color: #FFFFFF !important;
+    color: #FFFFFF;
 }
 
 .menu-account {
@@ -212,8 +212,9 @@ a.redHover:hover {
 
 /* -------- detailpagina -------- */
 
-.productdetails {
-    padding: 20px;
+.detailfoto {
+    display: block;
+    margin: 0 auto;
 }
 
 .detailsubfoto {
@@ -238,11 +239,6 @@ a.redHover:hover {
     border-radius: 5px;
 }
 
-.detailpagina-subfotos {
-    display: flex;
-    justify-content: space-between;
-}
-
 .horizontaal {
     display: flex;
     justify-content: space-between;
@@ -253,13 +249,17 @@ a.redHover:hover {
 }
 
 .detail-bedragen {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 0 20px;
 }
 
 .detail-bedragen hr {
     border-color: #F0F0F0;
-    margin-bottom: 5px;
+    margin-bottom: 0.75em;
+}
+
+.detail-aantal {
+    text-align: center;
+    margin-top: 2em;
 }
 
 /* ____________________________ */

@@ -7371,13 +7371,12 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 .tabs-title > a {
     display: block;
     padding: 1.25rem 1.5rem;
-    font-size: 0.75rem;
     line-height: 1;
     color: #1779ba;
 }
 
 .tabs-title > a:hover {
-    background: #fefefe;
+    background: #F2552C;
     color: #1468a0;
 }
 

@@ -11,10 +11,8 @@ include_once "components/meta.php";
             <h2>Hier komt de titel van de veiling</h2>
         </div>
         <div class="cell large-7 productdetails">
-            <div>
-                <img class='detailfoto' src="img/gouden_schoen.jpg" alt="Foto van een product">
-            </div>
-            <div class="detailpagina-subfotos">
+            <img class='detailfoto' src="img/gouden_schoen.jpg" alt="Foto van een product">
+            <div class="horizontaal">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
                 <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
@@ -29,8 +27,8 @@ include_once "components/meta.php";
             </div>
             <hr>
             <div>
-                <p>Hier kunt u bieden. Test tekst. Until this battle station is fully operational we are vulnerable. The
-                    Rebel Alliance is too well equipped. They're more dangerous than you realize.</p>
+                <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
+                    bent u verplicht te betalen als u het product wint.</p>
             </div>
             <div>
                 <form class="horizontaal">
@@ -63,9 +61,10 @@ include_once "components/meta.php";
                     <h4>&euro; 0,-</h4>
                     <h5>Username5</h5>
                 </div>
+                <hr>
             </div>
-            <div>
-                <h5>Aantal biedingen: 0</h5>
+            <div class="detail-aantal">
+                <h4>Aantal biedingen: 0</h4>
             </div>
         </div>
         <div class="cell detailpagina-omschrijving">
