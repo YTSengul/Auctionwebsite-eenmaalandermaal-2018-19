@@ -3,13 +3,41 @@ include_once "components/connect.php";
 include_once "components/meta.php";
 ?>
 
+<?PHP
+$sql_veilingen_query = "SELECT *
+FROM (
+     SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
+     FROM Voorwerp
+     ) AS MyDerivedTable
+WHERE MyDerivedTable.RowNum BETWEEN 0 AND 10 AND VeilingGesloten = 0";
+$sql_veilingen_data = $dbh->prepare($sql_veilingen_query);
+$sql_veilingen_data->execute();
+$veilingen = $sql_veilingen_data->fetchAll(PDO::FETCH_NUM);
+$aantalveilingen = $veilingen;
+
+$tijd_uit_server = time(); // or your date as well
+$your_date = strtotime(date($veilingen[0][10]));
+$datediff = $your_date - $tijd_uit_server;
+
+$dagen = round($datediff/(60*60*24));
+$uren = round($datediff/(60*60));
+$minuten = round($datediff/(60));
+$seconden = round($datediff);
+
+echo $dagen.'<br>';
+echo $uren.'<br>';
+echo $minuten.'<br>';
+echo $seconden.'<br>';
+
+?>
+
 <body>
 <?php include_once "components/header.php"; ?>
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="hide-for-small-only medium-12 large-12 float-center cell">
             <!--- Breadcrumbs -->
-            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs" >
+            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
                 <ul class="breadcrumbs">
                     <li><a href="#">Cat 1</a></li>
                     <li><a href="#">Cat 2</a></li>
@@ -227,138 +255,93 @@ include_once "components/meta.php";
                 </ul>
             </div>
         </div>
-        <div class="small-12 medium-9 large-9 float-center cell">
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
+        <?PHP
+        foreach ($veilingen as $veiling) {
+            echo "<div class='small-12 medium-9 large-9 float-center cell'>
+            <div class='media-object veilingen-veiling-box '>
+                <div class='media-object-section'>
+                    <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[15], 3) . "'>
                 </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
+                <div class='media-object-section veilingen-veiling-info'>
+                    <h5 class='veilingen-veiling-titel float-left'>$veiling[1]</h5>
+                    <h5 class='veilingen-veiling-timer float-right' id='demo' ></h5>
+                    <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[2]), 0, 140) . "</p>
                 </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <div class="media-object veilingen-veiling-box ">
-                <div class="media-object-section">
-                    <img class="thumbnail veilingen-veiling-image " src="https://placehold.it/100x100">
-                </div>
-                <div class="media-object-section veilingen-veiling-info">
-                    <h5 class="veilingen-veiling-titel float-left ">Mike Stevenson</h5>
-                    <h5 class="veilingen-veiling-timer float-right ">00:00</h5>
-                    <p class="hide-for-small-only veilingen-veiling-omschrijving">I'm going to improvise. Listen, there's something you should </p>
-                </div>
-            </div>
-            <!--    Hier kun je dingen plaatsen voor onderin in de pagina. ik zou hier een knop plaatsen voor de nav pagina's-->
-            <!--    <label>-->
-            <!--        My Review-->
-            <!--        <textarea placeholder="None"></textarea>-->
-            <!--    </label>-->
-            <!--    <button class="button">Submit Review</button>-->
+            </div>";
+        }
+        ?>
+        <!--    Hier kun je dingen plaatsen voor onderin in de pagina. ik zou hier een knop plaatsen voor de nav pagina's-->
+        <!--    <label>-->
+        <!--        My Review-->
+        <!--        <textarea placeholder="None"></textarea>-->
+        <!--    </label>-->
+        <!--    <button class="button">Submit Review</button>-->
 
-            <ul class="pagination text-center" role="navigation" aria-label="Pagination" data-page="6" data-total="16">
-                <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
-                <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-                <li><a href="#" aria-label="Page 2">2</a></li>
-                <li><a href="#" aria-label="Page 3">3</a></li>
-                <li><a href="#" aria-label="Page 4">4</a></li>
-                <li class="ellipsis" aria-hidden="true"></li>
-                <li><a href="#" aria-label="Page 12">12</a></li>
-                <li><a href="#" aria-label="Page 13">13</a></li>
-                <li class="pagination-next"><a href="#" aria-label="Next page">Next <span
-                                class="show-for-sr">page</span></a></li>
-            </ul>
-        </div>
+        <ul class="pagination text-center" role="navigation" aria-label="Pagination" data-page="6" data-total="16">
+            <li class="pagination-previous disabled">Previous <span class="show-for-sr">page</span></li>
+            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+            <li><a href="#" aria-label="Page 2">2</a></li>
+            <li><a href="#" aria-label="Page 3">3</a></li>
+            <li><a href="#" aria-label="Page 4">4</a></li>
+            <li class="ellipsis" aria-hidden="true"></li>
+            <li><a href="#" aria-label="Page 12">12</a></li>
+            <li><a href="#" aria-label="Page 13">13</a></li>
+            <li class="pagination-next"><a href="#" aria-label="Next page">Next <span
+                            class="show-for-sr">page</span></a></li>
+        </ul>
     </div>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
-    <script>
-        $('.categories-menu.menu.nested').each(function(){
-            var filterAmount = $(this).find('li').length;
-            if( filterAmount > 5){
-                $('li', this).eq(4).nextAll().hide().addClass('toggleable');
-                $(this).append('<li class="more">More</li>');
-            }
-        });
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
+<script>
+    $('.categories-menu.menu.nested').each(function () {
+        var filterAmount = $(this).find('li').length;
+        if (filterAmount > 5) {
+            $('li', this).eq(4).nextAll().hide().addClass('toggleable');
+            $(this).append('<li class="more">More</li>');
+        }
+    });
 
-        $('.categories-menu.menu.nested').on('click','.more', function(){
-            if( $(this).hasClass('less') ){
-                $(this).text('More').removeClass('less');
-            }else{
-                $(this).text('Less').addClass('less');
-            }
-            $(this).siblings('li.toggleable').slideToggle();
-        });
-        $(document).foundation();
-    </script>
+    $('.categories-menu.menu.nested').on('click', '.more', function () {
+        if ($(this).hasClass('less')) {
+            $(this).text('More').removeClass('less');
+        } else {
+            $(this).text('Less').addClass('less');
+        }
+        $(this).siblings('li.toggleable').slideToggle();
+    });
+    $(document).foundation();
+    $(document).app();
+</script>
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("<?PHP echo date($veiling[10]); ?>").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+
+        // Get todays date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "EXPIRED";
+        }
+    }, 1000);
+</script>
 </body>
 </html>

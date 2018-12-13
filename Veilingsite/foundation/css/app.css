@@ -566,3 +566,12 @@ a.redHover:hover {
     padding-right: 10px;
     border-bottom: 1px grey solid;
 }
+
+.veilingen-veiling-image {
+    width: 150px;
+    height: 150px;
+}
+
+.veilingen-veiling-info {
+    width: 100%;
+}
