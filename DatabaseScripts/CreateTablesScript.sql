@@ -207,7 +207,7 @@ GO
 
 CREATE TABLE Voorwerp
 (
-	Voorwerpnummer INT IDENTITY NOT NULL, --App c genereert zelf een nummer.
+	Voorwerpnummer BIGINT IDENTITY NOT NULL, --App c genereert zelf een nummer.
 	Titel VARCHAR(90) NOT NULL, --Minder dan marktplaats: 60 Moet 45 worden
 	Beschrijving VARCHAR(MAX) NOT NULL, --Moet 800 worden
 	Startprijs NUMERIC(18,2) NOT NULL, --Bedragen tot 100 miljoen.
@@ -224,6 +224,7 @@ CREATE TABLE Voorwerp
 	Verzendkosten NUMERIC(7,2) NULL, --Tot 99999 euro verzendkosten (Grote dingen, schepen? auto's? tanks?)
 	Verzendinstructies VARCHAR(400) NULL, --Helft van een beschrijving zou genoeg moeten zijn.
 	Verkoper VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam)
+	Thumbnail VARCHAR(50) NOT NULL,
 
 	CONSTRAINT PK_Voorwerp_Voorwerpnummer PRIMARY KEY (Voorwerpnummer),
 	CONSTRAINT FK_Voorwerp_Land_Land_Landnaam FOREIGN KEY (Land) REFERENCES Land(Landnaam),
@@ -246,7 +247,7 @@ GO
 CREATE TABLE Bestand
 (
 	Filenaam VARCHAR(50) NOT NULL, --Bestand namen gaan waarschijnlijk niet boven 50 karakters. 
-	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
+	Voorwerp BIGINT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 
 	CONSTRAINT PK_Bestand_Filenaam PRIMARY KEY(Filenaam),
 	CONSTRAINT FK_Bestand_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
@@ -263,7 +264,7 @@ GO
 CREATE TABLE Bod
 (
 	Bodbedrag NUMERIC(18,2) NOT NULL, --Zie tabel Voorwerp(Startprijs).
-	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
+	Voorwerp BIGINT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 	Gebruikersnaam VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
 	Tijd DATETIME NOT NULL,
 
@@ -282,7 +283,7 @@ GO
 
 CREATE TABLE Feedback
 (
-	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
+	Voorwerp BIGINT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 	SoortGebruiker BIT DEFAULT 1 NOT NULL,
 	Feedbacksoortnaam BIT DEFAULT 1 NOT NULL,
 	KoperOfVerkoper BIT DEFAULT 1 NOT NULL,
@@ -302,7 +303,7 @@ GO
 
 CREATE TABLE VoorwerpInRubriek
 (
-	Voorwerp INT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
+	Voorwerp BIGINT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 	RubriekOpLaagsteNiveau INT NOT NULL, --Zie tabel Rubriek(Rubrieknummer).
 
 	CONSTRAINT PK_VoorwerpInRubriek_Voorwerp_RubriekOpLaagsteNiveau PRIMARY KEY(Voorwerp, RubriekOpLaagsteNiveau),
