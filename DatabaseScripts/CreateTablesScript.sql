@@ -208,8 +208,8 @@ GO
 CREATE TABLE Voorwerp
 (
 	Voorwerpnummer BIGINT IDENTITY NOT NULL, --App c genereert zelf een nummer.
-	Titel VARCHAR(90) NOT NULL, --Minder dan marktplaats: 60 Moet 45 worden
-	Beschrijving VARCHAR(MAX) NOT NULL, --Moet 800 worden
+	Titel VARCHAR(100) NOT NULL, --Minder dan marktplaats: 60 Moet 45 worden.
+	Beschrijving VARCHAR(5000) NOT NULL, --Moet 800 worden
 	Startprijs NUMERIC(18,2) NOT NULL, --Bedragen tot 100 miljoen.
 	Betalingswijze VARCHAR(30) NOT NULL, --Zie tabel Betalingswijzen(Betalingswijze)
 	Betalingsinstructie VARCHAR(400) NULL, --Helft van een beschrijving zou genoeg moeten zijn.
@@ -266,7 +266,7 @@ CREATE TABLE Bod
 	Bodbedrag NUMERIC(18,2) NOT NULL, --Zie tabel Voorwerp(Startprijs).
 	Voorwerp BIGINT NOT NULL, --Zie tabel Voorwerp(Voorwerpnummer).
 	Gebruikersnaam VARCHAR(40) NOT NULL, --Zie tabel Gebruiker(Gebruikersnaam).
-	Tijd DATETIME NOT NULL,
+	Tijd DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
 	CONSTRAINT PK_Bod_Bodbedrag_Voorwerp PRIMARY KEY(Bodbedrag, Voorwerp),
 	CONSTRAINT FK_Bod_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer),

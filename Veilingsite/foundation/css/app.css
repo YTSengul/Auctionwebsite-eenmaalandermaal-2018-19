@@ -20,6 +20,10 @@ body {
     border: 0;
 }
 
+.noLineHeight{
+    line-height: 1 !important;
+}
+
 .spaceAround {
     display: flex !important;
     justify-content: space-around !important;
@@ -28,6 +32,16 @@ body {
 .spaceBetween {
     display: flex;
     justify-content: space-between;
+}
+
+.CustomMargin{
+    margin-bottom: 10px !important;
+}
+
+.ddd{
+    align-items: center;
+    justify-content: center;
+    align-content: center;
 }
 
 .makeStatic {
@@ -69,22 +83,36 @@ a:hover {
 /* -------- Auctions -------- */
 
 .veiling-sluit-index > div > img {
-    display: block;
-    min-height: 100px;
-    max-height: 250px;
-    max-width: 100%;
+    /* display: block; */
+    max-height: 200px !important;
+    min-width: 100%;
+    margin: auto;
+}
+
+.abc{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* overflow: hidden; */
+}
+
+.dbc{
+    /* height: 200px; */
 }
 
 .veiling-sluit-index {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 5px;
+    height: 98%;
     padding: 10px;
+    margin-bottom: 10px;
     background-color: #FFFFFF;
     box-shadow: 0 0 5px #7b7b7b;
     border-radius: 3px;
-    min-height: 400px;
 }
 
 .veiling-sluit-index > div > .timer {
@@ -106,7 +134,7 @@ a:hover {
 }
 
 .card-body {
-    margin-top: 5vh;
+    margin-top: 2vh;
 }
 
 /* _____________________________ */
