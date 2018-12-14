@@ -44,6 +44,15 @@ body {
     align-content: center;
 }
 
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.marginTopAuto {
+    margin-top: auto;
+}
+
 .makeStatic {
     position: static;
 }
@@ -290,6 +299,10 @@ a.redHover:hover {
 .detail-aantal {
     text-align: center;
     margin-top: 2em;
+}
+
+.flexEnd {
+    align-self: flex-end;
 }
 
 /* ____________________________ */

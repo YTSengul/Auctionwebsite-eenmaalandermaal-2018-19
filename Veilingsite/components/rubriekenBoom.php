@@ -46,7 +46,7 @@
         $hoofdRubrieken->execute();
         while($hoofdRubriek = $hoofdRubrieken->fetch()){
 
-            echo '<li class="noPadding noMargins"><a class="HeaderASpacings" href="#">'.$hoofdRubriek['Rubrieknaam'].'</a></li>';
+            echo '<li class="noPadding noMargins"><a class="HeaderASpacings redHover" href="#">'.$hoofdRubriek['Rubrieknaam'].'</a></li>';
 
         }
     }
@@ -56,7 +56,7 @@
         <div class="medium-12 cell">
             <ul class="dropdown menu spaceAround" data-dropdown-menu>
                 <?php rubriekenHeader(); ?>
-                <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings" href="#">Meer</a>
+                <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings redHover" href="#">Meer</a>
                     <ul class="menu megaMenuSize noBorder">
                         <div class="grid-x grid-margin-x megaMenuColourandBox">
                             <?php rubriekenBoom(); ?>

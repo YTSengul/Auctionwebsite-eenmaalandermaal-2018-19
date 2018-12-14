@@ -18,44 +18,27 @@ $beschrijving = $detail_veiling['Beschrijving'];
 //Prepared statement voor de images
 $foto_veiling = $dbh->prepare("SELECT Filenaam FROM Bestand WHERE Voorwerp = ?");
 $foto_veiling->execute([$_GET['Voorwerpnummer']]);
-//$veilingfoto = $foto_veiling->fetch();
-$thisbb;
-while($a = $foto_veiling->fetch()){
-    $thisbb = $a['Filenaam'];
+$veilingfoto = $foto_veiling->fetchAll(); //PDO::FETCH_NUM
 
+//echo '<pre>', var_dump($veilingfoto), '</pre>';
+
+
+//Functie die de hoofdfoto toont die bij een veiling hoort
+function echoMainpicture($veilingfoto)
+{
+    $hoofdfotoArray = $veilingfoto[0];
+    $hoofdfoto = $hoofdfotoArray[0];
+    echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$hoofdfoto' alt='Foto van een product'>";
 }
 
-?>
-
-
-
-<?php
-FUNCTION aa (){
-
-    if (!isset($_GET['Voorwerpnummer'])) {
-    header('location: index.php');
-}
-    $details_veiling = $dbh->prepare("SELECT Titel, Beschrijving FROM Voorwerp WHERE Voorwerpnummer = ?");
-$details_veiling->execute([$_GET['Voorwerpnummer']]);
-$detail_veiling = $details_veiling->fetch();
-
-$titel = $detail_veiling['Titel'];
-$beschrijving = $detail_veiling['Beschrijving'];
-
-//Prepared statement voor de images
-$foto_veiling = $dbh->prepare("SELECT Filenaam FROM Bestand WHERE Voorwerp = ?");
-$foto_veiling->execute([$_GET['Voorwerpnummer']]);
-//$veilingfoto = $foto_veiling->fetch();
-$thisbb;
-while($a = $foto_veiling->fetch()){
-    return = $a['Filenaam'];
-
+//Functie die de subfoto's toont die bij een veiling horen
+function echoSubpictures($veilingfoto)
+{
+    foreach ($veilingfoto as $foto) {
+        echo "<img class='detailsubfoto' src='http://iproject4.icasites.nl/pics/$foto[0]' alt='Subfoto van een product'>";
+    }
 }
 
-}
-
-
-?>
 ?>
 
 <body>
@@ -65,14 +48,11 @@ while($a = $foto_veiling->fetch()){
         <div class="cell">
             <h2><?php echo $titel ?></h2>
         </div>
-        <div class="cell large-7 productdetails">
-            <img class='detailfoto' src="iproject4.icasites.nl/pics/dt_1_<?php echo aa() ?>" alt="Foto van een product"> <!--Inladen foto testen op de server-->
-            <div class="spaceBetween">
-                <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
-                <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
-                <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
-                <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
-                <img class='detailsubfoto' src="img/gouden_schoen.jpg" alt="Subfoto van een product">
+        <div class="cell large-7 productdetails flexColumn">
+            <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
+            <?php echoMainpicture($veilingfoto) ?>
+            <div class="spaceAround marginTopAuto">
+                <?php echoSubpictures($veilingfoto) ?>
             </div>
         </div>
         <div class="cell large-5 detail-biedingen">
@@ -130,10 +110,7 @@ while($a = $foto_veiling->fetch()){
             <hr>
             <div class="tabs-content" data-tabs-content="example-tabs">
                 <div class="tabs-panel is-active" id="panel1">
-                    <p><?php echo $beschrijving ?> <!--Note to self: iframe gebruiken hier?-->
-                    </p>
-                </div>
-            </div>
+<!--                    <iframe id="contact" allowtransparency="true" frameborder="1" scrolling="yes" width="100%" height="900px">-->
             <div class="tabs-panel" id="panel2"> <!--Note: Iemand moet dit nog werkend maken-->
                 <p>Yes, sir. I think those new droids are going to work out fine. In fact, I, uh, was also thinking
                     about
