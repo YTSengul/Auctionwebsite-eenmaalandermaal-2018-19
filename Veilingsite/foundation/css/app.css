@@ -287,6 +287,10 @@ a.redHover:hover {
     background-color: #F2552C;
 }
 
+.detail-timer {
+    color: firebrick;
+}
+
 .detail-bedragen {
     margin: 0 20px;
 }
