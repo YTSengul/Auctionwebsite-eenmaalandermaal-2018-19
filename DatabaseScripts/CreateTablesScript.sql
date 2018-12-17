@@ -311,7 +311,7 @@ CREATE TABLE VoorwerpInRubriek
 )
 GO
 
-CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer INT)
+CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer BIGINT)
 RETURNS NUMERIC(18,2)
 AS
 BEGIN
