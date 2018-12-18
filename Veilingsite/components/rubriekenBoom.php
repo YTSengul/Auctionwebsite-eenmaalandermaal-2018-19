@@ -6,26 +6,29 @@
         /** Show amount of sub categories under main category. */
         $amountOfSubcategoriesShown = 3;
         /** Query to select all main categories from the database. Ordered by alphabet. */
-        $queryMainCategories = "SELECT Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = $previousCategory ORDER BY Rubrieknaam ASC";
+        $queryMainCategories = "SELECT Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Rubrieknaam ASC";
 
         $hoofdRubrieken = $dbh->prepare($queryMainCategories);
+        $hoofdRubrieken->bindParam(":vorigeRubriek", $previousCategory);
         $hoofdRubrieken->execute();
         while($hoofdRubriek = $hoofdRubrieken->fetch()){
 
             echo '
                 <div class="cell medium-6 large-3 categoryListSpacing">
-                <li><a class="redHover" href="#"><b>'.$hoofdRubriek['Rubrieknaam'].'</b></a></li>
+                <li><a class="redHover" href="veilingen.php?filter_rubriek=' . $hoofdRubriek['Rubrieknummer'] . '"><b>' . $hoofdRubriek['Rubrieknaam'] . '</b></a></li>
                 <hr>
             ';
 
             /** Query to select the first 3 sub categories from the main categories. Ordered by popularity and then alphabet. */
-            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = '$hoofdRubriek[Rubrieknummer]' ORDER BY Volgnummer, Rubrieknaam ASC";
+            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Volgnummer, Rubrieknaam ASC";
 
             $subRubrieken = $dbh->prepare($querySubCategories);
+            // $subRubrieken->bindParam(":topN", $amountOfSubcategoriesShown);
+            $subRubrieken->bindParam(":vorigeRubriek", $hoofdRubriek['Rubrieknummer']);
             $subRubrieken->execute();
             while($subRubriek = $subRubrieken->fetch()){
 
-                echo '<li><a class="redHover" href="veilingen.php?filter_rubriek='.$subRubriek['Rubrieknummer'].'">'.$subRubriek['Rubrieknaam'].'</a></li>';
+                echo '<li><a class="redHover" href="veilingen.php?filter_rubriek=' . $subRubriek['Rubrieknummer'] . '">' . $subRubriek['Rubrieknaam'] . '</a></li>';
 
             }
             echo '</div>';
@@ -46,7 +49,7 @@
         $hoofdRubrieken->execute();
         while($hoofdRubriek = $hoofdRubrieken->fetch()){
 
-            echo '<li class="noPadding noMargins"><a class="HeaderASpacings" href="veilingen.php?filter_rubriek='.$hoofdRubriek['Rubrieknummer'].'">'.$hoofdRubriek['Rubrieknaam'].'</a></li>';
+            echo '<li class="noPadding noMargins"><a class="HeaderASpacings" href="veilingen.php?filter_rubriek=' . $hoofdRubriek['Rubrieknummer'] . '">' . $hoofdRubriek['Rubrieknaam'] . '</a></li>';
 
         }
     }
