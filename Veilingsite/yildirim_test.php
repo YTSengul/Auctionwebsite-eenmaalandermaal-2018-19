@@ -5,7 +5,7 @@ include_once "components/meta.php";
 
 <?PHP
 // er wordt gekeken op welke pagina de gebruiker zich bevindt, indien nihil, wordt er vanzel 1 aangegevem
-if(isset($_GET['huidigepagina'])) {
+if (isset($_GET['huidigepagina'])) {
     $huidigepagina = $_GET['huidigepagina'];
 } else {
     $huidigepagina = 1;
@@ -13,69 +13,194 @@ if(isset($_GET['huidigepagina'])) {
 
 //Hier wordt berekend tussen welke nummers de veilingen genomen moeten worden
 $aantalveilingen_per_pagina = 10;
-$vanaf_veiling = ($huidigepagina-1)*$aantalveilingen_per_pagina;
-$tot_veiling = $huidigepagina * $aantalveilingen_per_pagina;
+$vanaf_veiling = ($huidigepagina - 1) * $aantalveilingen_per_pagina;
+$tot_veiling = $vanaf_veiling + $aantalveilingen_per_pagina;
+
+
+// Hier wordt gekeken of er een rubriek is ingegeven, zo ja, word die uit de database gehaald
+if (isset($_GET['filter_rubriek'])) {
+    $filter_rubriek = $_GET['filter_rubriek'];
+    $_SESSION['filter_rubriek'] = $filter_rubriek;
+} else if (isset($_SESSION['filter_rubriek'])) {
+    $filter_rubriek = $_SESSION['filter_rubriek'];
+} else {
+    $filter_rubriek = -1;
+}
 
 // De gegevens van de veilingen worden uit de database gehaald
-$sql_veilingen_query = "SELECT *
+$sql_veilingen_query = "with cte 
+    as (select Rubrieknummer
+        from Rubriek as t 
+        where RubriekNummer = $filter_rubriek
+        UNION ALL
+        select t.RubriekNummer
+        from Rubriek as t 
+        join cte 
+        on t.VorigeRubriek = cte.RubriekNummer)
+SELECT VoorwerpInRubriek.RubriekOpLaagsteNiveau, Voorwerp.Voorwerpnummer, Voorwerp.Titel, Voorwerp.Beschrijving, Voorwerp.EindMoment, Voorwerp.Thumbnail
 FROM (
      SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
-     FROM Voorwerp
-     ) AS MyDerivedTable
-WHERE MyDerivedTable.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND VeilingGesloten = 0";
+     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer, cte WHERE VeilingGesloten = 0 AND VoorwerpInRubriek.RubriekOpLaagsteNiveau = cte.RubriekNummer
+	 ) AS Voorwerp INNER JOIN VoorwerpInRubriek ON VoorwerpInRubriek.Voorwerp = Voorwerp.voorwerpnummer
+WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling";
 
 // de veilingen worden opgeslagen in een array
 $sql_veilingen_data = $dbh->prepare($sql_veilingen_query);
 $sql_veilingen_data->execute();
 $veilingen = $sql_veilingen_data->fetchAll(PDO::FETCH_NUM);
-$aantalveilingen = $veilingen;
+$aantalveilingen = sizeOf($veilingen);
 
-// er wordt een berekening gemaakt om de tijd te berekenen van de veiling
-$tijd_uit_server = time(); // or your date as well
-$your_date = strtotime(date($veilingen[0][10]));
-$datediff = $your_date - $tijd_uit_server;
 
-// de tijden van de eerste veiling worden op deze manie ropgeslagen
-$dagen = round($datediff / (60 * 60 * 24));
-$uren = round($datediff / (60 * 60));
-$minuten = round($datediff / (60));
-$seconden = round($datediff);
+// hier wordt de laatste pagina van de veilingen gezocht
+$sql_laatste_pagina_query = "with cte 
+as (select Rubrieknummer 
+from Rubriek as t 
+where RubriekNummer = $filter_rubriek
+UNION ALL 
+select t.RubriekNummer 
+from Rubriek as t 
+join cte 
+on t.VorigeRubriek = cte.RubriekNummer) 
+SELECT CEILING(CAST(COUNT(*)as float)/ $aantalveilingen_per_pagina)
+FROM (
+     SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
+     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer, cte 
+	 WHERE VeilingGesloten = 0 AND RubriekOpLaagsteNiveau = cte.Rubrieknummer
+     ) AS Voorwerp INNER JOIN VoorwerpInRubriek ON VoorwerpInRubriek.Voorwerp = Voorwerp.voorwerpnummer";
+
+$laatste_pagina;
+
+function filter_rubrieken()
+{
+    global $dbh;
+    global $sql_laatste_pagina_query;
+    global $filter_rubriek;
+
+// De laatste pagina wordt opgeslagen in een array
+    $sql_laatste_pagina_data = $dbh->prepare($sql_laatste_pagina_query);
+    $sql_laatste_pagina_data->execute();
+    global $laatste_pagina;
+    $laatste_pagina = $sql_laatste_pagina_data->fetchAll(PDO::FETCH_NUM);
+    $laatste_pagina = $laatste_pagina[0][0];
+
+// Hier worden de rubrieken gevonden om in de filter te laten zien
+    $vind_rubrieken_voor_filter_query = "select * from Rubriek where VorigeRubriek = $filter_rubriek order by Volgnummer, RubriekNaam ASC";
+    $vind_rubrieken_voor_filter_data = $dbh->prepare($vind_rubrieken_voor_filter_query);
+    $vind_rubrieken_voor_filter_data->execute();
+    $vind_rubrieken_filter = $vind_rubrieken_voor_filter_data->fetchAll(PDO::FETCH_NUM);
+
+    if (sizeof($vind_rubrieken_filter) == 0) {
+        global $dbh;
+        global $sql_laatste_pagina_query;
+
+// De laatste pagina wordt opgeslagen in een array
+        $sql_laatste_pagina_data = $dbh->prepare($sql_laatste_pagina_query);
+        $sql_laatste_pagina_data->execute();
+        global $laatste_pagina;
+        $laatste_pagina = $sql_laatste_pagina_data->fetchAll(PDO::FETCH_NUM);
+        $laatste_pagina = $laatste_pagina[0][0];
+
+// Hier worden de rubrieken gevonden om in de filter te laten zien
+        $vind_rubrieken_voor_filter_query = "select * from Rubriek where VorigeRubriek = " . $_SESSION['vollevorigerubriek'] . " order by Volgnummer, RubriekNaam ASC";
+        $vind_rubrieken_voor_filter_data = $dbh->prepare($vind_rubrieken_voor_filter_query);
+        $vind_rubrieken_voor_filter_data->execute();
+        $vind_rubrieken_filter = $vind_rubrieken_voor_filter_data->fetchAll(PDO::FETCH_NUM);
+
+    } else {
+        $_SESSION['vollevorigerubriek'] = $filter_rubriek;
+    }
+
+// De rubrieken worden toegevoegd aan de filter
+    foreach ($vind_rubrieken_filter as $rubriek) {
+        //echo '<pre>';
+        //var_dump($rubriek);
+        //echo '</pre>';
+        if ($rubriek[0] == $filter_rubriek) {
+            echo "<li><label><a href='yildirim_test.php?huidigepagina=1&filter_rubriek=$rubriek[0]' ><b>$rubriek[1]</b></a></label></li>";
+        } else {
+            echo "<li><label><a href='yildirim_test.php?huidigepagina=1&filter_rubriek=$rubriek[0]' >$rubriek[1]</a></label></li>";
+        }
+    }
+}
+
+// hier zijn de breadcrumbs in te vinden
+function create_Breadcrumbs($RubriekNummer)
+{
+    global $dbh;
+    $vind_hoofdrubriek_query = "select * from Rubriek where RubriekNummer = $RubriekNummer";
+    $vind_hoofdrubriek_data = $dbh->prepare($vind_hoofdrubriek_query);
+    $vind_hoofdrubriek_data->execute();
+    $vind_hoofdrubriek = $vind_hoofdrubriek_data->fetchAll(PDO::FETCH_NUM);
+    $hoofdrubriek = $vind_hoofdrubriek[0];
+    return $hoofdrubriek;
+}
+
+// hier wordt de array van de breadcrumb gemaakt
+$breadcrumbs_namen = array();
+$breadcrumbs_nummers = array();
+function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nummers)
+{
+    $rubriek_voor_hoofdcategorie = NULL;
+    if ($filter_rubriek = !-1) {
+        for ($x = 0; $rubriek_voor_hoofdcategorie[2] != -1; $x++) {
+            if ($rubriek_voor_hoofdcategorie != NULL) {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($rubriek_voor_hoofdcategorie[2]);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            } else {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($filter_rubriek);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            }
+        }
+    }
+    sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers);
+}
+
+//hier worden de breadcrumbs op rij gezet en geshowed dit wordt gedaan om het van achter naar voor te sorteren
+
+function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
+{
+    for ($x = sizeof($breadcrumbs_namen) - 1; $x >= 0; $x--) {
+        echo "<li><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
+    }
+}
 
 ?>
 
 <body>
+
 <?php include_once "components/header.php"; ?>
+
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="hide-for-small-only medium-12 large-12 float-center cell">
             <!--- Breadcrumbs -->
             <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
                 <ul class="breadcrumbs">
-                    <li><a href="#">Cat 1</a></li>
-                    <li><a href="#">Cat 2</a></li>
-                    <li><a href="#">Cat 3</a></li>
-                    <li>
+                    <?php call_Breadcrumbs($filter_rubriek, $breadcrumbs_namen, $breadcrumbs_nummers); ?>
+                    <!---<li>
                         <span class="show-for-sr">Current: </span> Huidige cat.
-                    </li>
+                    </li>-->
                 </ul>
             </nav>
 
-            <select class="float-right veilingen-filter-hoofd ">
+            <!---<select class="float-right veilingen-filter-hoofd ">
                 <option>Optie 1</option>
                 <option>Optie 2</option>
                 <option>Optie 3</option>
                 <option>Optie 4</option>
                 <option>Optie 5</option>
-            </select>
+            </select>-->
+
         </div>
         <div class="hide-for-small-only medium-3 large-3 float-center cell">
             <div class="product-filters">
                 <ul class="mobile-product-filters vertical menu show-for-small-only" data-accordion-menu>
                     <li>
-                        <a href="#"><h2>Products</h2></a>
+                        <a href="#"><h2>Rubrieken</h2></a>
                         <ul class="vertical menu" data-accordion-menu>
                             <li class="product-filters-tab">
-                                <a href="#">Category</a>
                                 <ul class="categories-menu menu vertical nested is-active">
                                     <a href="#" class="clear-all" id="category-clear-all">Clear All</a>
                                     <li><input class="category-clear-selection" id="category-checkbox1" type="checkbox"><label
@@ -110,184 +235,86 @@ $seconden = round($datediff);
                                                type="checkbox"><label for="category-checkbox15">Category 15</label></li>
                                 </ul>
                             </li>
-                            <li class="product-filters-tab">
-                                <a href="#">Size</a>
-                                <ul class="categories-menu menu vertical nested is-active">
-                                    <a href="#" class="clear-all" id="size-clear-all">Clear All</a>
-                                    <li><input id="size-checkbox1" type="checkbox"><label
-                                                for="size-checkbox1">Small</label></li>
-                                    <li><input id="size-checkbox2" type="checkbox"><label
-                                                for="size-checkbox2">Medium</label></li>
-                                    <li><input id="size-checkbox3" type="checkbox"><label
-                                                for="size-checkbox3">Large</label></li>
-                                    <li><input id="size-checkbox3" type="checkbox"><label
-                                                for="size-checkbox3">X-Large</label></li>
-                                    <li><input id="size-checkbox3" type="checkbox"><label
-                                                for="size-checkbox3">XX-Large</label></li>
-                                </ul>
-                            </li>
-                            <li class="product-filters-tab">
-                                <a href="#">Color</a>
-                                <ul class="categories-menu menu vertical nested">
-                                    <a href="#" class="clear-all" id="color-clear-all">Clear All</a>
-                                    <li><input id="color-checkbox1" type="checkbox"><label for="color-checkbox1">All
-                                            Color</label></li>
-                                    <li><input id="color-checkbox2" type="checkbox"><label
-                                                for="color-checkbox2">Black</label></li>
-                                    <li><input id="color-checkbox3" type="checkbox"><label
-                                                for="color-checkbox3">White</label></li>
-                                    <li><input id="color-checkbox4" type="checkbox"><label
-                                                for="color-checkbox4">Grey</label></li>
-                                    <li><input id="color-checkbox5" type="checkbox"><label
-                                                for="color-checkbox5">Red</label></li>
-                                    <li><input id="color-checkbox6" type="checkbox"><label
-                                                for="color-checkbox6">Blue</label></li>
-                                    <li><input id="color-checkbox7" type="checkbox"><label
-                                                for="color-checkbox7">Green</label></li>
-                                    <li><input id="color-checkbox8" type="checkbox"><label
-                                                for="color-checkbox8">Purple</label></li>
-                                    <li><input id="color-checkbox8" type="checkbox"><label for="color-checkbox8">Multi-color</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="product-filters-tab">
-                                <a href="#">Price</a>
-                                <ul class="categories-menu menu vertical nested is-active">
-                                    <a href="#" class="clear-all" id="price-clear-all">Clear All</a>
-                                    <li><input id="price-checkbox1" type="checkbox"><label for="price-checkbox1">Under
-                                            $25</label></li>
-                                    <li><input id="price-checkbox2" type="checkbox"><label
-                                                for="price-checkbox2">$25–$50</label></li>
-                                    <li><input id="price-checkbox3" type="checkbox"><label for="price-checkbox3">$50–$250</label>
-                                    </li>
-                                    <li><input id="price-checkbox4" type="checkbox"><label for="price-checkbox4">$250–$600</label>
-                                    </li>
-                                    <li><input id="price-checkbox4" type="checkbox"><label for="price-checkbox4">$600–$1,000</label>
-                                    </li>
-                                </ul>
-                            </li>
                         </ul>
                     </li>
                 </ul>
-
                 <h1 class="product-filters-header hide-for-small-only">Products</h1>
                 <ul class="vertical menu hide-for-small-only" data-accordion-menu>
                     <li class="product-filters-tab">
-                        <a href="#">Category</a>
                         <ul class="categories-menu menu vertical nested is-active">
-                            <a href="#" class="clear-all" id="category-clear-all">Clear All</a>
-                            <li><input id="category-checkbox1" type="checkbox"><label for="category-checkbox1">Category
-                                    1</label></li>
-                            <li><input id="category-checkbox2" type="checkbox"><label for="category-checkbox2">Category
-                                    2</label></li>
-                            <li><input id="category-checkbox3" type="checkbox"><label for="category-checkbox3">Category
-                                    3</label></li>
-                            <li><input id="category-checkbox4" type="checkbox"><label for="category-checkbox4">Category
-                                    4</label></li>
-                            <li><input id="category-checkbox5" type="checkbox"><label for="category-checkbox5">Category
-                                    5</label></li>
-                            <li><input id="category-checkbox6" type="checkbox"><label for="category-checkbox6">Category
-                                    6</label></li>
-                            <li><input id="category-checkbox7" type="checkbox"><label for="category-checkbox7">Category
-                                    7</label></li>
-                            <li><input id="category-checkbox8" type="checkbox"><label for="category-checkbox8">Category
-                                    8</label></li>
-                            <li><input id="category-checkbox9" type="checkbox"><label for="category-checkbox9">Category
-                                    9</label></li>
-                            <li><input id="category-checkbox10" type="checkbox"><label for="category-checkbox10">Category
-                                    10</label></li>
-                            <li><input id="category-checkbox11" type="checkbox"><label for="category-checkbox11">Category
-                                    11</label></li>
-                            <li><input id="category-checkbox12" type="checkbox"><label for="category-checkbox12">Category
-                                    12</label></li>
-                            <li><input id="category-checkbox13" type="checkbox"><label for="category-checkbox13">Category
-                                    13</label></li>
-                            <li><input id="category-checkbox14" type="checkbox"><label for="category-checkbox14">Category
-                                    14</label></li>
-                            <li><input id="category-checkbox15" type="checkbox"><label for="category-checkbox15">Category
-                                    15</label></li>
-                        </ul>
-                    </li>
-                    <li class="product-filters-tab">
-                        <a href="#">Size</a>
-                        <ul class="categories-menu menu vertical nested is-active">
-                            <a href="#" class="clear-all" id="size-clear-all">Clear All</a>
-                            <li><input id="size-checkbox1" type="checkbox"><label for="size-checkbox1">Small</label>
-                            </li>
-                            <li><input id="size-checkbox2" type="checkbox"><label for="size-checkbox2">Medium</label>
-                            </li>
-                            <li><input id="size-checkbox3" type="checkbox"><label for="size-checkbox3">Large</label>
-                            </li>
-                            <li><input id="size-checkbox3" type="checkbox"><label for="size-checkbox3">X-Large</label>
-                            </li>
-                            <li><input id="size-checkbox3" type="checkbox"><label for="size-checkbox3">XX-Large</label>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="product-filters-tab">
-                        <a href="#">Color</a>
-                        <ul class="categories-menu menu vertical nested is-active ">
-                            <a href="#" class="clear-all" id="color-clear-all">Clear All</a>
-                            <li><input id="color-checkbox1" type="checkbox"><label for="color-checkbox1">All
-                                    Color</label></li>
-                            <li><input id="color-checkbox2" type="checkbox"><label for="color-checkbox2">Black</label>
-                            </li>
-                            <li><input id="color-checkbox3" type="checkbox"><label for="color-checkbox3">White</label>
-                            </li>
-                            <li><input id="color-checkbox4" type="checkbox"><label for="color-checkbox4">Grey</label>
-                            </li>
-                            <li><input id="color-checkbox5" type="checkbox"><label for="color-checkbox5">Red</label>
-                            </li>
-                            <li><input id="color-checkbox6" type="checkbox"><label for="color-checkbox6">Blue</label>
-                            </li>
-                            <li><input id="color-checkbox7" type="checkbox"><label for="color-checkbox7">Green</label>
-                            </li>
-                            <li><input id="color-checkbox8" type="checkbox"><label for="color-checkbox8">Purple</label>
-                            </li>
-                            <li><input id="color-checkbox8" type="checkbox"><label
-                                        for="color-checkbox8">Multi-color</label></li>
-                        </ul>
-                    </li>
-                    <li class="product-filters-tab">
-                        <a href="#">Price</a>
-                        <ul class="categories-menu menu vertical nested is-active ">
-                            <a href="#" class="clear-all" id="price-clear-all">Clear All</a>
-                            <li><input id="price-checkbox1" type="checkbox"><label for="price-checkbox1">Under
-                                    $25</label></li>
-                            <li><input id="price-checkbox2" type="checkbox"><label for="price-checkbox2">$25–$50</label>
-                            </li>
-                            <li><input id="price-checkbox3" type="checkbox"><label
-                                        for="price-checkbox3">$50–$250</label></li>
-                            <li><input id="price-checkbox4" type="checkbox"><label
-                                        for="price-checkbox4">$250–$600</label></li>
-                            <li><input id="price-checkbox4" type="checkbox"><label
-                                        for="price-checkbox4">$600–$1,000</label></li>
+                            <?PHP filter_rubrieken(); ?>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
         <?PHP
-        foreach ($veilingen as $veiling) {
+        if (sizeof($veilingen) == 0) {
+            // hier wordt gekeken of een gebruiker niet te ver gaat in de pagina's door de get te veranderen in de url. als hij te ver
+            // gaat op deze manier wordt hij doorgestuurd naar pagina 1
+            $huidigepagina = 1;
 
-            $tijd_uit_server = time(); // or your date as well
-            $your_date = strtotime(date($veiling[10]));
-            $datediff = $your_date - $tijd_uit_server;
+            //Hier wordt berekend tussen welke nummers de veilingen genomen moeten worden
+            $aantalveilingen_per_pagina = 9;
+            $vanaf_veiling = ($huidigepagina - 1) * $aantalveilingen_per_pagina;
+            $tot_veiling = $huidigepagina * $aantalveilingen_per_pagina;
 
-            $dagen = round($datediff / (60 * 60 * 24));
-            $uren = round($datediff / (60 * 60));
-            $minuten = round($datediff / (60));
-            $seconden = round($datediff);
+// De gegevens van de veilingen worden uit de database gehaald
+            $sql_veilingen_query = "with cte 
+    as (select Rubrieknummer
+        from Rubriek as t 
+        where RubriekNummer = $filter_rubriek
+        UNION ALL
+        select t.RubriekNummer
+        from Rubriek as t 
+        join cte 
+        on t.VorigeRubriek = cte.RubriekNummer)
+SELECT VoorwerpInRubriek.RubriekOpLaagsteNiveau, Voorwerp.Voorwerpnummer, Voorwerp.Titel, Voorwerp.Beschrijving, Voorwerp.EindMoment, Voorwerp.Thumbnail
+FROM (
+     SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
+     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer WHERE VeilingGesloten = 0 
+	 ) AS Voorwerp INNER JOIN VoorwerpInRubriek ON VoorwerpInRubriek.Voorwerp = Voorwerp.voorwerpnummer, cte
+WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.RubriekOpLaagsteNiveau = cte.Rubrieknummer";
 
+// de veilingen worden opgeslagen in een array
+            $sql_veilingen_data = $dbh->prepare($sql_veilingen_query);
+            $sql_veilingen_data->execute();
+            $veilingen = $sql_veilingen_data->fetchAll(PDO::FETCH_NUM);
+            $aantalveilingen = $veilingen;
+
+        }
+        if (sizeof($veilingen) != 0) {
+            $counthelper = -1;
+            foreach ($veilingen as $veiling) {
+
+                $counthelper++;
+
+                $tijd_uit_server = time(); // or your date as well
+                $your_date = strtotime(date($veiling[4]));
+                $datediff = $your_date - $tijd_uit_server;
+
+                $dagen = round($datediff / (60 * 60 * 24));
+                $uren = round($datediff / (60 * 60));
+                $minuten = round($datediff / (60));
+                $seconden = round($datediff);
+
+                echo "<div class='small-12 medium-9 large-9 float-center cell'>
+            <div class='media-object veilingen-veiling-box '>
+                <div class='media-object-section'>
+                    <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3) . "'>
+                </div>
+                <div class='media-object-section veilingen-veiling-info'>
+                    <h5 class='veilingen-veiling-titel float-left'>" . substr($veiling[2], 0, 50) . "</h5>
+                    <h5 class='veilingen-veiling-timer float-right'>Nog $seconden uren!</h5>
+                    <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[3]), 0, 140) . "</p>
+                </div>
+            </div>";
+            }
+        } else {
             echo "<div class='small-12 medium-9 large-9 float-center cell'>
             <div class='media-object veilingen-veiling-box '>
                 <div class='media-object-section'>
-                    <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[15], 3) . "'>
-                </div>
-                <div class='media-object-section veilingen-veiling-info'>
-                    <h5 class='veilingen-veiling-titel float-left'>".substr($veiling[1], 0, 50)."</h5>
-                    <h5 class='veilingen-veiling-timer float-right'>Nog $dagen dagen!</h5>
-                    <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[2]), 0, 140) . "</p>
+                    <H2>GEEN VEILINGEN BESCHIKBAAR!</H2>
                 </div>
             </div>";
         }
@@ -298,34 +325,61 @@ $seconden = round($datediff);
         <!--        <textarea placeholder="None"></textarea>-->
         <!--    </label>-->
         <!--    <button class="button">Submit Review</button>-->
-<?PHP
+        <?PHP
         //de breadcrumbs van de navigatie
         // hier wordt gekeken naar de eerste pagina die onderin in de breadcumbs te zien moet zijn
-        if($huidigepagina == 1) {
-            $pagina_voor_huidige_pagina = 1;
-            $pagina_marger = 4;
+        if ($huidigepagina == 1 || $laatste_pagina == $huidigepagina) {
+            if ($huidigepagina == 1) {
+                $pagina_voor_huidige_pagina = 1;
+                $pagina_marger = 4;
+            } // hier wordt gekeken naar de laatste pagina die onderin in de breadcumbs te zien moet zijn
+            else if ($laatste_pagina == $huidigepagina) {
+                $hoeveel_paginas_voor_huidige_laatste_pagina = 3;
+                $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_laatste_pagina);
+                $pagina_marger = 1;
+            } // hier wordt gekeken naar de eerste pagina die onderin in de breadcumbs te zien moet zijn
+            else {
+                $hoeveel_paginas_voor_huidige_pagina = 1;
+                $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_pagina);
+                $pagina_marger = 3;
+            }
+        }  // hier wordt gekeken naar de eenalaatste pagina die onderin in de breadcumbs te zien moet zijn
+        else if ($laatste_pagina - 1 == $huidigepagina) {
+            $hoeveel_paginas_voor_huidige_eenalaatste_pagina = 2;
+            $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_eenalaatste_pagina);
+            $pagina_marger = 2;
         } else {
-            $pagina_voor_huidige_pagina = ($huidigepagina-1);
+            $pagina_voor_huidige_pagina = ($huidigepagina - 1);
             $pagina_marger = 3;
         }
+
         // Hier wordt gekeken of de knop 'Vorige' op disabled kan staan
         echo "<ul class='pagination text-center' role='navigation' aria-label='Pagination' data-page='6' data-total='16'>";
-        if($huidigepagina == 1) {
+        if ($huidigepagina == 1) {
             echo "<li class='pagination-previous disabled'>Vorige <span class='show-for-sr'>page</span></li>";
         } else {
             echo "<li class='pagination-previous'><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$pagina_voor_huidige_pagina' aria-label='Next page'>Vorige <span class='show-for-sr'>page</span></li>";
         }
-        for ($x=$pagina_voor_huidige_pagina;$x<$huidigepagina+$pagina_marger;$x++){
+
+        // hier worden de paginanummers toegevoegd aan de pagina
+        for ($x = $pagina_voor_huidige_pagina;
+             $x < $huidigepagina + $pagina_marger;
+             $x++) {
             if ($x == $huidigepagina) {
                 echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
-            }
-            else {
+            } else {
                 echo "<li><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$x' >$x</a></li>";
             }
         }
-        echo "<li class='pagination-next'><a href='#' aria-label='Next page'>Volgende <span
-                            class='show-for-sr''>page</span></a></li>
-        </ul>";
+
+        // hier wordt gekeken of je op de laatste pagina bent van de veilingen, zo ja wordt de volgende knop disabled
+        if ($huidigepagina == $laatste_pagina) {
+            echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
+                            class='show-for-sr''>page</span></a></li> </ul>";
+        } else {
+            echo "<li class='pagination-next'><a href='#' aria-label='Next page' >Volgende <span
+                            class='show-for-sr''>page</span></a></li> </ul>";
+        }
         ?>
 
     </div>
@@ -333,25 +387,80 @@ $seconden = round($datediff);
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
 <script>
+    var count0 = new Date("<?php echo $veilingen[0][4];?>").getTime();
+    var count1 = new Date("<?php echo $veilingen[1][4];?>").getTime();
+    var count2 = new Date("<?php echo $veilingen[2][4];?>").getTime();
+    var count3 = new Date("<?php echo $veilingen[3][4];?>").getTime();
+    var count4 = new Date("<?php echo $veilingen[4][4];?>").getTime();
+    var count5 = new Date("<?php echo $veilingen[5][4];?>").getTime();
+    var count6 = new Date("<?php echo $veilingen[6][4];?>").getTime();
+    var count7 = new Date("<?php echo $veilingen[7][4];?>").getTime();
+    var count8 = new Date("<?php echo $veilingen[8][4];?>").getTime();
+    var count9 = new Date("<?php echo $veilingen[9][4];?>").getTime();
+    var x = setInterval(function () {
+        startTimer('demo0', count0);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo1', count1);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo2', count2);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo3', count3);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo4', count4);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo5', count5);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo6', count6);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo7', count7);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo8', count8);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo9', count9);
+    }, 1000);
+    function startTimer(id, countDownDate) {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById(id).innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById(id).innerHTML = "VERLOPEN";
+        }
+    }
+</script>
+<script>
     $('.categories-menu.menu.nested').each(function () {
         var filterAmount = $(this).find('li').length;
         if (filterAmount > 5) {
             $('li', this).eq(4).nextAll().hide().addClass('toggleable');
-            $(this).append('<li class="more">More</li>');
+            $(this).append('<li class="more">Meer</li>');
         }
     });
 
     $('.categories-menu.menu.nested').on('click', '.more', function () {
         if ($(this).hasClass('less')) {
-            $(this).text('More').removeClass('less');
+            $(this).text('Meer').removeClass('less');
         } else {
-            $(this).text('Less').addClass('less');
+            $(this).text('Minder').addClass('less');
         }
         $(this).siblings('li.toggleable').slideToggle();
     });
     $(document).foundation();
     $(document).app();
 </script>
-
 </body>
 </html>

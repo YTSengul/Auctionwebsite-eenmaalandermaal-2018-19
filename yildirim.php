@@ -70,7 +70,7 @@ FROM (
 
 $laatste_pagina;
 
-function filter_rubrieken ()
+function filter_rubrieken()
 {
     global $dbh;
     global $sql_laatste_pagina_query;
@@ -79,7 +79,7 @@ function filter_rubrieken ()
 // De laatste pagina wordt opgeslagen in een array
     $sql_laatste_pagina_data = $dbh->prepare($sql_laatste_pagina_query);
     $sql_laatste_pagina_data->execute();
-    global  $laatste_pagina;
+    global $laatste_pagina;
     $laatste_pagina = $sql_laatste_pagina_data->fetchAll(PDO::FETCH_NUM);
     $laatste_pagina = $laatste_pagina[0][0];
 
@@ -89,19 +89,19 @@ function filter_rubrieken ()
     $vind_rubrieken_voor_filter_data->execute();
     $vind_rubrieken_filter = $vind_rubrieken_voor_filter_data->fetchAll(PDO::FETCH_NUM);
 
-    if(sizeof($vind_rubrieken_filter) == 0) {
+    if (sizeof($vind_rubrieken_filter) == 0) {
         global $dbh;
         global $sql_laatste_pagina_query;
 
 // De laatste pagina wordt opgeslagen in een array
         $sql_laatste_pagina_data = $dbh->prepare($sql_laatste_pagina_query);
         $sql_laatste_pagina_data->execute();
-        global  $laatste_pagina;
+        global $laatste_pagina;
         $laatste_pagina = $sql_laatste_pagina_data->fetchAll(PDO::FETCH_NUM);
         $laatste_pagina = $laatste_pagina[0][0];
 
 // Hier worden de rubrieken gevonden om in de filter te laten zien
-        $vind_rubrieken_voor_filter_query = "select * from Rubriek where VorigeRubriek = ".$_SESSION['vollevorigerubriek']." order by Volgnummer, RubriekNaam ASC";
+        $vind_rubrieken_voor_filter_query = "select * from Rubriek where VorigeRubriek = " . $_SESSION['vollevorigerubriek'] . " order by Volgnummer, RubriekNaam ASC";
         $vind_rubrieken_voor_filter_data = $dbh->prepare($vind_rubrieken_voor_filter_query);
         $vind_rubrieken_voor_filter_data->execute();
         $vind_rubrieken_filter = $vind_rubrieken_voor_filter_data->fetchAll(PDO::FETCH_NUM);
@@ -141,15 +141,17 @@ $breadcrumbs_nummers = array();
 function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nummers)
 {
     $rubriek_voor_hoofdcategorie = NULL;
-    for ($x = 0; $rubriek_voor_hoofdcategorie[2] != -1; $x++) {
-        if ($rubriek_voor_hoofdcategorie != NULL) {
-            $rubriek_voor_hoofdcategorie = create_Breadcrumbs($rubriek_voor_hoofdcategorie[2]);
-            array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
-            array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
-        } else {
-            $rubriek_voor_hoofdcategorie = create_Breadcrumbs($filter_rubriek);
-            array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
-            array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+    if ($filter_rubriek = !-1) {
+        for ($x = 0; $rubriek_voor_hoofdcategorie[2] != -1; $x++) {
+            if ($rubriek_voor_hoofdcategorie != NULL) {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($rubriek_voor_hoofdcategorie[2]);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            } else {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($filter_rubriek);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            }
         }
     }
     sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers);
@@ -281,12 +283,22 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             $aantalveilingen = $veilingen;
 
         }
-        foreach ($veilingen as $veiling) {
+        if (sizeof($veilingen) == 0) {
+            $counthelper = -1;
+            foreach ($veilingen as $veiling) {
 
-            $tijd_uit_server = time(); // or your date as well
-            $your_date = strtotime(date($veiling[4]));
+                $counthelper++;
 
-            echo "<div class='small-12 medium-9 large-9 float-center cell'>
+                $tijd_uit_server = time(); // or your date as well
+                $your_date = strtotime(date($veiling[4]));
+                $datediff = $your_date - $tijd_uit_server;
+
+                $dagen = round($datediff / (60 * 60 * 24));
+                $uren = round($datediff / (60 * 60));
+                $minuten = round($datediff / (60));
+                $seconden = round($datediff);
+
+                echo "<div class='small-12 medium-9 large-9 float-center cell'>
             <div class='media-object veilingen-veiling-box '>
                 <div class='media-object-section'>
                     <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3) . "'>
@@ -297,69 +309,82 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
                     <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[3]), 0, 140) . "</p>
                 </div>
             </div>";
+            }
+        } else {
+            echo "<div class='small-12 medium-9 large-9 float-center cell'>
+            <div class='media-object veilingen-veiling-box '>
+                <div class='media-object-section'>
+                    <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_'>
+                </div>
+                <div class='media-object-section veilingen-veiling-info'>
+                    <h5 class='veilingen-veiling-titel float-left'>AAAAAAAAAAAAAAA</h5>
+                    <h5 class='veilingen-veiling-timer float-right'>AAAAAAAAAAA</h5>
+                    <p class='hide-for-small-only veilingen-veiling-omschrijving'>AAAAAAAAAA</p>
+                </div>
+            </div>";
         }
         ?>
-        <!--    Hier kun je dingen plaatsen voor onderin in de pagina. ik zou hier een knop plaatsen voor de nav pagina's-->
-        <!--    <label>-->
-        <!--        My Review-->
-        <!--        <textarea placeholder="None"></textarea>-->
-        <!--    </label>-->
-        <!--    <button class="button">Submit Review</button>-->
+            <!--    Hier kun je dingen plaatsen voor onderin in de pagina. ik zou hier een knop plaatsen voor de nav pagina's-->
+            <!--    <label>-->
+            <!--        My Review-->
+            <!--        <textarea placeholder="None"></textarea>-->
+            <!--    </label>-->
+            <!--    <button class="button">Submit Review</button>-->
         <?PHP
         //de breadcrumbs van de navigatie
         // hier wordt gekeken naar de eerste pagina die onderin in de breadcumbs te zien moet zijn
         if ($huidigepagina == 1 || $laatste_pagina == $huidigepagina) {
-            if ($huidigepagina == 1) {
-                $pagina_voor_huidige_pagina = 1;
-                $pagina_marger = 4;
-            } // hier wordt gekeken naar de laatste pagina die onderin in de breadcumbs te zien moet zijn
-            else if ($laatste_pagina == $huidigepagina) {
-                $hoeveel_paginas_voor_huidige_laatste_pagina = 3;
-                $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_laatste_pagina);
-                $pagina_marger = 1;
-            } // hier wordt gekeken naar de eerste pagina die onderin in de breadcumbs te zien moet zijn
-            else {
-                $hoeveel_paginas_voor_huidige_pagina = 1;
-                $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_pagina);
-                $pagina_marger = 3;
-            }
+        if ($huidigepagina == 1) {
+        $pagina_voor_huidige_pagina = 1;
+        $pagina_marger = 4;
+        } // hier wordt gekeken naar de laatste pagina die onderin in de breadcumbs te zien moet zijn
+        else if ($laatste_pagina == $huidigepagina) {
+        $hoeveel_paginas_voor_huidige_laatste_pagina = 3;
+        $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_laatste_pagina);
+        $pagina_marger = 1;
+        } // hier wordt gekeken naar de eerste pagina die onderin in de breadcumbs te zien moet zijn
+        else {
+        $hoeveel_paginas_voor_huidige_pagina = 1;
+        $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_pagina);
+        $pagina_marger = 3;
+        }
         }  // hier wordt gekeken naar de eenalaatste pagina die onderin in de breadcumbs te zien moet zijn
         else if ($laatste_pagina - 1 == $huidigepagina) {
-            $hoeveel_paginas_voor_huidige_eenalaatste_pagina = 2;
-            $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_eenalaatste_pagina);
-            $pagina_marger = 2;
+        $hoeveel_paginas_voor_huidige_eenalaatste_pagina = 2;
+        $pagina_voor_huidige_pagina = ($huidigepagina - $hoeveel_paginas_voor_huidige_eenalaatste_pagina);
+        $pagina_marger = 2;
         } else {
-            $pagina_voor_huidige_pagina = ($huidigepagina - 1);
-            $pagina_marger = 3;
+        $pagina_voor_huidige_pagina = ($huidigepagina - 1);
+        $pagina_marger = 3;
         }
 
         // Hier wordt gekeken of de knop 'Vorige' op disabled kan staan
         echo "<ul class='pagination text-center' role='navigation' aria-label='Pagination' data-page='6' data-total='16'>";
         if ($huidigepagina == 1) {
-            echo "<li class='pagination-previous disabled'>Vorige <span class='show-for-sr'>page</span></li>";
+        echo "<li class='pagination-previous disabled'>Vorige <span class='show-for-sr'>page</span></li>";
         } else {
-            echo "<li class='pagination-previous'><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$pagina_voor_huidige_pagina' aria-label='Next page'>Vorige <span class='show-for-sr'>page</span></li>";
+        echo "<li class='pagination-previous'><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$pagina_voor_huidige_pagina' aria-label='Next page'>Vorige <span class='show-for-sr'>page</span></li>";
         }
 
         // hier worden de paginanummers toegevoegd aan de pagina
-        for ($x = $pagina_voor_huidige_pagina; $x < $huidigepagina + $pagina_marger; $x++) {
-            if ($x == $huidigepagina) {
-                echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
-            } else {
-                echo "<li><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$x' >$x</a></li>";
-            }
+        for ($x = $pagina_voor_huidige_pagina;
+        $x < $huidigepagina + $pagina_marger;
+        $x++) {
+        if ($x == $huidigepagina) {
+        echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
+        } else {
+        echo "<li><a href='/I-Project-2018-2019/veilingsite/yildirim_test.php?huidigepagina=$x' >$x</a></li>";
+        }
         }
 
         // hier wordt gekeken of je op de laatste pagina bent van de veilingen, zo ja wordt de volgende knop disabled
         if ($huidigepagina == $laatste_pagina) {
-            echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
+        echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         } else {
-            echo "<li class='pagination-next'><a href='#' aria-label='Next page' >Volgende <span
+        echo "<li class='pagination-next'><a href='#' aria-label='Next page' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         }
-        echo   '<p id="demo"></p>
-                <p id="demo1"></p>';
         ?>
 
     </div>
@@ -367,12 +392,47 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
 <script>
-    var count = new Date("<?php echo $veilingen[0][4];?>").getTime();
+    var count0 = new Date("<?php echo $veilingen[0][4];?>").getTime();
     var count1 = new Date("<?php echo $veilingen[1][4];?>").getTime();
-    var x = setInterval( function() { startTimer('demo',count); }, 1000 );
-    var x = setInterval( function() { startTimer('demo1',count1); }, 1000 );
-    function startTimer(id,countDownDate)
-    {
+    var count2 = new Date("<?php echo $veilingen[2][4];?>").getTime();
+    var count3 = new Date("<?php echo $veilingen[3][4];?>").getTime();
+    var count4 = new Date("<?php echo $veilingen[4][4];?>").getTime();
+    var count5 = new Date("<?php echo $veilingen[5][4];?>").getTime();
+    var count6 = new Date("<?php echo $veilingen[6][4];?>").getTime();
+    var count7 = new Date("<?php echo $veilingen[7][4];?>").getTime();
+    var count8 = new Date("<?php echo $veilingen[8][4];?>").getTime();
+    var count9 = new Date("<?php echo $veilingen[9][4];?>").getTime();
+    var x = setInterval(function () {
+        startTimer('demo0', count0);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo1', count1);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo2', count2);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo3', count3);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo4', count4);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo5', count5);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo6', count6);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo7', count7);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo8', count8);
+    }, 1000);
+    var x = setInterval(function () {
+        startTimer('demo9', count9);
+    }, 1000);
+    function startTimer(id, countDownDate) {
         var now = new Date().getTime();
         var distance = countDownDate - now;
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -383,7 +443,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             + minutes + "m " + seconds + "s ";
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById(id).innerHTML = "EXPIRED";
+            document.getElementById(id).innerHTML = "VERLOPEN";
         }
     }
 </script>

@@ -4852,7 +4852,7 @@ select[multiple] {
 }
 
 .breadcrumbs li {
-    float: left;
+    float: Left;
     font-size: 0.6875rem;
     color: #0a0a0a;
     cursor: default;
@@ -6729,7 +6729,7 @@ select[multiple] {
 
 .pagination .disabled {
     padding: 0.1875rem 0.625rem;
-    color: #cacaca;
+    color: #cacaca!important;
     cursor: not-allowed;
 }
 
