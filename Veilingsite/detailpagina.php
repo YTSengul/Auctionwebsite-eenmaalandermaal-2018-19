@@ -13,14 +13,15 @@ if (isset($_POST['verstuur_bod'])) {
         $check_bod = $dbh->prepare($check_bod_query);
         $check_bod->execute();
         $check = $check_bod->fetchAll(PDO::FETCH_NUM);
-        $laatste_bod = $check[0][0];
-
+        if($check != null) {
+            $laatste_bod = $check[0][0];
+        }
         $bieding_juist = 0;
         $min_bedrag = 0;
         //echo '<br>';
         //var_dump($check);
         //echo '<br>';
-        if($check[0][0] != null) {
+        if($check != null) {
             if ($laatste_bod < 49.99 & $bod >= $laatste_bod + 0.5) {
                 $bieding_juist = 1;
             } else if ($laatste_bod < 499.99 & $laatste_bod >= 50 & $bod >= $laatste_bod + 1) {
@@ -34,7 +35,7 @@ if (isset($_POST['verstuur_bod'])) {
             }
 
             if ($laatste_bod < 49.99) {
-                $min_bedrag = 0.5;
+                $min_bedrag = 0.50;
             } else if ($laatste_bod < 499.99 & $laatste_bod >= 50) {
                 $min_bedrag = 1;
             } else if ($laatste_bod < 999.99 & $laatste_bod >= 500) {
@@ -54,9 +55,9 @@ if (isset($_POST['verstuur_bod'])) {
             }
         }
 
-        if($bod < 1 & $check[0][0] == null) {
+        if($bod < 1 & $check == null) {
             echo "Je moet hoger bieden!! De beginbedrag is €1!!";
-        } else if ($bod > 1 & $check[0][0] == null) {
+        } else if ($bod > 1 & $check == null) {
             $bieding_juist = 1;
             if($bieding_juist == 1) {
                 $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
