@@ -177,9 +177,9 @@ function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nu
 
 function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
 {
-    echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
+    echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
     for ($x = sizeof($breadcrumbs_namen) - 1; $x >= 0; $x--) {
-        echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
+        echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
     }
 }
 

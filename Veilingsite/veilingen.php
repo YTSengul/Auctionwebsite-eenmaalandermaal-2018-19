@@ -30,14 +30,14 @@ if (isset($_GET['filter_rubriek'])) {
 }
 
 // De gegevens van de veilingen worden uit de database gehaald
-$sql_veilingen_query = "with cte 
+$sql_veilingen_query = "with cte
     as (select Rubrieknummer
-        from Rubriek as t 
+        from Rubriek as t
         where RubriekNummer = $filter_rubriek
         UNION ALL
         select t.RubriekNummer
-        from Rubriek as t 
-        join cte 
+        from Rubriek as t
+        join cte
         on t.VorigeRubriek = cte.RubriekNummer)
 SELECT VoorwerpInRubriek.RubriekOpLaagsteNiveau, Voorwerp.Voorwerpnummer, Voorwerp.Titel, Voorwerp.Beschrijving, Voorwerp.EindMoment, Voorwerp.Thumbnail
 FROM (
@@ -54,19 +54,19 @@ $aantalveilingen = sizeOf($veilingen);
 
 
 // hier wordt de laatste pagina van de veilingen gezocht
-$sql_laatste_pagina_query = "with cte 
-as (select Rubrieknummer 
-from Rubriek as t 
+$sql_laatste_pagina_query = "with cte
+as (select Rubrieknummer
+from Rubriek as t
 where RubriekNummer = $filter_rubriek
-UNION ALL 
-select t.RubriekNummer 
-from Rubriek as t 
-join cte 
-on t.VorigeRubriek = cte.RubriekNummer) 
+UNION ALL
+select t.RubriekNummer
+from Rubriek as t
+join cte
+on t.VorigeRubriek = cte.RubriekNummer)
 SELECT CEILING(CAST(COUNT(*)as float)/ $aantalveilingen_per_pagina)
 FROM (
      SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
-     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer, cte 
+     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer, cte
 	 WHERE VeilingGesloten = 0 AND RubriekOpLaagsteNiveau = cte.Rubrieknummer
      ) AS Voorwerp INNER JOIN VoorwerpInRubriek ON VoorwerpInRubriek.Voorwerp = Voorwerp.voorwerpnummer";
 
@@ -163,9 +163,9 @@ function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nu
 
 function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
 {
-    echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
+    echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
     for ($x = sizeof($breadcrumbs_namen) - 1; $x >= 0; $x--) {
-        echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
+        echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
     }
 }
 
@@ -262,19 +262,19 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
             $tot_veiling = $huidigepagina * $aantalveilingen_per_pagina;
 
 // De gegevens van de veilingen worden uit de database gehaald
-            $sql_veilingen_query = "with cte 
+            $sql_veilingen_query = "with cte
     as (select Rubrieknummer
-        from Rubriek as t 
+        from Rubriek as t
         where RubriekNummer = $filter_rubriek
         UNION ALL
         select t.RubriekNummer
-        from Rubriek as t 
-        join cte 
+        from Rubriek as t
+        join cte
         on t.VorigeRubriek = cte.RubriekNummer)
 SELECT VoorwerpInRubriek.RubriekOpLaagsteNiveau, Voorwerp.Voorwerpnummer, Voorwerp.Titel, Voorwerp.Beschrijving, Voorwerp.EindMoment, Voorwerp.Thumbnail
 FROM (
      SELECT *, ROW_NUMBER() OVER (ORDER BY EindMoment) AS RowNum
-     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer WHERE VeilingGesloten = 0 
+     FROM Voorwerp INNER JOIN VoorwerpInRubriek ON voorwerp = voorwerpnummer WHERE VeilingGesloten = 0
 	 ) AS Voorwerp INNER JOIN VoorwerpInRubriek ON VoorwerpInRubriek.Voorwerp = Voorwerp.voorwerpnummer, cte
 WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.RubriekOpLaagsteNiveau = cte.Rubrieknummer";
 
@@ -361,7 +361,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         if ($huidigepagina == 1) {
             echo "<li class='pagination-previous disabled'>Vorige <span class='show-for-sr'>page</span></li>";
         } else {
-            echo "<li class='pagination-previous'><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=$pagina_voor_huidige_pagina' aria-label='Next page'>Vorige <span class='show-for-sr'>page</span></li>";
+            echo "<li class='pagination-previous'><a href='veilingen.php?huidigepagina=$pagina_voor_huidige_pagina' aria-label='Next page'>Vorige <span class='show-for-sr'>page</span></li>";
         }
 
         // hier worden de paginanummers toegevoegd aan de pagina
@@ -369,7 +369,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             if ($x == $huidigepagina) {
                 echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
             } else if ($x > 0 & $x <= $laatste_pagina ) {
-                echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=$x' >$x</a></li>";
+                echo "<li><a href='veilingen.php?huidigepagina=$x' >$x</a></li>";
             }
         }
 
@@ -378,7 +378,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         } else {
-            echo "<li class='pagination-next'><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=".($huidigepagina+=1)."' aria-label='Next page' >Volgende <span
+            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=".($huidigepagina+=1)."' aria-label='Next page' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         }
         ?>
