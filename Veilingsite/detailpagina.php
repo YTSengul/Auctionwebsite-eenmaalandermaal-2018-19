@@ -79,7 +79,7 @@ if (isset($_POST['verstuur_bod'])) {
 
 //Als er geen Voorwerpnummer wordt meegegeven in de header (wat meestal betekent dat de user zelf probeert om via de URL de pagina te bereiken) kan de pagina niet correct geladen worden en wordt de user teruggestuurd naar de homepage.
 if (!isset($_GET['Voorwerpnummer'])) {
-    //header('location: index.php');
+    header('location: index.php');
 }
 
 //Prepared statement voor de productinformatie
@@ -137,10 +137,84 @@ function echoSubpictures($pictureAuctionResult)
 
 ?>
 
+<?PHP
+
+// hier zijn de breadcrumbs in te vinden
+function create_Breadcrumbs($RubriekNummer)
+{
+    global $dbh;
+    $vind_hoofdrubriek_query = "select * from Rubriek where RubriekNummer = $RubriekNummer";
+    $vind_hoofdrubriek_data = $dbh->prepare($vind_hoofdrubriek_query);
+    $vind_hoofdrubriek_data->execute();
+    $vind_hoofdrubriek = $vind_hoofdrubriek_data->fetchAll(PDO::FETCH_NUM);
+    $hoofdrubriek = $vind_hoofdrubriek[0];
+    return $hoofdrubriek;
+}
+
+// hier wordt de array van de breadcrumb gemaakt
+$breadcrumbs_namen = array();
+$breadcrumbs_nummers = array();
+function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nummers)
+{
+    $rubriek_voor_hoofdcategorie = NULL;
+    if ($filter_rubriek != -1) {
+        for ($x = 0; $rubriek_voor_hoofdcategorie[2] != -1; $x++) {
+            if ($rubriek_voor_hoofdcategorie != NULL) {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($rubriek_voor_hoofdcategorie[2]);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            } else {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($filter_rubriek);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            }
+        }
+    }
+    sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers);
+}
+
+//hier worden de breadcrumbs op rij gezet en geshowed dit wordt gedaan om het van achter naar voor te sorteren
+
+function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
+{
+    echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
+    for ($x = sizeof($breadcrumbs_namen) - 1; $x >= 0; $x--) {
+        echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
+    }
+}
+
+$detailsAuction_bc = $dbh->prepare("SELECT rubriekoplaagsteniveau FROM Voorwerpinrubriek WHERE Voorwerp = ".$_GET['Voorwerpnummer']);
+$detailsAuction_bc->execute();
+$resultAuction_bc = $detailsAuction_bc->fetch();
+
+?>
+
+
 <body>
 <?php include_once "components/header.php"; ?>
 <div class="grid-container">
     <div class="grid-x grid-margin-x detailpagina">
+        <div class="medium-12 large-12 float-center cell">
+            <!--- Breadcrumbs -->
+            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
+                <ul class="breadcrumbs">
+                    <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
+                    <!---<li>
+                        <span class="show-for-sr">Current: </span> Huidige cat.
+                    </li>-->
+                </ul>
+            </nav>
+
+            <!---<select class="float-right veilingen-filter-hoofd ">
+                <option>Optie 1</option>
+                <option>Optie 2</option>
+                <option>Optie 3</option>
+                <option>Optie 4</option>
+                <option>Optie 5</option>
+            </select>-->
+
+        </div>
+        <div clas
         <div class="cell">
             <h2><?php echo $title ?></h2>
         </div>
