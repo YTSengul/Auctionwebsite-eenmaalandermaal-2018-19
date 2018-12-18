@@ -356,8 +356,15 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             $pagina_marger = 3;
         }
 
-        // Hier wordt gekeken of de knop 'Vorige' op disabled kan staan
+        // Met deze knop kan de gebruiker naar de eerste pagina gaan
         echo "<ul class='pagination text-center' role='navigation' aria-label='Pagination' data-page='6' data-total='16'>";
+        if ($huidigepagina == 1) {
+            echo "<li class='pagination-previous disabled'>Eerste pagina <span class='show-for-sr'>page</span></li>";
+        } else {
+            echo "<li class='pagination-previous'><a href='veilingen.php?huidigepagina=1' aria-label='Next page'>Eerste pagina <span class='show-for-sr'>page</span></li>";
+        }
+
+        // Hier wordt gekeken of de knop 'Vorige' op disabled kan staan
         if ($huidigepagina == 1) {
             echo "<li class='pagination-previous disabled'>Vorige <span class='show-for-sr'>page</span></li>";
         } else {
@@ -379,7 +386,14 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
                             class='show-for-sr''>page</span></a></li> </ul>";
         } else {
             echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=".($huidigepagina+=1)."' aria-label='Next page' >Volgende <span
-                            class='show-for-sr''>page</span></a></li> </ul>";
+                            class='show-for-sr''>page</span></a></li>";
+        }
+
+        // Met deze knop kan de gebruiker naar de laatste pagina gaan
+        if ($huidigepagina == 1) {
+            echo "<li class='pagination-next disabled'>Laatste pagina <span class='show-for-sr'>page</span></li>";
+        } else {
+            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=".$laatste_pagina."' aria-label='Next page'>Laatste pagina <span class='show-for-sr'>page</span></li> </ul>";
         }
         ?>
 
