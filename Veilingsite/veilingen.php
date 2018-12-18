@@ -305,7 +305,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
                     <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3) . "'>
                 </div>
                 <div class='media-object-section veilingen-veiling-info'>
-                    <h5 class='veilingen-veiling-titel float-left'>" . substr($veiling[2], 0, 50) . "</h5>
+                    <h5 class='veilingen-veiling-titel float-left'><a href='detailpagina.php?Voorwerpnummer=".$veiling[1]."' > >" . substr($veiling[2], 0, 50) . "</a></h5>
                     <h5 class='veilingen-veiling-timer float-right' id='demo".$counthelper."' ></h5>
                     <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[3]), 0, 140) . "</p>
                 </div>
