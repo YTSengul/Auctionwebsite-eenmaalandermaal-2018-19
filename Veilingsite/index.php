@@ -38,7 +38,6 @@
                                    GROUP BY V.Voorwerpnummer, B.Voorwerp, V.Titel, V.Startprijs, V.EindMoment, V.Thumbnail
                                    ORDER BY COUNT(B.Voorwerp) $upOrDown, $sortFilter $upOrDown";
 
-
         $auctions = $dbh->prepare($querySelectionAuctions);
         $auctions->execute();
         while ($auction = $auctions->fetch()) {
