@@ -12,7 +12,7 @@ if (isset($_GET['huidigepagina'])) {
 }
 
 //Hier wordt berekend tussen welke nummers de veilingen genomen moeten worden
-$aantalveilingen_per_pagina = 10;
+$aantalveilingen_per_pagina = 9;
 $vanaf_veiling = ($huidigepagina - 1) * $aantalveilingen_per_pagina;
 $tot_veiling = $vanaf_veiling + $aantalveilingen_per_pagina;
 
@@ -376,7 +376,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         } else {
-            echo "<li class='pagination-next'><a href='#' aria-label='Next page' >Volgende <span
+            echo "<li class='pagination-next'><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=".($huidigepagina+=1)."' aria-label='Next page' >Volgende <span
                             class='show-for-sr''>page</span></a></li> </ul>";
         }
         ?>
