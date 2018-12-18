@@ -89,7 +89,7 @@ else if (isset($_GET["subrubriek_voegtoe"])) {
 }
 
 // De bestaande rubrieken in een array stoppen
-$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE VorigeRubriek = -1";
+$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE VorigeRubriek = -1 ORDER BY volgnummer DESC";
 $sql_alle_rubrieken = $dbh->prepare($alle_rubrieken_query);
 $sql_alle_rubrieken->execute();
 $alle_hoofdrubrieken_data = $sql_alle_rubrieken->fetchAll(PDO::FETCH_NUM);
@@ -171,7 +171,7 @@ for ($x = 0; $x < 10; $x++) {
                     ${'zoek_' . $loop_teller} = $_SESSION["formulier_" . $loop_teller . "_save"];
                 }
 
-                ${'zoek_' . $loop_teller . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE Rubrieknummer = '${"zoek_$loop_teller"}'";
+                ${'zoek_' . $loop_teller . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE Rubrieknummer = '${"zoek_$loop_teller"}' ORDER BY volgnummer DESC";
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller . "_rubrieken_query"});
 
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
@@ -179,7 +179,7 @@ for ($x = 0; $x < 10; $x++) {
                 ${'zoek_' . $loop_teller_plus . '_nummer'} = ${'zoek_' . $loop_teller_plus . '_rubrieken_data'}[0][0];
                 $help_de_variabele = ${'zoek_' . $loop_teller_plus . '_nummer'};
 
-                ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE VorigeRubriek = '$help_de_variabele'";
+                ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE VorigeRubriek = '$help_de_variabele' ORDER BY volgnummer DESC";
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller_plus . "_rubrieken_query"});
                 ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
                 ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);

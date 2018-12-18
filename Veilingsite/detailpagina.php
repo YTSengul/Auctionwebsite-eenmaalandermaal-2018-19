@@ -4,16 +4,16 @@ include_once "components/meta.php";
 
 if (isset($_POST['verstuur_bod'])) {
 
-    if(isset($_SESSION['ingelogde_gebruiker'])) {
+    if (isset($_SESSION['ingelogde_gebruiker'])) {
 
         $_GET['Voorwerpnummer'] = $_POST['voorwerpnummer_hidden'];
         $bod = $_POST['bod'];
 
-        $check_bod_query = "select * from bod where voorwerp = ".$_GET['Voorwerpnummer']." ORDER BY 1 DESC";
+        $check_bod_query = "select * from bod where voorwerp = " . $_GET['Voorwerpnummer'] . " ORDER BY 1 DESC";
         $check_bod = $dbh->prepare($check_bod_query);
         $check_bod->execute();
         $check = $check_bod->fetchAll(PDO::FETCH_NUM);
-        if($check != null) {
+        if ($check != null) {
             $laatste_bod = $check[0][0];
         }
         $bieding_juist = 0;
@@ -21,7 +21,7 @@ if (isset($_POST['verstuur_bod'])) {
         //echo '<br>';
         //var_dump($check);
         //echo '<br>';
-        if($check != null) {
+        if ($check != null) {
             if ($laatste_bod < 49.99 & $bod >= $laatste_bod + 0.5) {
                 $bieding_juist = 1;
             } else if ($laatste_bod < 499.99 & $laatste_bod >= 50 & $bod >= $laatste_bod + 1) {
@@ -45,9 +45,9 @@ if (isset($_POST['verstuur_bod'])) {
             } else if ($laatste_bod >= 5000) {
                 $min_bedrag = 50;
             }
-            if($bieding_juist == 1) {
+            if ($bieding_juist == 1) {
                 $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
-                $verstuur_bod_query = "insert into bod values ($bod,".$_GET['Voorwerpnummer'].",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
+                $verstuur_bod_query = "insert into bod values ($bod," . $_GET['Voorwerpnummer'] . ",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
                 $verstuur_bod = $dbh->prepare($verstuur_bod_query);
                 $verstuur_bod->execute();
             } else {
@@ -55,13 +55,13 @@ if (isset($_POST['verstuur_bod'])) {
             }
         }
 
-        if($bod <= 1 & $check == null) {
+        if ($bod <= 1 & $check == null) {
             echo "Je moet hoger bieden!! De beginbedrag is €1!!";
         } else if ($bod > 1 & $check == null) {
             $bieding_juist = 1;
-            if($bieding_juist == 1) {
+            if ($bieding_juist == 1) {
                 $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
-                $verstuur_bod_query = "insert into bod values ($bod,".$_GET['Voorwerpnummer'].",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
+                $verstuur_bod_query = "insert into bod values ($bod," . $_GET['Voorwerpnummer'] . ",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
                 $verstuur_bod = $dbh->prepare($verstuur_bod_query);
                 $verstuur_bod->execute();
                 echo 'aaa';
@@ -71,8 +71,7 @@ if (isset($_POST['verstuur_bod'])) {
         }
 
 
-
-    } else if(!isset($_SESSION['ingelogde_gebruiker'])) {
+    } else if (!isset($_SESSION['ingelogde_gebruiker'])) {
         header('Location:pre-registreer.php');
     }
 }
@@ -83,13 +82,14 @@ if (!isset($_GET['Voorwerpnummer'])) {
 }
 
 //Prepared statement voor de productinformatie
-$detailsAuction = $dbh->prepare("SELECT Titel, Beschrijving, EindMoment FROM Voorwerp WHERE Voorwerpnummer = ?");
+$detailsAuction = $dbh->prepare("SELECT Titel, Beschrijving, EindMoment, Startprijs FROM Voorwerp WHERE Voorwerpnummer = ?");
 $detailsAuction->execute([$_GET['Voorwerpnummer']]);
 $resultAuction = $detailsAuction->fetch();
 
 $title = $resultAuction['Titel'];
 $description = $resultAuction['Beschrijving'];
 $endTime = $resultAuction['EindMoment'];
+$startprijs = $resultAuction['Startprijs'];
 
 //Geeft variabele door aan productomschrijving in iFrame
 $_SESSION['beschrijving'] = $description;
@@ -100,9 +100,15 @@ $pictureAuction->execute([$_GET['Voorwerpnummer']]);
 $pictureAuctionResult = $pictureAuction->fetchAll();
 
 //Prepared statement voor de biedingen
-$topFiveBids = $dbh->prepare("SELECT TOP 5 Bodbedrag, Gebruikersnaam FROM Bod WHERE Voorwerp = ? ORDER BY Bodbedrag DESC");
+$topFiveBids = $dbh->prepare("SELECT TOP 4 Bodbedrag, Gebruikersnaam FROM Bod WHERE Voorwerp = ? ORDER BY Bodbedrag DESC");
 $topFiveBids->execute([$_GET['Voorwerpnummer']]);
 $resultTopFiveBids = $topFiveBids->fetchAll();
+
+// Hier wordt de eerste bieding op de veiling uit de database genomen
+$eerstebieding_query = "SELECT Bodbedrag, Gebruikersnaam FROM Bod WHERE Voorwerp = ? ORDER BY Bodbedrag ASC";
+$eerstebieding_data = $dbh->prepare($eerstebieding_query);
+$eerstebieding_data->execute([$_GET['Voorwerpnummer']]);
+$eerstebieding = $eerstebieding_data->fetchAll();
 
 //Prepared statement voor het aantal biedingen: Later samenvoegen met statement hierboven?
 $amountBidsAuction = $dbh->prepare("SELECT COUNT(Voorwerp) FROM Bod WHERE Voorwerp = ? GROUP BY Voorwerp");
@@ -112,10 +118,20 @@ $resultAmountBidsAuction = $amountBidsAuction->fetch();
 $finalAmountBidsAuction = $resultAmountBidsAuction[0];
 
 //Functie die de top 5 biedingen toont met username en bedrag
-function echoBedragen($resultTopFiveBids)
+$first = true;
+function echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs)
 {
+    global $first;
     foreach ($resultTopFiveBids as $bidData) {
-        echo '<div class="spaceBetween"><h4>&euro;' . $bidData[0] . '</h4><h5>' . $bidData[1] . '</h5></div><hr>';
+        if ($first == true) {
+            echo '<div class="spaceBetween"><h4><b>&euro;' . $bidData[0] . '</h4><h5>' . $bidData[1] . '</b></h5></div><hr>';
+            $first = false;
+        } else {
+            echo '<div class="spaceBetween"><h4>&euro;' . $bidData[0] . '</h4><h5>' . $bidData[1] . '</h5></div><hr>';
+        }
+    }
+    if ($eerstebieding != null & sizeof($eerstebieding) > 4) {
+        echo '<div class="spaceBetween"><h5>Startprijs: €' . $startprijs . '</h5><h5>Eerste bod: €' . $eerstebieding[0][0] . '</h5></div><hr>';
     }
 }
 
@@ -183,7 +199,7 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
     }
 }
 
-$detailsAuction_bc = $dbh->prepare("SELECT rubriekoplaagsteniveau FROM Voorwerpinrubriek WHERE Voorwerp = ".$_GET['Voorwerpnummer']);
+$detailsAuction_bc = $dbh->prepare("SELECT rubriekoplaagsteniveau FROM Voorwerpinrubriek WHERE Voorwerp = " . $_GET['Voorwerpnummer']);
 $detailsAuction_bc->execute();
 $resultAuction_bc = $detailsAuction_bc->fetch();
 
@@ -238,13 +254,14 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
             </div>
             <div>
                 <form class="spaceBetween" method="POST">
-                    <input type="text" placeholder="Vul bedrag in..." name="bod" >
+                    <input type="text" placeholder="Vul bedrag in..." name="bod">
                     <input type="hidden" name="voorwerpnummer_hidden" value="<?PHP echo $_GET['Voorwerpnummer']; ?>">
-                    <input class="button" type="submit" value="Bieden" name="verstuur_bod" > <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
+                    <input class="button" type="submit" value="Bieden" name="verstuur_bod">
+                    <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
                 </form>
             </div>
             <div class="detail-bedragen">
-                <?php echoBedragen($resultTopFiveBids) ?>
+                <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
             </div>
             <div class="detail-aantal">
                 <h4>Aantal
@@ -259,8 +276,7 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
             <hr>
             <div class="tabs-content" data-tabs-content="example-tabs">
                 <div class="tabs-panel is-active" id="panel1">
-                    <iframe src="components/productomschrijving.php" width="100%" height="100%">-->
-                        <p>Uw browser support dit helaas niet.</p>
+                    <iframe src="components/productomschrijving.php" class="detailpagina_iframe">
                     </iframe>
                     <div class="tabs-panel" id="panel2"> <!--Note: Iemand moet dit nog werkend maken-->
                         <p>Yes, sir. I think those new droids are going to work out fine. In fact, I, uh, was also

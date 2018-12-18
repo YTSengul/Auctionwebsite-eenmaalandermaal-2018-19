@@ -616,3 +616,8 @@ a.redHover:hover {
 .veilingen-veiling-info {
     width: 100%;
 }
+
+.detailpagina_iframe {
+    width: 100%;
+    min-height: 400px;
+}
