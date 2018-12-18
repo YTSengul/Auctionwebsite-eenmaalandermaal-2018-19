@@ -12,10 +12,14 @@ if (isset($_GET['huidigepagina'])) {
 }
 
 //Hier wordt berekend tussen welke nummers de veilingen genomen moeten worden
-$aantalveilingen_per_pagina = 9;
+$aantalveilingen_per_pagina = 10;
 $vanaf_veiling = ($huidigepagina - 1) * $aantalveilingen_per_pagina;
-$tot_veiling = $vanaf_veiling + $aantalveilingen_per_pagina;
-
+$tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina);
+if($huidigepagina!=1) {
+    $tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina - 1);
+}
+echo $vanaf_veiling;
+echo $tot_veiling;
 
 // Hier wordt gekeken of er een rubriek is ingegeven, zo ja, word die uit de database gehaald
 if (isset($_GET['filter_rubriek'])) {
@@ -284,6 +288,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
             $aantalveilingen = $veilingen;
 
         }
+
         if (sizeof($veilingen) != 0) {
             $counthelper = -1;
             foreach ($veilingen as $veiling) {
@@ -366,7 +371,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         for ($x = $pagina_voor_huidige_pagina; $x < $huidigepagina + $pagina_marger; $x++) {
             if ($x == $huidigepagina) {
                 echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
-            } else {
+            } else if ($x > 0 & $x <= $laatste_pagina ) {
                 echo "<li><a href='/I-Project-2018-2019/veilingsite/veilingen.php?huidigepagina=$x' >$x</a></li>";
             }
         }
