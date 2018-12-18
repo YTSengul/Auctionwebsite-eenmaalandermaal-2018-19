@@ -18,8 +18,6 @@ $tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina);
 if($huidigepagina!=1) {
     $tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina - 1);
 }
-echo $vanaf_veiling;
-echo $tot_veiling;
 
 // Hier wordt gekeken of er een rubriek is ingegeven, zo ja, word die uit de database gehaald
 if (isset($_GET['filter_rubriek'])) {
@@ -179,7 +177,7 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
 
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
-        <div class="hide-for-small-only medium-12 large-12 float-center cell">
+        <div class="medium-12 large-12 float-center cell">
             <!--- Breadcrumbs -->
             <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
                 <ul class="breadcrumbs">
@@ -199,7 +197,7 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
             </select>-->
 
         </div>
-        <div class="hide-for-small-only medium-3 large-3 float-center cell">
+        <div class="medium-3 large-3 float-center cell">
             <div class="product-filters">
                 <ul class="mobile-product-filters vertical menu show-for-small-only" data-accordion-menu>
                     <li>
@@ -243,8 +241,7 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
                         </ul>
                     </li>
                 </ul>
-                <h1 class="product-filters-header hide-for-small-only">Products</h1>
-                <ul class="vertical menu hide-for-small-only" data-accordion-menu>
+                <ul class="vertical menu" data-accordion-menu>
                     <li class="product-filters-tab">
                         <ul class="categories-menu menu vertical nested is-active">
                             <?PHP filter_rubrieken(); ?>
@@ -449,8 +446,8 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
 <script>
     $('.categories-menu.menu.nested').each(function () {
         var filterAmount = $(this).find('li').length;
-        if (filterAmount > 5) {
-            $('li', this).eq(4).nextAll().hide().addClass('toggleable');
+        if (filterAmount > 3) {
+            $('li', this).eq(2).nextAll().hide().addClass('toggleable');
             $(this).append('<li class="more">Meer</li>');
         }
     });

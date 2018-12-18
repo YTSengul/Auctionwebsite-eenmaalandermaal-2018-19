@@ -55,7 +55,7 @@ if (isset($_POST['verstuur_bod'])) {
             }
         }
 
-        if($bod < 1 & $check == null) {
+        if($bod <= 1 & $check == null) {
             echo "Je moet hoger bieden!! De beginbedrag is €1!!";
         } else if ($bod > 1 & $check == null) {
             $bieding_juist = 1;
@@ -72,8 +72,8 @@ if (isset($_POST['verstuur_bod'])) {
 
 
 
-    } else {
-
+    } else if(!isset($_SESSION['ingelogde_gebruiker'])) {
+        header('Location:pre-registreer.php');
     }
 }
 
