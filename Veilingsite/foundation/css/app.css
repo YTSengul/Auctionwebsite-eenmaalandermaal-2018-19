@@ -38,7 +38,7 @@ body {
     margin-bottom: 10px !important;
 }
 
-.ddd{
+.FullCenter{
     align-items: center;
     justify-content: center;
     align-content: center;
@@ -98,7 +98,7 @@ a:hover {
     margin: auto;
 }
 
-.abc{
+.resizeImage{
     width: 100%;
     height: 50%;
     display: flex;
@@ -106,10 +106,6 @@ a:hover {
     align-items: center;
     align-content: center;
     /* overflow: hidden; */
-}
-
-.dbc{
-    /* height: 200px; */
 }
 
 .veiling-sluit-index {

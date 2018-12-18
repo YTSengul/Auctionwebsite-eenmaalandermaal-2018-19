@@ -19,13 +19,13 @@
             ';
 
             /** Query to select the first 3 sub categories from the main categories. Ordered by popularity and then alphabet. */
-            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam FROM Rubriek WHERE VorigeRubriek = '$hoofdRubriek[Rubrieknummer]' ORDER BY Volgnummer, Rubrieknaam ASC";
+            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = '$hoofdRubriek[Rubrieknummer]' ORDER BY Volgnummer, Rubrieknaam ASC";
 
             $subRubrieken = $dbh->prepare($querySubCategories);
             $subRubrieken->execute();
             while($subRubriek = $subRubrieken->fetch()){
 
-                echo '<li><a class="redHover" href="#">'.$subRubriek['Rubrieknaam'].'</a></li>';
+                echo '<li><a class="redHover" href="veilingen.php?filter_rubriek='.$subRubriek['Rubrieknummer'].'">'.$subRubriek['Rubrieknaam'].'</a></li>';
 
             }
             echo '</div>';
@@ -46,7 +46,7 @@
         $hoofdRubrieken->execute();
         while($hoofdRubriek = $hoofdRubrieken->fetch()){
 
-            echo '<li class="noPadding noMargins"><a class="HeaderASpacings redHover" href="#">'.$hoofdRubriek['Rubrieknaam'].'</a></li>';
+            echo '<li class="noPadding noMargins"><a class="HeaderASpacings" href="veilingen.php?filter_rubriek='.$hoofdRubriek['Rubrieknummer'].'">'.$hoofdRubriek['Rubrieknaam'].'</a></li>';
 
         }
     }
@@ -56,7 +56,7 @@
         <div class="medium-12 cell">
             <ul class="dropdown menu spaceAround" data-dropdown-menu>
                 <?php rubriekenHeader(); ?>
-                <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings redHover" href="#">Meer</a>
+                <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings" href="#">Meer</a>
                     <ul class="menu megaMenuSize noBorder">
                         <div class="grid-x grid-margin-x megaMenuColourandBox">
                             <?php rubriekenBoom(); ?>
