@@ -2,9 +2,83 @@
 include_once "components/connect.php";
 include_once "components/meta.php";
 
+if (isset($_POST['verstuur_bod'])) {
+
+    if(isset($_SESSION['ingelogde_gebruiker'])) {
+
+        $_GET['Voorwerpnummer'] = $_POST['voorwerpnummer_hidden'];
+        $bod = $_POST['bod'];
+
+        $check_bod_query = "select * from bod where voorwerp = ".$_GET['Voorwerpnummer']." ORDER BY 1 DESC";
+        $check_bod = $dbh->prepare($check_bod_query);
+        $check_bod->execute();
+        $check = $check_bod->fetchAll(PDO::FETCH_NUM);
+        $laatste_bod = $check[0][0];
+
+        $bieding_juist = 0;
+        $min_bedrag = 0;
+        //echo '<br>';
+        //var_dump($check);
+        //echo '<br>';
+        if($check[0][0] != null) {
+            if ($laatste_bod < 49.99 & $bod >= $laatste_bod + 0.5) {
+                $bieding_juist = 1;
+            } else if ($laatste_bod < 499.99 & $laatste_bod >= 50 & $bod >= $laatste_bod + 1) {
+                $bieding_juist = 1;
+            } else if ($laatste_bod < 999.99 & $laatste_bod >= 500 & $bod >= $laatste_bod + 5) {
+                $bieding_juist = 1;
+            } else if ($laatste_bod < 4999.99 & $laatste_bod >= 1000 & $bod >= $laatste_bod + 10) {
+                $bieding_juist = 1;
+            } else if ($laatste_bod >= 5000 & $bod >= $laatste_bod + 50) {
+                $bieding_juist = 1;
+            }
+
+            if ($laatste_bod < 49.99) {
+                $min_bedrag = 0.5;
+            } else if ($laatste_bod < 499.99 & $laatste_bod >= 50) {
+                $min_bedrag = 1;
+            } else if ($laatste_bod < 999.99 & $laatste_bod >= 500) {
+                $min_bedrag = 5;
+            } else if ($laatste_bod < 4999.99 & $laatste_bod >= 1000) {
+                $min_bedrag = 10;
+            } else if ($laatste_bod >= 5000) {
+                $min_bedrag = 50;
+            }
+            if($bieding_juist == 1) {
+                $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
+                $verstuur_bod_query = "insert into bod values ($bod,".$_GET['Voorwerpnummer'].",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
+                $verstuur_bod = $dbh->prepare($verstuur_bod_query);
+                $verstuur_bod->execute();
+            } else {
+                echo "Je moet hoger bieden!! De minimum verhoging is: € $min_bedrag";
+            }
+        }
+
+        if($bod < 1 & $check[0][0] == null) {
+            echo "Je moet hoger bieden!! De beginbedrag is €1!!";
+        } else if ($bod > 1 & $check[0][0] == null) {
+            $bieding_juist = 1;
+            if($bieding_juist == 1) {
+                $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
+                $verstuur_bod_query = "insert into bod values ($bod,".$_GET['Voorwerpnummer'].",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
+                $verstuur_bod = $dbh->prepare($verstuur_bod_query);
+                $verstuur_bod->execute();
+                echo 'aaa';
+            } else {
+                echo "Je moet hoger bieden!! De minimum verhoging is: € $min_bedrag";
+            }
+        }
+
+
+
+    } else {
+
+    }
+}
+
 //Als er geen Voorwerpnummer wordt meegegeven in de header (wat meestal betekent dat de user zelf probeert om via de URL de pagina te bereiken) kan de pagina niet correct geladen worden en wordt de user teruggestuurd naar de homepage.
 if (!isset($_GET['Voorwerpnummer'])) {
-    header('location: index.php');
+    //header('location: index.php');
 }
 
 //Prepared statement voor de productinformatie
@@ -88,9 +162,10 @@ function echoSubpictures($pictureAuctionResult)
                     bent u verplicht te betalen als u het product wint.</p>
             </div>
             <div>
-                <form class="spaceBetween">
-                    <input type="number" placeholder="Vul bedrag in...">
-                    <input class="button" type="submit" value="Bieden"> <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
+                <form class="spaceBetween" method="POST">
+                    <input type="text" placeholder="Vul bedrag in..." name="bod" >
+                    <input type="hidden" name="voorwerpnummer_hidden" value="<?PHP echo $_GET['Voorwerpnummer']; ?>">
+                    <input class="button" type="submit" value="Bieden" name="verstuur_bod" > <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
                 </form>
             </div>
             <div class="detail-bedragen">

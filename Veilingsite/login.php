@@ -17,13 +17,17 @@ if (isset($_POST["login"])) {
     $sql_login_check = $dbh->prepare($sql_login_check_query);
     $sql_login_check->execute();
     $sql_login_data = $sql_login_check->fetchAll(PDO::FETCH_ASSOC);
-
+    var_dump($sql_login_data);
     if ($sql_login_check->rowCount() > 0) {
-        $gehashed_wachtwoord = $sql_login_data[0]['wachtwoord'];
+        $gehashed_wachtwoord = $sql_login_data[0]['Wachtwoord'];
         if (password_verify($wachtwoord, $gehashed_wachtwoord)) {
             $_SESSION['ingelogde_gebruiker'] = $gebruikersnaam;
             header('location:index.php');
-        } else {
+        } else if ($wachtwoord == $sql_login_data[0]['Wachtwoord']){
+            $_SESSION['ingelogde_gebruiker'] = $gebruikersnaam;
+            header('location:index.php');
+        }
+        else {
             $login_verification = $invalid;
         }
     } else {
