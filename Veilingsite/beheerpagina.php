@@ -4,13 +4,14 @@ include_once "components/connect.php";
 
 include_once "components/meta.php";
 
+
 // Op deze plaats worden de nieuwe volgnummers naar de database gestuurd indie die zij uitgevoerd
 if (isset($_POST['rubriek_sorteer'])) {
     $sql_wijzig_volgnummer_query = 'update rubriek set Volgnummer = :volgnummer where Rubrieknummer = :rubrieknummer ';
     $sql_wijzig_volgnummer = $dbh->prepare($sql_wijzig_volgnummer_query);
 
-    foreach($_POST as $Rubrieknummer => $Volgnummer) {
-        if($Rubrieknummer != 'rubriek_sorteer'){
+    foreach ($_POST as $Rubrieknummer => $Volgnummer) {
+        if ($Rubrieknummer != 'rubriek_sorteer') {
             $sql_wijzig_volgnummer->bindParam(":volgnummer", $Volgnummer);
             $sql_wijzig_volgnummer->bindParam(":rubrieknummer", $Rubrieknummer);
             $stuur_nieuwe_volgnummers = $sql_wijzig_volgnummer->execute();
@@ -19,9 +20,8 @@ if (isset($_POST['rubriek_sorteer'])) {
     }
     $s = $_SERVER['REQUEST_URI'];
     $nieuwe_string_na_sorteren = strstr($s, '?', true);
-    header('Location:'.$nieuwe_string_na_sorteren);
-}
-// Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
+    header('Location:' . $nieuwe_string_na_sorteren);
+} // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
 else if (isset($_GET['rubriek_hernoem'])) {
 
     $nieuwe_rubriek_naam = $_GET['hernoem_rubriek'];
@@ -47,7 +47,7 @@ else if (isset($_GET['rubriek_hernoem'])) {
 } // Het versturen van de nieuwe Subrubriek naar de database
 else if (isset($_GET["subrubriek_voegtoe"])) {
 
-    $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek";
+    $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek  order by 'Volgnummer' desc";
     $sql_hoogste_rubrieknummer = $dbh->prepare($sql_neem_hoogste_rubrieknummer);
     $sql_hoogste_rubrieknummer->execute();
     $hoogste_rubrieknummer_data = $sql_hoogste_rubrieknummer->fetchAll(PDO::FETCH_NUM);
@@ -89,7 +89,7 @@ else if (isset($_GET["subrubriek_voegtoe"])) {
 }
 
 // De bestaande rubrieken in een array stoppen
-$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE VorigeRubriek = -1 ORDER BY volgnummer DESC";
+$alle_rubrieken_query = "SELECT * FROM Rubriek WHERE VorigeRubriek = '-1' ORDER BY volgnummer DESC";
 $sql_alle_rubrieken = $dbh->prepare($alle_rubrieken_query);
 $sql_alle_rubrieken->execute();
 $alle_hoofdrubrieken_data = $sql_alle_rubrieken->fetchAll(PDO::FETCH_NUM);
@@ -114,111 +114,103 @@ for ($x = 0; $x < 10; $x++) {
     }
 }
 
-?>
+// Hier worden de hoofdrubrieken aangeroepen met de keuzes
+function beheerpagina_hoofdrubriek()
+{
+    global $alle_hoofdrubrieken_data;
 
-<body>
-
-<?php include_once 'components/header.php'; ?>
-
-<div class="grid-container">
-    <div class="grid-x grid-padding-x">
-        <div class="medium-12 large-12 cell">
-            <h2 class="Rubriekenbeheren_titel">Rubrieken beheren</h2>
-        </div>
-
-        <?PHP
-        echo '<div class="medium-3 large-3 cell">
+    echo '<div class="medium-3 large-3 cell">
             <form action="#" method="GET">
                 <select name="zoek_0">';
 
-        foreach ($alle_hoofdrubrieken_data as $hoofdrubrieken) {
-            if ($hoofdrubrieken[0] == $_SESSION['formulier_0_save']) {
-                echo '<option selected value="' . $hoofdrubrieken[0] . '">' . $hoofdrubrieken[1] . '</option>';
-            } else {
-                echo '<option value="' . $hoofdrubrieken[0] . '">' . $hoofdrubrieken[1] . '</option>';
-            }
+    foreach ($alle_hoofdrubrieken_data as $hoofdrubrieken) {
+        if ($hoofdrubrieken[0] == $_SESSION['formulier_0_save']) {
+            echo '<option selected value="' . $hoofdrubrieken[0] . '">' . $hoofdrubrieken[1] . '</option>';
+        } else {
+            echo '<option value="' . $hoofdrubrieken[0] . '">' . $hoofdrubrieken[1] . '</option>';
         }
+    }
 
-        echo '</select>
+    echo '</select>
             <input type="submit" value="zoek" name="rubriek_zoek_0" class="button expanded">
             <input type="submit" value="Hernoem" name="rubriek_zoek_0" class="button expanded">
             <input type="submit" value="Subrubriek invoegen" name="rubriek_zoek_0" class="button expanded">
             <input type="submit" value="Sorteren" name="rubriek_zoek_0" class="button expanded">
             </form>
         </div>';
-        ?>
+}
 
-        <?PHP
+// Hier worden de subrubrieken aangeroepen met de keuzes
+function beheerpagina_subrubriek(){
 
-        // for loop om te kijken hoe ver je in de de rubriekenboom bent
-        for ($loop_teller = 0; $loop_teller <= $_SESSION['formulier_count']; $loop_teller++) {
-            $loop_teller_plus = ($loop_teller + 1);
+    global $dbh;
 
-            // hier wordt gekeken welke optie je gekozen hebt en wordt gekeken hoe ver er gegaan moet worden in de rubriekenboom
-            if (isset($_GET["zoek_$loop_teller"]) || $_SESSION["formulier_count"] > $loop_teller) {
-                // Deze if is er voor dar er geen subrubriek wordt geopend wanneer er een rubriek hernoemd wordt, of onder de gekozen rubriek ene subrubriek moet komen
-                if (isset($_GET["zoek_$loop_teller"]) && $_GET['rubriek_zoek_' . $loop_teller] != 'zoek') {
-                    $_SESSION['formulier_count'] = $loop_teller;
-                    $_SESSION["formulier_" . $loop_teller . "_save"] = $_GET["zoek_" . $loop_teller];
-                    ${'zoek_' . $loop_teller} = $_GET["zoek_$loop_teller"];
-                } // Deze if is ervoor als er wordt gezicht in de rubriek naar subrubrieken, zodat de volgende rubriek opent
-                else if (isset($_GET["zoek_$loop_teller"])) {
-                    $_SESSION['formulier_count'] = ${'formulier_' . $loop_teller_plus . '_actief'};
-                    $_SESSION["formulier_" . $loop_teller . "_save"] = $_GET["zoek_" . $loop_teller];
-                    ${'zoek_' . $loop_teller} = $_GET["zoek_$loop_teller"];
-                } // Hier wordt gekeken welk rubriek is opgeslagen in de session omdat hij niet gekozen is maar wel de hoofdrubriek is van de subrubriek
-                else {
-                    ${'zoek_' . $loop_teller} = $_SESSION["formulier_" . $loop_teller . "_save"];
-                }
+    // for loop om te kijken hoe ver je in de de rubriekenboom bent
+    for ($loop_teller = 0; $loop_teller <= $_SESSION['formulier_count']; $loop_teller++) {
+        $loop_teller_plus = ($loop_teller + 1);
 
-                ${'zoek_' . $loop_teller . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE Rubrieknummer = '${"zoek_$loop_teller"}' ORDER BY volgnummer DESC";
-                ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller . "_rubrieken_query"});
+        global ${'formulier_' . $loop_teller_plus . '_actief'};
 
-                ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
-                ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);
-                ${'zoek_' . $loop_teller_plus . '_nummer'} = ${'zoek_' . $loop_teller_plus . '_rubrieken_data'}[0][0];
-                $help_de_variabele = ${'zoek_' . $loop_teller_plus . '_nummer'};
-
-                ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE VorigeRubriek = '$help_de_variabele' ORDER BY volgnummer DESC";
-                ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller_plus . "_rubrieken_query"});
-                ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
-                ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);
+        // hier wordt gekeken welke optie je gekozen hebt en wordt gekeken hoe ver er gegaan moet worden in de rubriekenboom
+        if (isset($_GET["zoek_$loop_teller"]) || $_SESSION["formulier_count"] > $loop_teller) {
+            // Deze if is er voor dar er geen subrubriek wordt geopend wanneer er een rubriek hernoemd wordt, of onder de gekozen rubriek ene subrubriek moet komen
+            if (isset($_GET["zoek_$loop_teller"]) && $_GET['rubriek_zoek_' . $loop_teller] != 'zoek') {
+                $_SESSION['formulier_count'] = $loop_teller;
+                $_SESSION["formulier_" . $loop_teller . "_save"] = $_GET["zoek_" . $loop_teller];
+                ${'zoek_' . $loop_teller} = $_GET["zoek_$loop_teller"];
+            } // Deze if is ervoor als er wordt gezicht in de rubriek naar subrubrieken, zodat de volgende rubriek opent
+            else if (isset($_GET["zoek_$loop_teller"])) {
+                $_SESSION['formulier_count'] = ${'formulier_' . $loop_teller_plus . '_actief'};
+                $_SESSION["formulier_" . $loop_teller . "_save"] = $_GET["zoek_" . $loop_teller];
+                ${'zoek_' . $loop_teller} = $_GET["zoek_$loop_teller"];
+            } // Hier wordt gekeken welk rubriek is opgeslagen in de session omdat hij niet gekozen is maar wel de hoofdrubriek is van de subrubriek
+            else {
+                ${'zoek_' . $loop_teller} = $_SESSION["formulier_" . $loop_teller . "_save"];
             }
 
-            if ($_SESSION['formulier_count'] > $loop_teller && ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} != null) {
-                echo '<div class="medium-3 large-3 cell">
+            ${'zoek_' . $loop_teller . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE Rubrieknummer = '${"zoek_$loop_teller"}' ORDER BY volgnummer DESC";
+            ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller . "_rubrieken_query"});
+
+            ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
+            ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);
+            ${'zoek_' . $loop_teller_plus . '_nummer'} = ${'zoek_' . $loop_teller_plus . '_rubrieken_data'}[0][0];
+            $help_de_variabele = ${'zoek_' . $loop_teller_plus . '_nummer'};
+
+            ${'zoek_' . $loop_teller_plus . '_rubrieken_query'} = "SELECT * FROM Rubriek WHERE VorigeRubriek = '$help_de_variabele' ORDER BY volgnummer DESC";
+            ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'} = $dbh->prepare(${"zoek_" . $loop_teller_plus . "_rubrieken_query"});
+            ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->execute();
+            global ${'zoek_' . $loop_teller_plus . '_rubrieken_data'};
+            ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} = ${'sql_zoek_' . $loop_teller_plus . '_rubrieken'}->fetchAll(PDO::FETCH_NUM);
+        }
+
+        if ($_SESSION['formulier_count'] > $loop_teller && ${'zoek_' . $loop_teller_plus . '_rubrieken_data'} != null) {
+            echo '<div class="medium-3 large-3 cell">
             <form action="#" method="GET">
                 <select name="zoek_' . $loop_teller_plus . '">';
 
-                foreach (${'zoek_' . $loop_teller_plus . '_rubrieken_data'} as ${'zoek_' . $loop_teller_plus . '_rubrieken'}) {
-                    if (${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] == $_SESSION["formulier_" . $loop_teller_plus . "_save"]) {
-                        echo '<option selected value="' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] . '">' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[1] . '</option>';
-                    } else {
-                        echo '<option value="' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] . '">' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[1] . '</option>';
-                    }
+            foreach (${'zoek_' . $loop_teller_plus . '_rubrieken_data'} as ${'zoek_' . $loop_teller_plus . '_rubrieken'}) {
+                if (${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] == $_SESSION["formulier_" . $loop_teller_plus . "_save"]) {
+                    echo '<option selected value="' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] . '">' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[1] . '</option>';
+                } else {
+                    echo '<option value="' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[0] . '">' . ${'zoek_' . $loop_teller_plus . '_rubrieken'}[1] . '</option>';
                 }
+            }
 
-                echo '</select>
+            echo '</select>
                 <input type="submit" value="zoek" name="rubriek_zoek_' . $loop_teller_plus . '" class="button expanded">
             <input type="submit" value="Hernoem" name="rubriek_zoek_' . $loop_teller_plus . '" class="button expanded">
             <input type="submit" value="Subrubriek invoegen" name="rubriek_zoek_' . $loop_teller_plus . '" class="button expanded">
             <input type="submit" value="Sorteren" name="rubriek_zoek_' . $loop_teller_plus . '" class="button expanded">
             </form>
         </div>';
-            }
-
-
         }
 
-        //        echo '<pre>';
-        //        print_r(get_defined_vars());
-        //        echo '</pre>';
+    }
+}
 
-        ?>
-
-    </div>
-
-    <?php
+// De formulier die word aangeroepen als er een keuze gemaakt word om de rubriek te hernoemen
+function formulier_hernoem()
+{
     // De input voor het hernoemen van de rubrieken
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_count'];
@@ -236,7 +228,11 @@ for ($x = 0; $x < 10; $x++) {
             }
         }
     }
+}
 
+// De formulier die word aangeroepen als er een keuze gemaakt word om een sububriek in te voegen
+function formulier_subrubriek_voegin()
+{
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_count'];
          $loop_teller++) {
@@ -253,15 +249,23 @@ for ($x = 0; $x < 10; $x++) {
             }
         }
     }
+}
+
+// De formulier die word aangeroepen als er een keuze gemaakt word om de rubrieken te sorteren
+function formulier_sorteer()
+{
+    global ${'alle_hoofdrubrieken_data'};
 
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_count'];
          $loop_teller++) {
+
+        global ${'zoek_' . $loop_teller . '_rubrieken_data'};
+
         if (isset($_GET['zoek_0'])) {
             if (isset($_GET["rubriek_zoek_$loop_teller"])) {
                 if ($_GET["rubriek_zoek_$loop_teller"] == 'Sorteren') {
-                    echo '
-            <form action="#" method="POST">';
+                    echo '<form action="#" method="POST">';
                     foreach (${'alle_hoofdrubrieken_data'} as ${'zoek_' . $loop_teller . '_rubrieken'}) {
                         echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
 <input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
@@ -272,8 +276,7 @@ for ($x = 0; $x < 10; $x++) {
             }
         } else if (isset($_GET["rubriek_zoek_$loop_teller"])) {
             if ($_GET["rubriek_zoek_$loop_teller"] == 'Sorteren') {
-                echo '
-            <form action="#" method="POST">';
+                echo '<form action="#" method="POST">';
                 foreach (${'zoek_' . $loop_teller . '_rubrieken_data'} as ${'zoek_' . $loop_teller . '_rubrieken'}) {
                     echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
 <input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
@@ -283,6 +286,38 @@ for ($x = 0; $x < 10; $x++) {
             }
         }
     }
+}
+
+?>
+
+<body>
+
+<?php include_once 'components/header.php'; ?>
+
+<div class="grid-container">
+    <div class="grid-x grid-padding-x">
+        <div class="medium-12 large-12 cell">
+            <h2 class="Rubriekenbeheren_titel">Rubrieken beheren</h2>
+        </div>
+
+        <?PHP
+
+        beheerpagina_hoofdrubriek();
+
+        beheerpagina_subrubriek();
+
+        ?>
+
+    </div>
+
+    <?php
+
+    formulier_hernoem();
+
+    formulier_subrubriek_voegin();
+
+    formulier_sorteer();
+
     ?>
 
 </div>

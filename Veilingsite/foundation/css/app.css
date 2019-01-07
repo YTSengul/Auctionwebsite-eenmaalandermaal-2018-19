@@ -621,3 +621,11 @@ a.redHover:hover {
     width: 100%;
     min-height: 400px;
 }
+
+.verkopen-object-box {
+    background-color: white;
+    padding: 18px;
+    margin: 10px;
+    border-radius: 3px;
+    width: inherit;
+}

@@ -17,7 +17,7 @@ if (isset($_POST["login"])) {
     $sql_login_check = $dbh->prepare($sql_login_check_query);
     $sql_login_check->execute();
     $sql_login_data = $sql_login_check->fetchAll(PDO::FETCH_ASSOC);
-    var_dump($sql_login_data);
+
     if ($sql_login_check->rowCount() > 0) {
         $gehashed_wachtwoord = $sql_login_data[0]['Wachtwoord'];
         if (password_verify($wachtwoord, $gehashed_wachtwoord)) {
@@ -44,7 +44,7 @@ if (isset($_POST["login"])) {
 
         <div class="cell large-5 float-center">
             <h5>Inloggen</h5>
-            <form action="login.php" method="POST">
+            <form action="#" method="POST">
                 <label>Gebruikersnaam </label>
                 <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
