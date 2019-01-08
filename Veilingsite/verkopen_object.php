@@ -5,6 +5,35 @@ include_once "components/connect.php";
 include_once "components/meta.php";
 
 $formulier_check = true;
+$afbeelding_onjuist = false;
+function image_processor()
+{
+    global $nieuw_voorwerpnummer;
+    global $afbeelding_onjuist;
+    global $formulier_check;
+    $imagecounter = 1;
+    foreach ($_FILES as $image) {
+        // Er wordt eerst een check gedaan of er wel iets is geüpload
+        if ($image['type'] == 'image/jpeg' || $image['type'] == 'image/png') {
+            // Hier word de afbeelding in de database geplaatst
+            // vorens wordt er gecheckt of de bestand een afbeelding is
+            $info = pathinfo($image['name']);
+            // De type afbeelding wordt opgenomen in een variabele
+            $ext = $info['extension'];
+            // De nieuwe naam wordt toegekend aan de foto
+            $newname = "dt_" . $imagecounter . "_" . $nieuw_voorwerpnummer . "." . $ext;
+            $target = 'img/' . $newname;
+            move_uploaded_file($image['tmp_name'], $target);
+
+            // De imagecounter gaat hier pas ++ omdat anders de volgorde van de afbeeldingen niet klopt
+            $imagecounter++;
+        } // Als de bestand geen geen PNG of JPG is.
+        elseif ($image["error"] != 4) {
+            $formulier_check = false;
+            $afbeelding_onjuist = true;
+        }
+    }
+}
 
 if (isset($_POST['plaats_veiling'])) {
 
@@ -67,28 +96,7 @@ if (isset($_POST['plaats_veiling'])) {
         $plaatsnaam_onjuist = true;
     }
 
-    $imagecounter = 0;
-    foreach ($_FILES as $image) {
-        // Er wordt eerst een check gedaan of er wel iets is geüpload
-        if ($image["error"] == 0) {
-            // Hier word de afbeelding in de database geplaatst
-            // vorens wordt er gecheckt of de bestand een afbeelding is
-            if ($image['type'] == 'image/jpeg' || $image['type'] == 'image/png') {
-                $info = pathinfo($image['name']);
-                // De type afbeelding wordt opgenomen in een variabele
-                $ext = $info['extension'];
-                // De nieuwe naam wordt toegekend aan de foto
-                $newname = "newname" . $imagecounter . "." . $ext;
-                $target = 'images/' . $newname;
-                move_uploaded_file($image['tmp_name'], $target);
-            } // Als de bestand geen geen PNG of JPG is.
-            else {
-                $formulier_check = false;
-                $afbeelding_onjuist = true;
-            }
-        }
-        $imagecounter++;
-    }
+    image_processor();
 
     if ($formulier_check == true) {
         // Met deze statement word de veiling geplaatst. De identity wordt voor de query aan en na de query uit gezet.
@@ -106,20 +114,7 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_plaats_voorwerp->bindParam(":beginmoment", $beginmoment);
         $sql_plaats_voorwerp->bindParam(":verzendkosten", $verzendkosten);
         $sql_plaats_voorwerp->bindParam(":verzendinstructies", $verzendinstructies);
-        //$sql_plaats_voorwerp->bindParam(":verkoper", $verkoper);
-        //$sql_plaats_voorwerp->bindParam(":thumbnail", $thumbnail);
-//    echo $nieuw_voorwerpnummer.'<br>';
-//    echo $titel.'<br>';
-//    echo $beschrijving.'<br>';
-//    echo $startprijs.'<br>';
-//    echo $betalingswijze.'<br>';
-//    echo $betalingsinstructie.'<br>';
-//    echo $plaatsnaam.'<br>';
-//    echo $land.'<br>';
-//    echo $looptijd.'<br>';
-//    echo $verzendkosten.'<br>';
-//    echo $verzendinstructies.'<br>';
-//    var_dump($sql_plaats_voorwerp);
+
         $sql_plaats_voorwerp->execute();
 
         // Met deze statement word de veiling in de rubriekoplaagsteniveau tabel geplaatst
@@ -128,8 +123,6 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':voorwerpnummer', $nieuw_voorwerpnummer);
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':rubrieknummer', $rubriekoplaagsteniveau);
         $sql_plaats_rubriekoplaagsteniveau->execute();
-
-
     }
 }
 
@@ -204,11 +197,11 @@ function titel_check()
 
     if (isset($titel_onjuist)) {
         echo '<label>Titel*
-            <input name="titel" class="is-invalid-input" type="text" placeholder="Vul hier de titel van de veiling in." value=' . $titel . ' required>
+            <input name="titel" class="is-invalid-input" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required>
             <span class="form-error is-visible" id="exemple2Error">Gebruikersnaam moet minimaal 4 tekens bevatten.</span></label>';
     } else {
         echo '<label>Titel*
-            <input name="titel" type="text" placeholder="Vul hier de titel van de veiling in." required></label>';
+            <input name="titel" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required></label>';
     }
 }
 
@@ -253,6 +246,8 @@ function beschrijving_check()
 
 function afbeeldingen()
 {
+    global $afbeelding_onjuist;
+
     echo "<div class='medium-3 cell'>
             <input type='file' name='foto_0' ><br>
                 <input type='file' name='foto_1' >
@@ -260,8 +255,11 @@ function afbeeldingen()
             </div>
                 <div class='medium-3 cell'>
                     <input type='file' name='foto_2' >
-                    <input type='file' name='foto_3' >
-                </div>";
+                    <input type='file' name='foto_3' >";
+    if ($afbeelding_onjuist == true) {
+        echo "<span class='form-error is-visible' id='exemple2Error'>De beschrijving mag maar 5000 tekens lang zijn.</span>";
+    }
+    echo "</div>";
 }
 
 function betalingswijze()
