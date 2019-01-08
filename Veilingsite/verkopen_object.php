@@ -4,13 +4,25 @@ include_once "components/connect.php";
 
 include_once "components/meta.php";
 
+// Check of de gebruiker is ingelogd
+// Hier moe took komen te staan of de gebruiker een verkoper is
+// later wordt de gebruiker naar zijn eigen pagina gestuurd
+if (!isset($_SESSION['ingelogde_gebruiker'])){
+    header('location:pre-registreer.php');
+}
+
+// De boolean die uit gaat als de formulier niet klopt
 $formulier_check = true;
+
+// de boolean voor de afbeelding. gaat aan als er een onjuist document word geladen
 $afbeelding_onjuist = false;
+
 function image_processor()
 {
     global $nieuw_voorwerpnummer;
     global $afbeelding_onjuist;
     global $formulier_check;
+    global $image_names;
     $imagecounter = 1;
     foreach ($_FILES as $image) {
         // Er wordt eerst een check gedaan of er wel iets is geüpload
@@ -22,6 +34,7 @@ function image_processor()
             $ext = $info['extension'];
             // De nieuwe naam wordt toegekend aan de foto
             $newname = "dt_" . $imagecounter . "_" . $nieuw_voorwerpnummer . "." . $ext;
+            array_push($image_names, $newname);
             $target = 'img/' . $newname;
             move_uploaded_file($image['tmp_name'], $target);
 
@@ -59,6 +72,7 @@ if (isset($_POST['plaats_veiling'])) {
     $verzendinstructies = $_POST['verzendinstructies'];
     $beginmoment = date('Y-m-d H:i:s');
     $rubriekoplaagsteniveau = $_SESSION['gekozen_rubrieknummer'];
+    $verkoper = $_SESSION['ingelogde_gebruiker'];
 
     // Hier wordt gecheckt of de titel minimaal 4 characters bevat
     if (strlen($titel) < 4) {
@@ -96,11 +110,17 @@ if (isset($_POST['plaats_veiling'])) {
         $plaatsnaam_onjuist = true;
     }
 
+    // Hier worden de namen van de toegevoegde afbeeldingen opgeslagen
+    $image_names = [];
+    // De Geüploadde bestanden worden gecheckt
     image_processor();
 
     if ($formulier_check == true) {
+        // De thumbail wordt hier als laatst nog gegeven aan een variabele om hem in de 'voorwerp' tabel toe te kunnen toevoegen
+        $thumbnail = (string)$image_names[0];
+
         // Met deze statement word de veiling geplaatst. De identity wordt voor de query aan en na de query uit gezet.
-        $sql_plaats_voorwerp_query = "SET IDENTITY_INSERT voorwerp on; insert into voorwerp (Voorwerpnummer, Titel, Beschrijving, Startprijs, Betalingswijze, Betalingsinstructie, Plaatsnaam, Land, Looptijd, BeginMoment,  Verzendkosten, Verzendinstructies, Verkoper, Thumbnail) values (:voorwerpnummer, :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructie, :plaatsnaam, :land, :looptijd, :beginmoment, :verzendkosten, :verzendinstructies, 'kraaitje', ''); SET IDENTITY_INSERT voorwerp off";
+        $sql_plaats_voorwerp_query = "SET IDENTITY_INSERT voorwerp on; insert into voorwerp (Voorwerpnummer, Titel, Beschrijving, Startprijs, Betalingswijze, Betalingsinstructie, Plaatsnaam, Land, Looptijd, BeginMoment,  Verzendkosten, Verzendinstructies, Verkoper, Thumbnail) values (:voorwerpnummer, :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructie, :plaatsnaam, :land, :looptijd, :beginmoment, :verzendkosten, :verzendinstructies, :verkoper, :thumbnail); SET IDENTITY_INSERT voorwerp off";
         $sql_plaats_voorwerp = $dbh->prepare($sql_plaats_voorwerp_query);
         $sql_plaats_voorwerp->bindParam(":voorwerpnummer", $nieuw_voorwerpnummer);
         $sql_plaats_voorwerp->bindParam(":titel", $titel);
@@ -113,8 +133,9 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_plaats_voorwerp->bindParam(":looptijd", $looptijd);
         $sql_plaats_voorwerp->bindParam(":beginmoment", $beginmoment);
         $sql_plaats_voorwerp->bindParam(":verzendkosten", $verzendkosten);
+        $sql_plaats_voorwerp->bindParam(":verkoper", $verkoper);
         $sql_plaats_voorwerp->bindParam(":verzendinstructies", $verzendinstructies);
-
+        $sql_plaats_voorwerp->bindParam(":thumbnail", $thumbnail);
         $sql_plaats_voorwerp->execute();
 
         // Met deze statement word de veiling in de rubriekoplaagsteniveau tabel geplaatst
@@ -123,6 +144,18 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':voorwerpnummer', $nieuw_voorwerpnummer);
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':rubrieknummer', $rubriekoplaagsteniveau);
         $sql_plaats_rubriekoplaagsteniveau->execute();
+
+        // De afbeeldingen worden toegevoegd aan de database
+        foreach ($image_names as $name){
+        $sql_add_image_query = "insert into Bestand (Filenaam, Voorwerp) values (:filenaam, :voorwerp)";
+        $sql_add_image = $dbh->prepare($sql_add_image_query);
+        $sql_add_image->bindParam(':filenaam', $name);
+        $sql_add_image->bindParam(':voorwerp', $nieuw_voorwerpnummer);
+        $sql_add_image->execute();
+        }
+
+        header('location:mijn_profiel.php');
+
     }
 }
 

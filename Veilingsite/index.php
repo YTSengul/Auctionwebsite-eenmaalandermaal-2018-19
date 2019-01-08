@@ -5,8 +5,6 @@
     Function Prijs($Voorwerpnummer){
         global $dbh;
 
-        $b = 1;
-
         // Selects the top most Startprijs and Highest Bodbedrag based on the Voorwerpnummer.
         $queryPrice = "SELECT TOP 1 V.Startprijs, B.Bodbedrag
                        FROM Bod B FULL OUTER JOIN Voorwerp V ON B.Voorwerp = V.Voorwerpnummer
