@@ -128,7 +128,7 @@
             echo '
                         <div class="veiling-sluit-index">
                             <div class="resizeImage">
-                                <img src="http://iproject5.icasites.nl/thumbnails/'. $auction['Thumbnail'] .'" alt="Auction Photo">
+                                <img src="http://iproject4.icasites.nl/thumbnails/'. $auction['Thumbnail'] .'" alt="Auction Photo">
                             </div>
                             <div class="card-body">
                                 <div class="grid-x">

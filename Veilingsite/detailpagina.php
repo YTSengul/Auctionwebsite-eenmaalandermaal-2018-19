@@ -70,7 +70,7 @@ function auctionBiddingDetails($voorwerpNummer){
         return array($price, $name);
     }
     else{
-        $auctionStartPrice_query = "SELECT Startprijs FROM Voorwerp WHERE voorwerp = :voorwerpNummer";
+        $auctionStartPrice_query = "SELECT Startprijs FROM Voorwerp WHERE Voorwerpnummer = :voorwerpNummer";
         $auctionStartPrice = $dbh->prepare($auctionStartPrice_query);
         $auctionStartPrice->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
         $auctionStartPrice->execute();
@@ -208,7 +208,7 @@ function echoSubpictures($pictureAuctionResult)
 function create_Breadcrumbs($RubriekNummer)
 {
     global $dbh;
-    $vind_hoofdrubriek_query = "select * from Rubriek where RubriekNummer = $RubriekNummer";
+    $vind_hoofdrubriek_query = "SELECT * FROM Rubriek WHERE RubriekNummer = $RubriekNummer";
     $vind_hoofdrubriek_data = $dbh->prepare($vind_hoofdrubriek_query);
     $vind_hoofdrubriek_data->execute();
     $vind_hoofdrubriek = $vind_hoofdrubriek_data->fetchAll(PDO::FETCH_NUM);
@@ -248,7 +248,7 @@ function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
     }
 }
 
-$detailsAuction_bc = $dbh->prepare("SELECT rubriekoplaagsteniveau FROM Voorwerpinrubriek WHERE Voorwerp = " . $_GET['Voorwerpnummer']);
+$detailsAuction_bc = $dbh->prepare("SELECT RubriekOpLaagsteNiveau FROM Voorwerpinrubriek WHERE Voorwerp = " . $_GET['Voorwerpnummer']);
 $detailsAuction_bc->execute();
 $resultAuction_bc = $detailsAuction_bc->fetch();
 
