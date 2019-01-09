@@ -50,34 +50,45 @@ function minimumPrice($price){
 }
 
 function getMinimumPrice(){
-    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[0]);
+    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
 }
 
 function auctionBiddingDetails($voorwerpNummer){
     global $dbh;
 
-    $check_bod_query = "SELECT TOP (:top) Bodbedrag, Gebruikersnaam FROM bod WHERE voorwerp = :voorwerpNummer ORDER BY Bodbedrag DESC";
-    $check_bod = $dbh->prepare($check_bod_query);
-    $check_bod->bindValue(":top", 1, PDO::PARAM_INT);
-    $check_bod->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
-    $check_bod->execute();
+    $auctionDetails_query = "SELECT Startprijs, Verkoper FROM Voorwerp WHERE Voorwerpnummer = :voorwerpNummer";
+    $auctionDetails = $dbh->prepare($auctionDetails_query);
+    $auctionDetails->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+    $auctionDetails->execute();
 
-    if ($check_bod->rowCount() != 0) {
-        $priceAndName = $check_bod->fetch(PDO::FETCH_OBJ);
-        $price = $priceAndName->Bodbedrag;
-        $name = $priceAndName->Gebruikersnaam;
+    $startPriceAndSeller = $auctionDetails->fetch(PDO::FETCH_OBJ);
+    $startPrice = $startPriceAndSeller->Startprijs;
+    $seller = $startPriceAndSeller->Verkoper;
 
-        return array($price, $name);
+    $biddingDetails_query = "SELECT TOP (:top) Bodbedrag, Gebruikersnaam FROM bod WHERE voorwerp = :voorwerpNummer ORDER BY Bodbedrag DESC";
+    $biddingDetails = $dbh->prepare($biddingDetails_query);
+    $biddingDetails->bindValue(":top", 1, PDO::PARAM_INT);
+    $biddingDetails->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+    $biddingDetails->execute();
+
+    if ($biddingDetails->rowCount() != 0) {
+        $highestBidAndNameHighestBidder = $biddingDetails->fetch(PDO::FETCH_OBJ);
+        $highestBid = $highestBidAndNameHighestBidder->Bodbedrag;
+        $highestBidder = $highestBidAndNameHighestBidder->Gebruikersnaam;
+
+        //Double check that the bidding is higher than the starting price.
+        //If this were to be the case it will be treated as if there were no bidding yet.
+        //The only case that a person can bid twice in a row. (But impossible without messing with the database).
+        if($startPrice > $highestBid){
+            return array("no_Biddings", $seller, $startPrice);
+        }
+        else{
+            return array("a_Bidder", $seller, $highestBid, $highestBidder);
+        }
+
     }
     else{
-        $auctionStartPrice_query = "SELECT Startprijs FROM Voorwerp WHERE Voorwerpnummer = :voorwerpNummer";
-        $auctionStartPrice = $dbh->prepare($auctionStartPrice_query);
-        $auctionStartPrice->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
-        $auctionStartPrice->execute();
-
-        $price = $auctionStartPrice->fetch(PDO::FETCH_OBJ)->Startprijs;
-
-        return array($price);
+        return array("no_Biddings", $seller, $startPrice);
     }
 }
 
@@ -89,35 +100,44 @@ if (isset($_POST['verstuur_bod'])) {
         //Amount that the user bid for the auction.
         $bod = $_POST['bod'];
 
-        $auctionBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
+        //Must be a number.
+        if(is_numeric($bod)){
 
-        //There is at least 1 bid that has been placed.
-        if(isset($auctionBiddingDetails[1])){
-            $highest_Bid_Username = $auctionBiddingDetails[1];
-            $highest_Bid = $auctionBiddingDetails[0];
-            //This user has the last (and highest) bid already on him.
-            if($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']){
-                $errorMessage = "U heeft al geboden.";
+            //Rounded down to 2 decimals. For some reason the function number_format makes the float an string again.
+            $bod = (float)number_format($bod, 2);
+
+            $auctionAndBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
+            $seller = $auctionAndBiddingDetails[1];
+            $price = $auctionAndBiddingDetails[2];
+            $minimumBidPrice = minimumPrice($price);
+
+            //Seller tries to bid on his own auction.
+            if($seller == $_SESSION['ingelogde_gebruiker']){
+                $errorMessage = "U mag niet op uw eigen veilingen bieden.";
             }
             else{
-                $MinimalePrijs = minimumPrice($highest_Bid);
-                if($MinimalePrijs <= $bod){
-                    insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
+                //Impossible username.
+                $highest_Bid_Username = "a";
+                //There is at least 1 bid that has been placed.
+                if($auctionAndBiddingDetails[0] == "a_Bidder"){
+                    $highest_Bid_Username = $auctionAndBiddingDetails[3];
+                }
+                //This user has the last (and highest) bid already on him.
+                if($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']){
+                    $errorMessage = "U heeft al geboden.";
                 }
                 else{
-                    $errorMessage = "U moet hoger bieden.";
+                    if($minimumBidPrice <= $bod){
+                        insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
+                    }
+                    else{
+                        $errorMessage = "U moet hoger bieden.";
+                    }
                 }
             }
         }
         else{
-            $startingPrice = $auctionBiddingDetails[0];
-            $MinimalePrijs = minimumPrice($startingPrice);
-            if($MinimalePrijs <= $bod){
-                insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
-            }
-            else{
-                $errorMessage = "U moet hoger bieden.";
-            }
+            $errorMessage = "U moet een juist bedrag invoeren.";
         }
 
     } else if (!isset($_SESSION['ingelogde_gebruiker'])) {
