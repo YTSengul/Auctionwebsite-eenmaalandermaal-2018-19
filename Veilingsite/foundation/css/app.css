@@ -632,5 +632,5 @@ a.redHover:hover {
     padding: 18px;
     margin: 10px;
     border-radius: 3px;
-    width: inherit;
+    width: auto;
 }

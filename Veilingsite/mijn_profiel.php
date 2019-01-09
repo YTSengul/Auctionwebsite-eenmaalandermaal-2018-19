@@ -47,7 +47,7 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
     if ($sql_get_voorwerpen->rowCount() == 0) {
         return;
     } else {
-    echo '    <div class="grid-x grid-padding-x home-veilingen-box">
+        echo '    <div class="grid-x grid-padding-x home-veilingen-box">
                 <div class="cell">
                     <h4>' . $header . '</h4>
                 </div>';

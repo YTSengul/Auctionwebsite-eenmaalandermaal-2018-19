@@ -15,7 +15,7 @@
                             ';
                         }
                         else {
-                            echo '<li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
+                            echo '<li><a class="blackHover" href="mijn_profiel.php"> mijn profiel</a></li><li><a>|</a></li><li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
                         }
                     ?>
                 </ul>
