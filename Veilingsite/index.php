@@ -8,14 +8,14 @@
         $b = 1;
 
         // Selects the top most Startprijs and Highest Bodbedrag based on the Voorwerpnummer.
-        $queryPrice = "SELECT TOP 1 V.Startprijs, B.Bodbedrag
+        $queryPrice = "SELECT TOP (:top) V.Startprijs, B.Bodbedrag
                        FROM Bod B FULL OUTER JOIN Voorwerp V ON B.Voorwerp = V.Voorwerpnummer
                        WHERE Voorwerpnummer = :Voorwerpnummer
                        ORDER BY B.Bodbedrag DESC, V.Startprijs DESC";
 
         $Prices = $dbh->prepare($queryPrice);
-        // $Prices->bindParam(":a", $b);
-        $Prices->bindParam(":Voorwerpnummer", $Voorwerpnummer);
+        $Prices->bindValue(":top", 1, PDO::PARAM_INT);
+        $Prices->bindParam(":Voorwerpnummer", $Voorwerpnummer, PDO::PARAM_INT);
         $Prices->execute();
         while($Price = $Prices->fetch()){
             //Er is minimaal 1 keer geboden (daarvan is automatisch het hoogste bedrag al gepakt).
@@ -58,15 +58,15 @@
         }
 
         // Selects auctions based on the where statement. After that picks the auctions based on the most biddings, and sorts by the most biddings, price.
-        $querySelectionAuctions = "SELECT TOP $amountOfAuctions V.Voorwerpnummer, V.Titel, V.Startprijs, V.EindMoment, V.Thumbnail, COUNT(B.Voorwerp) AS Aantalboden
+        $querySelectionAuctions = "SELECT TOP (:top) V.Voorwerpnummer, V.Titel, V.Startprijs, V.EindMoment, V.Thumbnail, COUNT(B.Voorwerp) AS Aantalboden
                                    FROM Bod B right join Voorwerp V ON B.Voorwerp = V.Voorwerpnummer
                                    WHERE VeilingGesloten = :veilingGesloten AND $whereFilter
                                    GROUP BY V.Voorwerpnummer, B.Voorwerp, V.Titel, V.Startprijs, V.EindMoment, V.Thumbnail
                                    ORDER BY COUNT(B.Voorwerp) $upOrDown, $sortFilter $upOrDown";
 
         $auctions = $dbh->prepare($querySelectionAuctions);
-        $auctions->bindValue(":veilingGesloten", 0);
-        // $auctions->bindParam(:veilingGesloten, 0);
+        $auctions->bindValue(":veilingGesloten", 0, PDO::PARAM_INT);
+        $auctions->bindParam(":top", $amountOfAuctions, PDO::PARAM_INT);
         $auctions->execute();
 
         if($auctions->rowCount() == 0){

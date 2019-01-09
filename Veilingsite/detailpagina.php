@@ -2,77 +2,126 @@
 include_once "components/connect.php";
 include_once "components/meta.php";
 
-if (isset($_POST['verstuur_bod'])) {
+$errorMessage = "";
 
+function insertBid($bid, $voorwerpNummer, $userName, $time){
+    global $dbh;
+
+    $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
+    $verstuur_bod_query = "INSERT INTO bod (Bodbedrag, Voorwerp, Gebruikersnaam, Tijd) VALUES(?, ?, ?, ?)";
+    $verstuur_bod = $dbh->prepare($verstuur_bod_query);
+    $verstuur_bod->bindParam(1, $bid);
+    $verstuur_bod->bindParam(2, $voorwerpNummer);
+    $verstuur_bod->bindParam(3, $userName);
+    $verstuur_bod->bindParam(4, $time);
+
+    $verstuur_bod->execute();
+}
+
+function minimaleVerhoging($price){
+    switch($price){
+        case $price < 50:
+            return 0.5;
+            break;
+        case $price >= 50 && $price < 500:
+            return 1;
+            break;
+        case $price >= 500 && $price < 1000:
+            return 5;
+            break;
+        case $price >= 1000 && $price < 5000:
+            return 10;
+            break;
+        case $price >= 5000:
+            return 50;
+            break;
+    }
+}
+
+function wrongBiddingMessage(){
+    global $errorMessage;
+    if($errorMessage != null){
+        echo "<div class='errorMessage'>" . $errorMessage . "</div>";
+    }
+}
+
+function minimumPrice($price){
+    return $price + minimaleVerhoging($price);
+}
+
+function getMinimumPrice(){
+    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[0]);
+}
+
+function auctionBiddingDetails($voorwerpNummer){
+    global $dbh;
+
+    $check_bod_query = "SELECT TOP (:top) Bodbedrag, Gebruikersnaam FROM bod WHERE voorwerp = :voorwerpNummer ORDER BY Bodbedrag DESC";
+    $check_bod = $dbh->prepare($check_bod_query);
+    $check_bod->bindValue(":top", 1, PDO::PARAM_INT);
+    $check_bod->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+    $check_bod->execute();
+
+    if ($check_bod->rowCount() != 0) {
+        $priceAndName = $check_bod->fetch(PDO::FETCH_OBJ);
+        $price = $priceAndName->Bodbedrag;
+        $name = $priceAndName->Gebruikersnaam;
+
+        return array($price, $name);
+    }
+    else{
+        $auctionStartPrice_query = "SELECT Startprijs FROM Voorwerp WHERE voorwerp = :voorwerpNummer";
+        $auctionStartPrice = $dbh->prepare($auctionStartPrice_query);
+        $auctionStartPrice->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+        $auctionStartPrice->execute();
+
+        $price = $auctionStartPrice->fetch(PDO::FETCH_OBJ)->Startprijs;
+
+        return array($price);
+    }
+}
+
+//User pressed the bid button.
+if (isset($_POST['verstuur_bod'])) {
+    //User is logged in.
     if (isset($_SESSION['ingelogde_gebruiker'])) {
 
-        $_GET['Voorwerpnummer'] = $_POST['voorwerpnummer_hidden'];
+        //Amount that the user bid for the auction.
         $bod = $_POST['bod'];
 
-        $check_bod_query = "select * from bod where voorwerp = " . $_GET['Voorwerpnummer'] . " ORDER BY 1 DESC";
-        $check_bod = $dbh->prepare($check_bod_query);
-        $check_bod->execute();
-        $check = $check_bod->fetchAll(PDO::FETCH_NUM);
-        if ($check != null) {
-            $laatste_bod = $check[0][0];
-        }
-        $bieding_juist = 0;
-        $min_bedrag = 0;
-        //echo '<br>';
-        //var_dump($check);
-        //echo '<br>';
-        if ($check != null) {
-            if ($laatste_bod < 49.99 & $bod >= $laatste_bod + 0.5) {
-                $bieding_juist = 1;
-            } else if ($laatste_bod < 499.99 & $laatste_bod >= 50 & $bod >= $laatste_bod + 1) {
-                $bieding_juist = 1;
-            } else if ($laatste_bod < 999.99 & $laatste_bod >= 500 & $bod >= $laatste_bod + 5) {
-                $bieding_juist = 1;
-            } else if ($laatste_bod < 4999.99 & $laatste_bod >= 1000 & $bod >= $laatste_bod + 10) {
-                $bieding_juist = 1;
-            } else if ($laatste_bod >= 5000 & $bod >= $laatste_bod + 50) {
-                $bieding_juist = 1;
-            }
+        $auctionBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
 
-            if ($laatste_bod < 49.99) {
-                $min_bedrag = 0.50;
-            } else if ($laatste_bod < 499.99 & $laatste_bod >= 50) {
-                $min_bedrag = 1;
-            } else if ($laatste_bod < 999.99 & $laatste_bod >= 500) {
-                $min_bedrag = 5;
-            } else if ($laatste_bod < 4999.99 & $laatste_bod >= 1000) {
-                $min_bedrag = 10;
-            } else if ($laatste_bod >= 5000) {
-                $min_bedrag = 50;
+        //There is at least 1 bid that has been placed.
+        if(isset($auctionBiddingDetails[1])){
+            $highest_Bid_Username = $auctionBiddingDetails[1];
+            $highest_Bid = $auctionBiddingDetails[0];
+            //This user has the last (and highest) bid already on him.
+            if($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']){
+                $errorMessage = "U heeft al geboden.";
             }
-            if ($bieding_juist == 1) {
-                $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
-                $verstuur_bod_query = "insert into bod values ($bod," . $_GET['Voorwerpnummer'] . ",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
-                $verstuur_bod = $dbh->prepare($verstuur_bod_query);
-                $verstuur_bod->execute();
-            } else {
-                echo "Je moet hoger bieden!! De minimum verhoging is: € $min_bedrag";
+            else{
+                $MinimalePrijs = minimumPrice($highest_Bid);
+                if($MinimalePrijs <= $bod){
+                    insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
+                }
+                else{
+                    $errorMessage = "U moet hoger bieden.";
+                }
             }
         }
-
-        if ($bod <= 1 & $check == null) {
-            echo "Je moet hoger bieden!! De beginbedrag is €1!!";
-        } else if ($bod > 1 & $check == null) {
-            $bieding_juist = 1;
-            if ($bieding_juist == 1) {
-                $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
-                $verstuur_bod_query = "insert into bod values ($bod," . $_GET['Voorwerpnummer'] . ",'$gebruikersnaam','" . date('Y-m-d H:s:i') . "')";
-                $verstuur_bod = $dbh->prepare($verstuur_bod_query);
-                $verstuur_bod->execute();
-                echo 'aaa';
-            } else {
-                echo "Je moet hoger bieden!! De minimum verhoging is: € $min_bedrag";
+        else{
+            $startingPrice = $auctionBiddingDetails[0];
+            $MinimalePrijs = minimumPrice($startingPrice);
+            if($MinimalePrijs <= $bod){
+                insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
+            }
+            else{
+                $errorMessage = "U moet hoger bieden.";
             }
         }
-
 
     } else if (!isset($_SESSION['ingelogde_gebruiker'])) {
-        header('Location:pre-registreer.php');
+        $errorMessage = "Je moet eerst inloggen voordat je kan bieden.";
     }
 }
 
@@ -207,21 +256,21 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
 
 
 <body>
-<?php include_once "components/header.php"; ?>
-<div class="grid-container">
-    <div class="grid-x grid-margin-x detailpagina">
-        <div class="medium-12 large-12 float-center cell">
-            <!--- Breadcrumbs -->
-            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
-                <ul class="breadcrumbs">
-                    <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
-                    <!---<li>
+    <?php include_once "components/header.php"; ?>
+    <div class="grid-container">
+        <div class="grid-x grid-margin-x detailpagina">
+            <div class="medium-12 large-12 float-center cell">
+                <!--- Breadcrumbs -->
+                <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
+                    <ul class="breadcrumbs">
+                        <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
+                        <!---<li>
                         <span class="show-for-sr">Current: </span> Huidige cat.
                     </li>-->
-                </ul>
-            </nav>
+                    </ul>
+                </nav>
 
-            <!---<select class="float-right veilingen-filter-hoofd ">
+                <!---<select class="float-right veilingen-filter-hoofd ">
                 <option>Optie 1</option>
                 <option>Optie 2</option>
                 <option>Optie 3</option>
@@ -229,102 +278,100 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
                 <option>Optie 5</option>
             </select>-->
 
-        </div>
-        <div clas
-        <div class="cell">
-            <h2><?php echo $title ?></h2>
-        </div>
-        <div class="cell large-7 productdetails flexColumn">
-            <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
-            <!--Note to self: Nog implementeren dat bij klik op subfoto dat de hoofdfoto wordt-->
-            <?php echoMainpicture($pictureAuctionResult) ?>
-            <div class="spaceAround marginTopAuto">
-                <?php echoSubpictures($pictureAuctionResult) ?>
             </div>
-        </div>
-        <div class="cell large-5 detail-biedingen">
-            <div class="spaceBetween">
-                <h3>Doe een bod</h3>
-                <h4 class="detail-timer" id="timer"></h4>
+            <div clas <div class="cell">
+                <h2>
+                    <?php echo $title ?>
+                </h2>
             </div>
-            <hr>
-            <div>
-                <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
-                    bent u verplicht te betalen als u het product wint.</p>
+            <div class="cell large-7 productdetails flexColumn">
+                <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
+                <!--Note to self: Nog implementeren dat bij klik op subfoto dat de hoofdfoto wordt-->
+                <?php echoMainpicture($pictureAuctionResult) ?>
+                <div class="spaceAround marginTopAuto">
+                    <?php echoSubpictures($pictureAuctionResult) ?>
+                </div>
             </div>
-            <div>
-                <form class="spaceBetween" method="POST">
-                    <input type="text" placeholder="Vul bedrag in..." name="bod">
-                    <input type="hidden" name="voorwerpnummer_hidden" value="<?PHP echo $_GET['Voorwerpnummer']; ?>">
-                    <input class="button" type="submit" value="Bieden" name="verstuur_bod">
-                    <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
-                </form>
+            <div class="cell large-5 detail-biedingen">
+                <div class="spaceBetween">
+                    <h3>Doe een bod</h3>
+                    <h4 class="detail-timer" id="timer"></h4>
+                </div>
+                <hr>
+                <div>
+                    <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
+                        bent u verplicht te betalen als u het product wint.</p>
+                </div>
+                <?php wrongBiddingMessage(); ?>
+                <div>
+                    <form class="spaceBetween" method="POST">
+                        <input type="text" placeholder="Vul bedrag in..." name="bod" value="<?php echo getMinimumPrice(); ?>">
+                        <input class="button" type="submit" value="Bieden" name="verstuur_bod">
+                        <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
+                    </form>
+                </div>
+                <div class="detail-bedragen">
+                    <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
+                </div>
+                <div class="detail-aantal">
+                    <h4>Aantal
+                        biedingen:
+                        <?php echo $finalAmountBidsAuction > 0 || $finalAmountBidsAuction !== null ? $finalAmountBidsAuction : "0" ?>
+                    </h4>
+                </div>
             </div>
-            <div class="detail-bedragen">
-                <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
-            </div>
-            <div class="detail-aantal">
-                <h4>Aantal
-                    biedingen: <?php echo $finalAmountBidsAuction > 0 || $finalAmountBidsAuction !== null ? $finalAmountBidsAuction : "0" ?></h4>
-            </div>
-        </div>
-        <div class="cell detailpagina-omschrijving">
-            <ul class="tabs" data-tabs id="example-tabs">
-                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
-                <li class="tabs-title"><a href="#panel2">Feedback</a></li>
-            </ul>
-            <hr>
-            <div class="tabs-content" data-tabs-content="example-tabs">
-                <div class="tabs-panel is-active" id="panel1">
-                    <iframe src="components/productomschrijving.php" class="detailpagina_iframe">
-                    </iframe>
-                    <div class="tabs-panel" id="panel2"> <!--Note: Iemand moet dit nog werkend maken-->
-                        <p>Yes, sir. I think those new droids are going to work out fine. In fact, I, uh, was also
-                            thinking
-                            about
-                            our agreement about my staying on another season. And if these new droids do work out, I
-                            want to
-                            transmit my application to the Academy this year. You mean the next semester before harvest?
-                            Sure,
-                            there're more than enough droids. Harvest is when I need you the most. Only one more season.
-                            This
-                            year
-                            we'll make enough on the harvest so I'll be able to hire some more hands. And then you can
-                            go to the
-                            Academy next year. You must understand I need you here, Luke. But it's a whole 'nother year.
-                            Look,
-                            it's
-                            only one more season. Yeah, that's what you said last year when Biggs and Tank left. Where
-                            are you
-                            going? It looks like I'm going nowhere. I have to finish cleaning those droids.
+            <div class="cell detailpagina-omschrijving">
+                <ul class="tabs" data-tabs id="example-tabs">
+                    <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
+                    <li class="tabs-title"><a href="#panel2">Feedback</a></li>
+                </ul>
+                <hr>
+                <div class="tabs-content" data-tabs-content="example-tabs">
+                    <div class="tabs-panel is-active" id="panel1">
+                        <iframe src="components/productomschrijving.php" class="detailpagina_iframe"></iframe>
+                    </div>
+                    <div class="tabs-panel" id="panel2">
+                        <!--Note: Iemand moet dit nog werkend maken-->
+                        <p>
+                            Yes, sir. I think those new droids are going to work out fine.
+                            In fact, I, uh, was also thinking about our agreement about my staying on another season.
+                            And if these new droids do work out, I want to transmit my application to the Academy this year.
+                            You mean the next semester before harvest? Sure, there're more than enough droids.
+                            Harvest is when I need you the most. Only one more season.
+                            This year we'll make enough on the harvest so I'll be able to hire some more hands.
+                            And then you can go to the Academy next year. You must understand I need you here, Luke.
+                            But it's a whole 'nother year. Look, it's only one more season.
+                            Yeah, that's what you said last year when Biggs and Tank left. Where are you going? It looks like I'm going nowhere.
+                            I have to finish cleaning those droids.
                         </p>
                     </div>
+                    <?php include "components/scripts.html"; ?>
+                    <!--    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+                    <!--    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>-->
+                    <!--    <script>-->
+                    <!--        $(document).foundation();-->
+                    <!--    </script>-->
+                    <script>
+                        var countdownDate = new Date("<?php echo $endTime; ?>").getTime();
+                        var interval = setInterval(function() {
+                            var now = new Date().getTime();
+                            var distance = countdownDate - now;
+                            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            document.getElementById("timer").innerHTML = days + "d " + hours + "h " +
+                                minutes + "m " + seconds + "s ";
+                            if (distance < 0) {
+                                clearInterval(interval);
+                                document.getElementById("timer").innerHTML = "Veiling beëindigd";
+                            }
+                        }, 1000);
+                    </script>
                 </div>
-                <?php include "components/scripts.html"; ?>
-                <!--    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>-->
-                <!--    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>-->
-                <!--    <script>-->
-                <!--        $(document).foundation();-->
-                <!--    </script>-->
-                <script>
-                    var countdownDate = new Date("<?php echo $endTime; ?>").getTime();
-                    var interval = setInterval(function () {
-                        var now = new Date().getTime();
-                        var distance = countdownDate - now;
-                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                        document.getElementById("timer").innerHTML = days + "d " + hours + "h "
-                            + minutes + "m " + seconds + "s ";
-                        if (distance < 0) {
-                            clearInterval(interval);
-                            document.getElementById("timer").innerHTML = "Veiling beëindigd";
-                        }
-                    }, 1000);
-                </script>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

@@ -250,6 +250,11 @@ a.redHover:hover {
 
 /* -------- detailpagina -------- */
 
+.errorMessage{
+    /* text-shadow: 2px 2px 8px #FF0000; */
+    color: #FF0000;
+}
+
 .detailfoto {
     display: block;
     margin: 0 auto;
