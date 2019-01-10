@@ -35,7 +35,7 @@ function image_processor()
             // De nieuwe naam wordt toegekend aan de foto
             $newname = "dt_" . $imagecounter . "_" . $nieuw_voorwerpnummer . "." . $ext;
             array_push($image_names, $newname);
-            $target = 'img/' . $newname;
+            $target = 'upload/' . $newname;
             move_uploaded_file($image['tmp_name'], $target);
 
             // De imagecounter gaat hier pas ++ omdat anders de volgorde van de afbeeldingen niet klopt

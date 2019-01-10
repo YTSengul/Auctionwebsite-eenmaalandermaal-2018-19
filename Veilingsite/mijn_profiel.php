@@ -34,15 +34,17 @@ Function prijs($Voorwerpnummer)
 function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $tabel)
 {
     global $dbh;
+    global $sql_get_voorwerpen_data;
+
     $gebruikersnaam = $_SESSION["ingelogde_gebruiker"];
     if ($tabel == 'Voorwerp') {
         $sql_get_voorwerpen_query = "select top 8 * from Voorwerp where Verkoper = '$gebruikersnaam' AND $column = $filter order by $order_by $up_or_down";
     } elseif ($tabel == 'Bod') {
-        $sql_get_voorwerpen_query = "select top 8 * from Voorwerp v RIGHT JOIN Bod b ON b.Voorwerp = v.Voorwerpnummer WHERE B.Gebruikersnaam = '" . $gebruikersnaam . "'";
+        $sql_get_voorwerpen_query = "select top 8 * from Voorwerp v RIGHT JOIN Bod b ON b.Voorwerp = v.Voorwerpnummer WHERE B.Gebruikersnaam = '" . $gebruikersnaam . "' AND $column = $filter order by $order_by $up_or_down";
     }
     $sql_get_voorwerpen = $dbh->prepare($sql_get_voorwerpen_query);
     $sql_get_voorwerpen->execute();
-    //$sql_get_voorwerpen_data = $sql_get_voorwerpen->fetchAll();
+    $sql_get_voorwerpen_data = $sql_get_voorwerpen->fetchAll();
     //var_dump($sql_neem_voorwerpen_data);
     if ($sql_get_voorwerpen->rowCount() == 0) {
         return;
@@ -52,29 +54,10 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
                     <h4>' . $header . '</h4>
                 </div>';
     }
-
-    while ($auction = $sql_get_voorwerpen->fetch()) {
+    $counter = 0;
+    foreach ($sql_get_voorwerpen_data as $auction) {
 
         $title = (strlen($auction['Titel']) > 38) ? substr($auction['Titel'], 0, 35) . '...' : $auction['Titel'];
-
-
-        // De tijd word hier berekend-----------------------------
-        $datetime1 = strtotime(date("Y/m/d h:i:s", time()));
-        $datetime2 = strtotime($auction['EindMoment']);
-
-        $secs = $datetime2 - $datetime1;// seconds between the two times
-        $mins = $secs / 60;
-        $hours = $mins / 60;
-        $days = $hours / 24;
-
-        if ($mins < 60) {
-            $time = floor($mins) . "mins " . ($secs - $mins * 60) . " secs";
-        } else if ($hours < 24) {
-            $time = round($hours) . " Uren";
-        } else {
-            $time = round($days) . " Dagen";
-        }
-        //--------------------------------------------------------
 
         echo '      
                 <div class="cell small-6 medium-4 large-3">
@@ -90,7 +73,7 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
                                             <h5>' . $title . '</h5>
                                         </div>
                                         <div class="cell timer">
-                                            <h5>' . $time . '</h5>
+                                            <h5 class="countdown" end="' . $auction['EindMoment'] . '"></h5>
                                         </div>
                                     </div>
                                 </div>
@@ -110,9 +93,9 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
                             </div>
                         </div>
                     </div></div>';
+        $counter++;
     }
-    echo '  
-        </div>';
+    echo '</div>';
 }
 
 echo '   <div class="grid-container">';
@@ -120,15 +103,85 @@ echo '   <div class="grid-container">';
 get_from_voorwerp('Mijn laatst toegevoegde veilingen', 'veilinggesloten', '0', 'BeginMoment', 'DESC', 'Voorwerp');
 
 //Neemt de al afgelopen veilingen van de verkoper uit de database
-get_from_voorwerp('Mijn afgelopen veilingen', 'veilinggesloten', '1', 'EindMoment', 'DESC', 'Voorwerp');
+get_from_voorwerp('Mijn afgelopen veilingen', 'veilinggesloten', '1', 'EindMoment', 'ASC', 'Voorwerp');
 
 //Neemt de alle veilingen uit de database waar de gebruiker op heeft geboden
-get_from_voorwerp('Mijn geboden veilingen', 'veilinggesloten', '1', 'EindMoment', 'DESC', 'Bod');
-echo '   </div>';
+get_from_voorwerp('Mijn geboden veilingen', 'veilinggesloten', '0', 'EindMoment', 'ASC', 'Bod');
 
 ?>
 
 <?php include "components/scripts.html"; ?>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
+<script>
+    timer();
+    function timer() {
+
+        setInterval(
+            function () {
+
+                var timers = $('.countdown');
+                for (var i = 0; i < timers.length; i++) {
+                    var el = timers[i];
+                    var endTime = $(el).attr('end');
+                    el.innerHTML = startTimer(new Date(endTime));
+                }
+            }
+            , 1000);
+    }
+
+    function startTimer(countDownDate) {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        if (hours < 10) {
+            hours = '0' + hours;
+        }
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        if (distance < 0) {
+            return "EXPIRED";
+        }
+        if (days > 1) {
+            return days + " dagen";
+        }
+        if (hours === 0 && minutes > 0) {
+            return minutes + ":" + seconds;
+        }
+        if (minutes === 0 && seconds > 0) {
+            return seconds;
+        }
+        return hours + ":" + minutes + ":" + seconds;
+
+    }
+</script>
+<script>
+    $('.categories-menu.menu.nested').each(function () {
+        var filterAmount = $(this).find('li').length;
+        if (filterAmount > 3) {
+            $('li', this).eq(2).nextAll().hide().addClass('toggleable');
+            $(this).append('<li class="more">Meer</li>');
+        }
+    });
+
+    $('.categories-menu.menu.nested').on('click', '.more', function () {
+        if ($(this).hasClass('less')) {
+            $(this).text('Meer').removeClass('less');
+        } else {
+            $(this).text('Minder').addClass('less');
+        }
+        $(this).siblings('li.toggleable').slideToggle();
+    });
+    $(document).foundation();
+    $(document).app();
+</script>
 </body>
 </html>
 
