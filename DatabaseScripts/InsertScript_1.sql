@@ -3467,9 +3467,11 @@ INSERT Categorieen (ID,Name,Parent) VALUES
 GO
 
 INSERT INTO vraag VALUES
-(1, 'Wat is de naam van je eerste huisdier?'),
-(2, 'Op welk basisschool heb je gezeten?'),
-(3, 'Wat is de meisjesnaam van je moeder?')
+(1, 'In welke straat ben je geboren?'),
+(2, 'Wat is de meisjesnaam je moeder?'),
+(3, 'Wat is je lievelingsgerecht?'),
+(4, 'Hoe heet je oudste zusje?'),
+(5, 'Hoe heet je huisdier?')
 GO
 
 INSERT INTO Betalingswijzen VALUES
