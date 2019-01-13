@@ -287,19 +287,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         }
 
         if (sizeof($veilingen) != 0) {
-            $counthelper = -1;
             foreach ($veilingen as $veiling) {
-
-                $counthelper++;
-
-                $tijd_uit_server = time(); // or your date as well
-                $your_date = strtotime(date($veiling[4]));
-                $datediff = $your_date - $tijd_uit_server;
-
-                $dagen = round($datediff / (60 * 60 * 24));
-                $uren = round($datediff / (60 * 60));
-                $minuten = round($datediff / (60));
-                $seconden = round($datediff);
 
                 echo "<div class='small-12 medium-9 large-9 float-center cell'>
             <div class='media-object veilingen-veiling-box '>
@@ -308,10 +296,11 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
                 </div>
                 <div class='media-object-section veilingen-veiling-info'>
                     <h5 class='veilingen-veiling-titel float-left'><a href='detailpagina.php?Voorwerpnummer=".$veiling[1]."' > >" . substr($veiling[2], 0, 50) . "</a></h5>
-                    <h5 class='veilingen-veiling-timer float-right' id='demo".$counthelper."' ></h5>
+                    <h5 class='veilingen-veiling-timer float-right countdown' end='".$veiling[4]."' ></h5>
                     <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[3]), 0, 140) . "</p>
                 </div>
             </div>";
+
             }
         } else {
             echo "<div class='small-12 medium-9 large-9 float-center cell'>
@@ -402,59 +391,52 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>
 <script>
-    var count0 = new Date("<?php echo $veilingen[0][4];?>").getTime();
-    var count1 = new Date("<?php echo $veilingen[1][4];?>").getTime();
-    var count2 = new Date("<?php echo $veilingen[2][4];?>").getTime();
-    var count3 = new Date("<?php echo $veilingen[3][4];?>").getTime();
-    var count4 = new Date("<?php echo $veilingen[4][4];?>").getTime();
-    var count5 = new Date("<?php echo $veilingen[5][4];?>").getTime();
-    var count6 = new Date("<?php echo $veilingen[6][4];?>").getTime();
-    var count7 = new Date("<?php echo $veilingen[7][4];?>").getTime();
-    var count8 = new Date("<?php echo $veilingen[8][4];?>").getTime();
-    var count9 = new Date("<?php echo $veilingen[9][4];?>").getTime();
-    var x = setInterval(function () {
-        startTimer('demo0', count0);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo1', count1);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo2', count2);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo3', count3);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo4', count4);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo5', count5);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo6', count6);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo7', count7);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo8', count8);
-    }, 1000);
-    var x = setInterval(function () {
-        startTimer('demo9', count9);
-    }, 1000);
-    function startTimer(id, countDownDate) {
+    timer();
+    function timer() {
+
+        setInterval(
+            function () {
+
+                var timers = $('.countdown');
+                for (var i = 0; i < timers.length; i++) {
+                    var el = timers[i];
+                    var endTime = $(el).attr('end');
+                    el.innerHTML = startTimer(new Date(endTime));
+                }
+            }
+            , 1000);
+    }
+
+    function startTimer(countDownDate) {
         var now = new Date().getTime();
         var distance = countDownDate - now;
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById(id).innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById(id).innerHTML = "EXPIRED";
+        if (hours < 10) {
+            hours = '0' + hours;
         }
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        if (distance < 0) {
+            return "EXPIRED";
+        }
+        if (days > 1) {
+            return days + " dagen";
+        }
+        if (hours === 0 && minutes > 0) {
+            return minutes + ":" + seconds;
+        }
+        if (minutes === 0 && seconds > 0) {
+            return seconds;
+        }
+        return hours + ":" + minutes + ":" + seconds;
+
     }
 </script>
 <script>

@@ -27,19 +27,14 @@ DROP TABLE Gebruiker
 GO
 DROP TABLE Vraag
 GO
-DROP TABLE emailconfiguratie
-GO
 DROP TABLE Land
 GO
 DROP TABLE Betalingswijzen
 GO
-
 DROP FUNCTION dbo.HoogsteBod
 GO
 DROP FUNCTION dbo.HoogsteBieder
 GO
-
-
 
 /*
 ======================================================================
@@ -179,22 +174,6 @@ CREATE TABLE Beheerder
 
 	CONSTRAINT PK_Beheerder_Gebruikersnaam PRIMARY KEY (Gebruikersnaam)
 	CONSTRAINT FK_Gebruiker_gebruikersnaam_Gebruiker FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
-)
-GO
-
-/*
-======================================================================
-	Table: EmailConfiguratie
-	Status: Done.
-======================================================================
-*/
-
-create table EmailConfiguratie (
-	Mailbox varchar(50) NOT NULL,
-	Verificatiecode varchar(10) NOT NULL,
-	Geverifieerd bit DEFAULT 0 NOT NULL,
-
-	CONSTRAINT PK_EmailConfiguratie_Mailbox PRIMARY KEY (mailbox)
 )
 GO
 
