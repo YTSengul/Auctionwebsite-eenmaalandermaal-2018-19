@@ -46,7 +46,8 @@
         else if($auctionClass === "Goedkoop"){
             $whereFilter = "Startprijs < 10";
         }
-        // Not a special where needed.
+        // Not a special where needed. it's sorted by how many biddings there are on that auction.
+        // Meaning the auctions with the highest amount of biddings will pop up on the website. (These will be the most popular ones.)
         else if($auctionClass === "Populair"){
             $whereFilter = "1 = 1";
         }
