@@ -7,6 +7,8 @@ USE Iproject
 GO
 */
 
+Drop TABLE Verkoper
+GO
 DROP TABLE Beheerder
 GO
 DROP TABLE Bestand
@@ -289,6 +291,25 @@ CREATE TABLE VoorwerpInRubriek
 	CONSTRAINT FK_VoorwerpInRubriek_Voorwerp_Voorwerp_Voorwerpnummer FOREIGN KEY (Voorwerp) REFERENCES Voorwerp(Voorwerpnummer)
 )
 GO
+
+/*
+======================================================================
+	Table: Verkoper
+	Status: Done.
+======================================================================
+*/
+
+create table Verkoper 
+(
+Gebruikersnaam varchar(40) NOT NULL,
+Banknaam char(8) NULL,
+Rekeningnummer char(7) NULL,
+Controleoptienaam char(10) NOT NULL,
+Creditcardnummer varchar(20) NULL
+
+CONSTRAINT PK_Verkoper PRIMARY KEY (Gebruikersnaam)
+CONSTRAINT FK_Verkoper_Gebruikersnaam FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
+)
 
 CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer BIGINT)
 RETURNS NUMERIC(18,2)

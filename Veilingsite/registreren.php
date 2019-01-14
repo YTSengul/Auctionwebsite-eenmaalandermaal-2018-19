@@ -42,68 +42,7 @@ else {
     $geboortedatum = $_POST["geboortedatum"];
     $wachtwoord1 = $_POST["wachtwoord1"];
     $veiligheidsvraag = $_POST["veiligheidsvraag"];
-    $antwoord_op_veiligheidsvraag = $_POST["antwoord_op_veiligheidsvraag"];
-
-
-    function check_length($label) {
-        $variable_length = ['emailadres'=>50,'voornaam'=>30,'achternaam'=>30,'adresregel1'=>50,'adresregel2'=>50,
-            'postcode'=>7, 'plaatsnaam'=>85, 'land'=>40, 'wachtwoord1'=>255, 'antwoord_op_veiligheidsvraag' => 255];
-        if($label>$variable_length[$label]) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    // Hier worden checks uitgevoerd op de ingevulde gegevens
-//    if (strlen($emailadres) > 50){
-//        $formulier_validation = $invalid;
-//        $emailadres_check_length = $invalid;
-//    }
-//    if (strlen($voornaam) > 30){
-//        $formulier_validation = $invalid;
-//        $voornaam_check_length = $invalid;
-//    }
-//    if (strlen($achternaam) > 30){
-//        $formulier_validation = $invalid;
-//        $achternaam_check_length = $invalid;
-//    }
-//    if (strlen($adresregel1) > 50){
-//        $formulier_validation = $invalid;
-//        $adresregel1_check_length = $invalid;
-//    }
-//    if (isset($adresregel2)){
-//        if (strlen($adresregel2) > 50){
-//            $formulier_validation = $invalid;
-//            $adresregel2_check_length = $invalid;
-//        }
-//    }
-//    if (strlen($postcode) > 7){
-//        $formulier_validation = $invalid;
-//        $postcode_check_length = $invalid;
-//    }
-//    if (strlen($plaatsnaam) > 85){
-//        $formulier_validation = $invalid;
-//        $plaatsnaam_check_length = $invalid;
-//    }
-//    if (strlen($land) > 40){
-//        $formulier_validation = $invalid;
-//        $land_check_length = $invalid;
-//    }
-//    if (strlen($wachtwoord1) > 255){
-//        $formulier_validation = $invalid;
-//        $wachtwoord1_check_length = $invalid;
-//    }
-//    if (strlen($antwoord_op_veiligheidsvraag) > 255){
-//        $formulier_validation = $invalid;
-//        $antwoord_op_veiligheidsvraag_check_length = $invalid;
-//    }
-
-    // Check of de hash klopt met de gestuurde hash in de header
-    if (md5($emailadres . 'sadvbsydbfdsbm') != $hash) {
-        $formulier_validation = $invalid;
-        //header('Location:pre-registreer.php?mailadres=leeg');
-    }
+    $antwoord = $_POST["antwoord"];
 
     /* Gebruikersnaam definieren voor de check */
     $gebruikersnaam = $_POST["gebruikersnaam"];
@@ -132,6 +71,60 @@ else {
     }
 }
 
+// Check of de hash klopt met de gestuurde hash in de header
+if (md5($emailadres . 'sadvbsydbfdsbm') != $hash) {
+    $formulier_validation = $invalid;
+    //header('Location:pre-registreer.php?mailadres=leeg');
+}
+
+function check_length($label, $input)
+{
+    $variable_length = ['gebruikersnaam' => 40, 'emailadres' => 50, 'voornaam' => 30, 'achternaam' => 30, 'adresregel1' => 50, 'adresregel2' => 50,
+        'postcode' => 7, 'plaatsnaam' => 85, 'land' => 40, 'wachtwoord1' => 255, 'antwoord' => 255];
+    if (strlen($input) > $variable_length[$label]) {
+        return array(true,$variable_length[$label]);
+    } else {
+        return false;
+    }
+}
+
+function create_label($name, $type, $placeholder, $required)
+{
+    global ${$name};
+    $posted = ${$name};
+    global $invalid;
+
+    $variables = check_length($name, $posted);
+
+    if($name == 'gebruikersnaam') {
+        global $gebruikersnaam_validation;
+    }
+
+    echo '<input name='.$name.' type="' . $type . '" placeholder="' . $placeholder . '" ';
+    if (isset($posted)) {
+        // Als de variabele veel langer is dan toegestaan
+        if ($variables[0]) {
+            echo 'class="is-invalid-input"';
+        }
+        // Als de gebruikersnaam al in gebruik is
+        if($name == 'gebruikersnaam' && $gebruikersnaam_validation == $invalid) {
+            echo 'class="is-invalid-input"';
+        }
+        echo "value='$posted'";
+    }
+    if ($required) {
+        echo 'required';
+    }
+
+    echo ' >';
+    if (isset($posted)) {
+        //echo "<script type='text/javascript'>alert('aaa');</script>";
+        if ($variables[0]) {
+            echo '<span class="form-error is-visible" id="exemple2Error">Uw '.$name.' mag maar '.$variables[1].' karakters bevatten.</span>';
+        }
+    }
+}
+
 $sql_landen_query = "select * from Land";
 $sql_landen = $dbh->prepare($sql_landen_query);
 $sql_landen->execute();
@@ -144,7 +137,8 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
     // De wachtwoord wod gehashed voor het naar de database gestuurd word
     $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
 
-    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
+    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) 
+    values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
 
     $stmt = $dbh->prepare($sql_registreer);
 
@@ -161,7 +155,7 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
         $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
         $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
         $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
-        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord_op_veiligheidsvraag, PDO::PARAM_STR);
+        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord, PDO::PARAM_STR);
 
         // De gebruiker wordt geprobeerd aan te melden in de website
         try {
@@ -194,15 +188,10 @@ include_once "components/meta.php"
                     </div>
 
                     <label>Gebruikersnaam*
-                        <input <?php if ($gebruikersnaam_validation == $invalid) {
-                            echo 'class="is-invalid-input"';
-                        }
-                        if (isset($gebruikersnaam)) {
-                            echo "value='$gebruikersnaam'";
-                        } ?> name="gebruikersnaam" type="text" placeholder="Uw gebruikersnaam" required>
+                        <?PHP create_label('gebruikersnaam', 'text', 'Uw gebruikersnaam', '*'); ?>
                     </label>
                     <?php if ($gebruikersnaam_validation == $invalid) {
-                        echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam bestaat al.</span>';
+                        echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam is al in gebruik.</span>';
                     } ?>
                     <div class="grid-x grid-padding-x">
                         <div class="medium-6 cell">
@@ -230,38 +219,28 @@ include_once "components/meta.php"
                         <h4>Persoonsgegevens</h4>
                     </div>
                     <label>Voornaam*
-                        <input name="voornaam" type="text" <?PHP if (isset($voornaam)) {
-                            echo "value='$voornaam'";
-                        } ?> placeholder="Uw voornaam" required>
+                        <?PHP create_label('voornaam', 'text', 'Uw voornaam', '*'); ?>
                     </label>
-                    <label>Achternaam*<?PHP if(isset($achternaam)){echo check_length($achternaam);}; ?>
-                        <input name="achternaam" type="text" <?PHP if (isset($achternaam)) {
-                            echo "value='$achternaam'";
-                        } ?> placeholder="Uw achternaam" required>
+
+                    <label>Achternaam*
+                        <?PHP create_label('achternaam', 'text', 'Uw achternaam', '*'); ?>
                     </label>
+
                     <label>Adresregel1*
-                        <input name="adresregel1" type="text" <?PHP if (isset($adresregel1)) {
-                            echo "value='$adresregel1'";
-                        } ?> placeholder="Uw adresregel1" required>
+                        <?PHP create_label('adresregel1', 'text', 'Uw adresregel1', '*'); ?>
                     </label>
                     <label>Adresregel2
-                        <input name="adresregel2" type="text" <?PHP if (isset($adresregel2)) {
-                            echo "value='$adresregel2'";
-                        } ?> placeholder="Uw adresregel2">
+                        <?PHP create_label('adresregel2', 'text', 'Uw adresregel2', ''); ?>
                     </label>
                     <div class="grid-x grid-padding-x">
                         <div class="medium-6 cell">
                             <label>Plaatsnaam*
-                                <input name="plaatsnaam" type="text" <?PHP if (isset($plaatsnaam)) {
-                                    echo "value='$plaatsnaam'";
-                                } ?> placeholder="Uw plaatsnaam" required>
+                                <?PHP create_label('plaatsnaam', 'text', 'Uw plaatsnaam', '*'); ?>
                             </label>
                         </div>
                         <div class="medium-6 small-6 cell">
                             <label>Postcode*
-                                <input name="postcode" type="text" <?PHP if (isset($postcode)) {
-                                    echo "value='$postcode'";
-                                } ?> placeholder="Uw postcode" required>
+                                <?PHP create_label('postcode', 'text', 'Uw postcode', '*'); ?>
                             </label>
                         </div>
                     </div>
@@ -284,8 +263,7 @@ include_once "components/meta.php"
                         } ?> type="date" required>
                     </label>
                     <label>E-mailadres*
-                        <input name="emailadres" value="<?PHP echo $emailadres; ?>" type="email"
-                               placeholder="Uw E-mailadres" required>
+                        <?PHP create_label('emailadres', 'text', 'Uw E-mailadres', '*'); ?>
                     </label>
                     <label>Veiligheidsvraag*
                         <select name="veiligheidsvraag" required>
@@ -322,11 +300,7 @@ include_once "components/meta.php"
                         </select>
                     </label>
                     <label>Antwoord*
-                        <input name="antwoord_op_veiligheidsvraag"
-                               type="text" <?PHP if (isset($antwoord_op_veiligheidsvraag)) {
-                            echo "value='$antwoord_op_veiligheidsvraag'";
-                        } ?>
-                               placeholder="Uw antwoord op de veiligheidsvraag" required>
+                        <?PHP create_label('antwoord', 'text', 'Uw antwoord op de veiligheidsvraag', '*'); ?>
                     </label>
                     <input type="hidden" name="hash" value="<?PHP echo $hash; ?>">
                 </div>

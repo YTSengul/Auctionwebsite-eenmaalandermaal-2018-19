@@ -5,8 +5,6 @@ $verificatie_incorrect = false;
 
 if (isset($_POST['vraag_verificatiecode_op'])) {
 
-    $verificatie_code = chr(64 + rand(0, 26)) . chr(64 + rand(0, 26)) . chr(64 + rand(0, 26)) . chr(64 + rand(0, 26)) . chr(64 + rand(0, 26));
-
     $pre_emailadres = $_POST["pre-emailadres"];
 
     $hash = md5($pre_emailadres . 'sadvbsydbfdsbm');
