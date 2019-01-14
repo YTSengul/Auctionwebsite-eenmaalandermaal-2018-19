@@ -21,7 +21,8 @@ if (isset($_POST['rubriek_sorteer'])) {
     $s = $_SERVER['REQUEST_URI'];
     $nieuwe_string_na_sorteren = strstr($s, '?', true);
     header('Location:' . $nieuwe_string_na_sorteren);
-} // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
+}
+// Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
 else if (isset($_GET['rubriek_hernoem'])) {
 
     $nieuwe_rubriek_naam = $_GET['hernoem_rubriek'];
@@ -44,7 +45,8 @@ else if (isset($_GET['rubriek_hernoem'])) {
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-} // Het versturen van de nieuwe Subrubriek naar de database
+}
+// Het versturen van de nieuwe Subrubriek naar de database
 else if (isset($_GET["subrubriek_voegtoe"])) {
 
     $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek  order by 'Volgnummer' desc";
