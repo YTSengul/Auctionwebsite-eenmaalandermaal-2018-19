@@ -7,6 +7,8 @@ USE Iproject
 GO
 */
 
+DROP TABLE PostVerificatie
+GO
 Drop TABLE Verkoper
 GO
 DROP TABLE Beheerder
@@ -299,17 +301,32 @@ GO
 ======================================================================
 */
 
-create table Verkoper 
+CREATE TABLE Verkoper 
 (
-Gebruikersnaam varchar(40) NOT NULL,
-Banknaam char(8) NULL,
-Rekeningnummer char(7) NULL,
-Controleoptienaam char(10) NOT NULL,
-Creditcardnummer varchar(20) NULL
+	Gebruikersnaam VARCHAR(40) NOT NULL,
+	Banknaam VARCHAR(20) NULL,
+	Rekeningnummer VARCHAR(30) NULL,
+	Controleoptienaam VARCHAR(15) NOT NULL,
+	Creditcardnummer VARCHAR(20) NULL
 
-CONSTRAINT PK_Verkoper PRIMARY KEY (Gebruikersnaam)
-CONSTRAINT FK_Verkoper_Gebruikersnaam FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
+	CONSTRAINT PK_Verkoper PRIMARY KEY (Gebruikersnaam)
+	CONSTRAINT FK_Verkoper_Gebruikersnaam FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
 )
+
+CREATE TABLE PostVerificatie
+(
+	Gebruikersnaam VARCHAR(40) NOT NULL,
+	VerificatieCode VARCHAR(40) NOT NULL,
+	BeginMoment DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	EindMoment AS DATEADD(DAY, 7, BeginMoment),
+	Geldig AS CASE WHEN GETDATE() > DATEADD(DAY, 7, BeginMoment)
+					THEN 1
+					ELSE 0 END,
+	CONSTRAINT PK_PostVerificatie PRIMARY KEY (Gebruikersnaam, VerificatieCode),
+	CONSTRAINT FK_PostVerificatie_Gebruikersnaam FOREIGN KEY (Gebruikersnaam) REFERENCES Gebruiker(Gebruikersnaam)
+)
+
+GO
 
 CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer BIGINT)
 RETURNS NUMERIC(18,2)
