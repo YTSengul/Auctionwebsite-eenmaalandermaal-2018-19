@@ -256,7 +256,7 @@
                 <p>' . $errorMessageCreditcard . '</p>
                 <input type="text" placeholder="Alleen Cijfers. Min 13, Max 19" name="' . $creditcard . '" value="' . $creditcardValue . '">
                 <p>* verplichte velden</p>
-                <p>** Als bank in gevuld is, dan is bankrekening niet meer optioneel en andersom (Alleen bij creditcard controle.)</p>
+                <p>** Als bank ingevuld is, dan is bankrekening niet meer optioneel en andersom (Alleen bij creditcard controle.)</p>
                 <input type="hidden" value="' . $_POST['Controle_optie'] . '" name="Controle_optie">
                 <input type="submit" value="Verstuur aanvraag" name="Verkoper_aanvraag" class="button expanded float-right">
             </form>
