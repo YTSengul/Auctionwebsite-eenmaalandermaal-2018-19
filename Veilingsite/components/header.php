@@ -76,12 +76,13 @@
                         echo'
                             <li><a class="blackHover" href="logout.php"> Uitloggen</a></li>
                         ';
-                    }
-                    if (isset($_SESSION['ingelogde_gebruiker']) == 'y.t.sengul') {
-                        echo '
-                            <li><a>|</a></li>
-                            <li><a class="blackHover" href="beheerpagina.php"> Beheerpagina</a></li>
-                        ';
+
+                        if ($_SESSION['ingelogde_gebruiker'] == 'y.t.sengul') {
+                            echo '
+                                <li><a>|</a></li>
+                                <li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>
+                            ';
+                        }
                     }
                     ?>
                 </ul>

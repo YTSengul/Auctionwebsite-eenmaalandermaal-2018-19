@@ -1,5 +1,13 @@
 <?php
 
+if (isset($_SESSION['ingelogde_gebruiker'])) {
+    if ($_SESSION['ingelogde_gebruiker'] != 'y.t.sengul') {
+        header('Location:index.php');
+    }
+} else {
+    header('Location:index.php');
+}
+
 include_once "components/connect.php";
 
 include_once "components/meta.php";

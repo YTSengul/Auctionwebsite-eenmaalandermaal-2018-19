@@ -7,6 +7,15 @@ include_once 'components/meta.php';
 
 <?PHP
 
+// Check of er een afbeelding is gevonden of niet.
+function c_file_exists($file){
+    $file_headers = @get_headers($file);
+    if(strpos($file_headers[0], '404 Not Found')) {
+        return false;
+    }
+    return true;
+}
+
 Function prijs($Voorwerpnummer)
 {
     global $dbh;
@@ -62,9 +71,13 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
         echo '      
                 <div class="cell small-6 medium-4 large-3">
                 <div class="veiling-sluit-index">
-                        <div class="resizeImage">
-                            <img src="http://iproject5.icasites.nl/thumbnails/' . $auction['Thumbnail'] . '" alt="Auction Photo">
-                        </div>
+                        <div class="resizeImage">';
+                        if(c_file_exists('http://iproject5.icasites.nl/thumbnails/' . $auction['Thumbnail'])) {
+                            echo '<img src="http://iproject5.icasites.nl/thumbnails/' . $auction['Thumbnail'] . '" alt="Auction Photo">';
+                        } else {
+                            echo '<img src="upload/' . $auction['Thumbnail'] . '" alt="Auction Photo">';
+                        }
+        echo '          </div>
                         <div class="card-body">
                             <div class="grid-x">
                                 <div class="cell">

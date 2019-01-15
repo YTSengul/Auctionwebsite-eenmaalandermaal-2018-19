@@ -634,3 +634,17 @@ a.redHover:hover {
     border-radius: 3px;
     width: auto;
 }
+
+.detailpagina-button-left {
+    float: left;
+    margin-left: 25%;
+    background-color: #F2552C;
+    padding: 5px 10px;
+}
+
+.detailpagina-button-right {
+    float: right;
+    margin-right: 25%;
+    background-color: #F2552C;
+    padding: 5px 10px;
+}
