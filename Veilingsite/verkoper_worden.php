@@ -103,8 +103,8 @@
                     }
                 }
 
-                //Creditcard
                 if($bankJuist && $bankrekeningJuist && $creditcardJuist){
+                    //Creditcard
                     if($_POST['Controle_optie'] == $Verification_Option1){
                         if($bankFilledIn || $bankrekeningFilledIn){
                             if($bankFilledIn && $bankrekeningFilledIn){
@@ -138,6 +138,7 @@
 
                             maakVerkoper();
                         }
+                        header('location: index.php');
                     }
                     //Post
                     else{
@@ -170,6 +171,7 @@
                             $verkoper_Worden->bindParam(4, $_POST['Controle_optie'], PDO::PARAM_STR);
                             $verkoper_Worden->execute();
                         }
+                        header('location: index.php');
                     }
                 }
             }
@@ -248,7 +250,7 @@
             <form action="#" method="POST">
                 <label>' . $bank . placeStar($_POST['Controle_optie'], $bank) . '</label>
                 <p>' . $errorMessageBank . '</p>
-                <input type="text" placeholder="Allen kleine letters en hoofdletters. Min 3, Max 20" name="' . $bank . '" value="' . $bankValue . '">
+                <input type="text" placeholder="Alleen kleine letters en hoofdletters. Min 3, Max 20" name="' . $bank . '" value="' . $bankValue . '">
                 <label>' . $bankrekening . placeStar($_POST['Controle_optie'], $bankrekening) . '</label>
                 <p>' . $errorMessageBankrekening . '</p>
                 <input type="text" placeholder="Alleen Hoofdletters en Cijfers. Min 15, Max 30" name="' . $bankrekening . '" value="' . $bankrekeningValue . '">
@@ -256,7 +258,7 @@
                 <p>' . $errorMessageCreditcard . '</p>
                 <input type="text" placeholder="Alleen Cijfers. Min 13, Max 19" name="' . $creditcard . '" value="' . $creditcardValue . '">
                 <p>* verplichte velden</p>
-                <p>** Als bank in gevuld is, dan is bankrekening niet meer optioneel en andersom (Alleen bij creditcard controle.)</p>
+                <p>** Als bank ingevuld is, dan is bankrekening niet meer optioneel en andersom (Alleen bij creditcard controle.)</p>
                 <input type="hidden" value="' . $_POST['Controle_optie'] . '" name="Controle_optie">
                 <input type="submit" value="Verstuur aanvraag" name="Verkoper_aanvraag" class="button expanded float-right">
             </form>

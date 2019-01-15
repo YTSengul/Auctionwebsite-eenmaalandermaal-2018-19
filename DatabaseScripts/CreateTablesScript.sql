@@ -220,6 +220,7 @@ CREATE TABLE Voorwerp
 )
 GO
 
+
 /*
 ======================================================================
 	Table: Bestand
@@ -317,6 +318,7 @@ CREATE TABLE PostVerificatie
 (
 	Gebruikersnaam VARCHAR(40) NOT NULL,
 	VerificatieCode VARCHAR(40) NOT NULL,
+	VerificatieCodeUnhased VARCHAR(40) NOT NULL,
 	BeginMoment DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	EindMoment AS DATEADD(DAY, 7, BeginMoment),
 	Geldig AS CASE WHEN GETDATE() > DATEADD(DAY, 7, BeginMoment)
@@ -327,6 +329,16 @@ CREATE TABLE PostVerificatie
 )
 
 GO
+
+--select * from PostVerificatie
+--Select * from Verkoper
+--select * from Gebruiker where Gebruikersnaam = 'Stefan oude Lohuis'
+--delete From Verkoper
+--delete from PostVerificatie
+--Drop table PostVerificatie
+--update Gebruiker set Verkoper = 0 where Gebruikersnaam = 'croata'
+GO
+
 
 CREATE FUNCTION dbo.HoogsteBod(@Voorwerpnummer BIGINT)
 RETURNS NUMERIC(18,2)
