@@ -57,7 +57,7 @@
                         ';
                         if(isVerkoper($_SESSION['ingelogde_gebruiker'])){
                             echo '
-                                <li><a class="blackHover" href="verkopen_object.php"> Verkopen object</a></li>
+                                <li><a class="blackHover" href="verkopen_object.php"> Plaats voorwerp</a></li>
                                 <li><a>|</a></li>
                             ';
                         }
@@ -80,7 +80,7 @@
                         if ($_SESSION['ingelogde_gebruiker'] == 'tigersclaw4') {
                             echo '
                                 <li><a>|</a></li>
-                                <li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>
+                                <li><a class="blackHover" href="beheerpagina.php"> Beheerpagina</a></li>
                             ';
                         }
                     }

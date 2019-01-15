@@ -533,7 +533,7 @@ function contactgegevens()
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="medium-12 large-12 cell">
-            <h2 class="registreren_titel">Plaats voorwerp</h2>
+            <h2 class="registreren_titel">Verkopen voorwerp</h2>
         </div>
     </div>
     <div class="grid-x grid-padding-x">

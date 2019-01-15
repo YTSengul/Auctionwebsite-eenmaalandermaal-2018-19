@@ -1,18 +1,21 @@
 <?php
 
-if (isset($_SESSION['ingelogde_gebruiker'])) {
-    if ($_SESSION['ingelogde_gebruiker'] != 'tigersclaw4') {
-        header('Location:index.php');
-    }
-} else {
-    header('Location:index.php');
-}
-
 include_once "components/connect.php";
 
 include_once "components/meta.php";
 
 include_once 'components/header.php';
+
+if (isset($_SESSION['ingelogde_gebruiker'])) {
+    if ($_SESSION['ingelogde_gebruiker'] != 'tigersclaw4') {
+        header('Location:index.php');
+    }
+} else {
+    var_dump($_SESSION['ingelogde_gebruiker']);
+    header('Location:index.php');
+}
+
+
 
 // Op deze plaats worden de nieuwe volgnummers naar de database gestuurd indie die zij uitgevoerd
 if (isset($_POST['rubriek_sorteer'])) {
@@ -25,11 +28,8 @@ if (isset($_POST['rubriek_sorteer'])) {
             $sql_wijzig_volgnummer->bindParam(":rubrieknummer", $Rubrieknummer);
             $stuur_nieuwe_volgnummers = $sql_wijzig_volgnummer->execute();
         }
-
     }
-    $s = $_SERVER['REQUEST_URI'];
-    $nieuwe_string_na_sorteren = strstr($s, '?', true);
-    header('Location:' . $nieuwe_string_na_sorteren);
+
 } // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
 else if (isset($_POST['rubriek_hernoem_stuur'])) {
 
@@ -111,8 +111,6 @@ function rubrieken()
             $hoofdrubriek = $_POST["zoek_" . $_POST['rubriek_zoek_getal'] . ""];
             $_SESSION['formulier_teller'] = $_POST['rubriek_zoek_getal'] += 1;
             $_SESSION['hoofdrubriek'][$_POST['rubriek_zoek_getal']] = $hoofdrubriek;
-        } else {
-            $hoofdrubriek = $_SESSION['gekozen_rubrieknaam'];
         }
     }
 
