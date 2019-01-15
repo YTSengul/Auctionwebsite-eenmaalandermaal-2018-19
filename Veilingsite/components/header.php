@@ -16,7 +16,7 @@
                         echo '<li><a class="blackHover" href="mijn_profiel.php"> mijn profiel</a></li><li><a>|</a></li><li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
                     }
                     if (isset($_SESSION['ingelogde_gebruiker'])) {
-                        if ($_SESSION['ingelogde_gebruiker'] == 'y.t.sengul') {
+                        if ($_SESSION['ingelogde_gebruiker'] == 'tigersclaw4') {
                             echo '<li><a>|</a></li><li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>';
                         }
                     }

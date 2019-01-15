@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_SESSION['ingelogde_gebruiker'])) {
-    if ($_SESSION['ingelogde_gebruiker'] != 'y.t.sengul') {
+    if ($_SESSION['ingelogde_gebruiker'] != 'tigersclaw4') {
         header('Location:index.php');
     }
 } else {
