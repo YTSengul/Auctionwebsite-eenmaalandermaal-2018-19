@@ -22,17 +22,18 @@ if (isset($_POST['rubriek_sorteer'])) {
     $s = $_SERVER['REQUEST_URI'];
     $nieuwe_string_na_sorteren = strstr($s, '?', true);
     header('Location:' . $nieuwe_string_na_sorteren);
-}
-// Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
-else if (isset($_POST['rubriek_hernoem'])) {
+} // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
+else if (isset($_POST['rubriek_hernoem_stuur'])) {
 
     $nieuwe_rubriek_naam = $_POST['hernoem_rubriek'];
     $nummer_van_hernoem_rubriek = $_POST['nummer_van_hernoem_rubriek'];
 
     $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
     $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
+
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
     $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
+
     $stuur_nieuwe_rubrieknaam = $sql_nieuwe_rubrieknaam->execute();
 
     try {
@@ -44,8 +45,7 @@ else if (isset($_POST['rubriek_hernoem'])) {
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-}
-// Het versturen van de nieuwe Subrubriek naar de database
+} // Het versturen van de nieuwe Subrubriek naar de database
 else if (isset($_POST["subrubriek_voegtoe"])) {
 
     $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek";
@@ -59,7 +59,7 @@ else if (isset($_POST["subrubriek_voegtoe"])) {
     $nummer_van_hoofdrubriek = $_POST['nummer_van_hoofdrubriek'];
 
     // Naam van de nieuwe rubriek
-    $nieuw_subrubrieknaam = $_POST['subrubriek_voeg_toe'];
+    $nieuw_subrubrieknaam = $_POST['hernoem_rubriek'];
 
     // VOlgnummer toevoegen
     $nieuw_volgnummer = 0;
@@ -103,8 +103,15 @@ function rubrieken()
             $hoofdrubriek = $_POST["zoek_" . $_POST['rubriek_zoek_getal'] . ""];
             $_SESSION['formulier_teller'] = $_POST['rubriek_zoek_getal'] += 1;
             $_SESSION['hoofdrubriek'][$_POST['rubriek_zoek_getal']] = $hoofdrubriek;
+        } else {
+            $hoofdrubriek = $_SESSION['gekozen_rubrieknaam'];
         }
-    };
+    }
+
+    if (isset($_POST['rubriek_hernoem']) || isset($_POST["rubriek_subrubriek_invoegen"]) || isset($_POST["rubriek_sorteren"])) {
+        $_SESSION['formulier_teller'] = ($_SESSION['formulier_teller'] - 1);
+    }
+
 
     for ($x = 0; $x <= $_SESSION['formulier_teller']; $x++) {
         $eenmeerdanforloopvariabele = 1 + $x;
@@ -114,6 +121,7 @@ function rubrieken()
             $rubriek_zoek = $_SESSION['hoofdrubriek'][$x];
         }
 
+        global $neem_rubrieken_data;
         // Het ophalen van de rubrieken
         $neem_rubrieken_query = "select * from rubriek where vorigeRubriek = '" . $rubriek_zoek . "' ORDER BY 'Volgnummer' DESC ";
         $neem_rubrieken = $dbh->prepare($neem_rubrieken_query);
@@ -136,10 +144,10 @@ function rubrieken()
             }
             echo "    </select>
              <input type='hidden' name='rubriek_zoek_getal' value='" . $x . "' >
-             <input type='submit' value='zoek' name='rubriek_zoek_" . $eenmeerdanforloopvariabele . "' class='button expanded'>
-            <input type='submit' value='Hernoem' name='rubriek_zoek_" . $eenmeerdanforloopvariabele . "' class='button expanded'>
-            <input type='submit' value='Subrubriek invoegen' name='rubriek_zoek_" . $eenmeerdanforloopvariabele . "' class='button expanded'>
-            <input type='submit' value='Sorteren' name='rubriek_zoek_" . $eenmeerdanforloopvariabele . "' class='button expanded'>
+            <input type='submit' value='zoek' name='rubriek_zoek' class='button expanded'>
+            <input type='submit' value='hernoem' name='rubriek_hernoem' class='button expanded'>
+            <input type='submit' value='subrubriek invoegen' name='rubriek_subrubriek_invoegen' class='button expanded'>
+            <input type='submit' value='sorteren' name='rubriek_sorteren' class='button expanded'>
             </form>
           </div>";
         } // Als de klant van iConcepts op de laagste niveau is
@@ -158,17 +166,17 @@ function rubrieken()
 // De formulier die word aangeroepen als er een keuze gemaakt word om de rubriek te hernoemen
 function formulier_hernoem()
 {
+    $marge = 1;
     // De input voor het hernoemen van de rubrieken
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_teller'];
          $loop_teller++) {
-
-        if (isset($_POST["rubriek_zoek_$loop_teller"])) {
-            if ($_POST["rubriek_zoek_$loop_teller"] == 'Hernoem') {
+        if (isset($_POST["rubriek_zoek_getal"])) {
+            if ((isset($_POST["rubriek_hernoem"]) == 'hernoem') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
                 echo '<form action="#" method="POST">
                     <input type="text" name="hernoem_rubriek" >
-                    <input type="hidden" name="nummer_van_hernoem_rubriek" value="' . $_POST["zoek_".($loop_teller-1)] . '"> 
-                    <input type="submit" value="Hernoem rubriek" name="rubriek_hernoem" class="button expanded float-right">
+                    <input type="hidden" name="nummer_van_hernoem_rubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
+                    <input type="submit" value="Hernoem rubriek" name="rubriek_hernoem_stuur" class="button expanded float-right">
             </form>';
             }
         }
@@ -178,19 +186,18 @@ function formulier_hernoem()
 // De formulier die word aangeroepen als er een keuze gemaakt word om een sububriek in te voegen
 function formulier_subrubriek_voegin()
 {
+    $marge = 1;
+    // De input voor het hernoemen van de rubrieken
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_teller'];
          $loop_teller++) {
-        if (isset($_POST["rubriek_zoek_$loop_teller"])) {
-            if ($_POST["rubriek_zoek_$loop_teller"] == 'Subrubriek invoegen') {
+        if (isset($_POST["rubriek_zoek_getal"])) {
+            if ((isset($_POST["rubriek_subrubriek_invoegen"]) == 'subrubriek invoegen') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
                 echo '<form action="#" method="POST">
-                    <input type="text" name="subrubriek_voeg_toe" >
-                    <input type="hidden" name="nummer_van_hoofdrubriek" value="' . $_POST["zoek_".($loop_teller-1)] . '"> 
-                    <input type="submit" value="Voeg subrubriek in" name="subrubriek_voegtoe" class="button expanded float-right">
+                    <input type="text" name="hernoem_rubriek" >
+                    <input type="hidden" name="nummer_van_hoofdrubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
+                    <input type="submit" value="Hernoem rubriek" name="subrubriek_voegtoe" class="button expanded float-right">
             </form>';
-                echo '<pre>';
-                print_r($_POST);
-                echo '</pre>';
             }
         }
     }
@@ -200,29 +207,16 @@ function formulier_subrubriek_voegin()
 function formulier_sorteer()
 {
     global ${'alle_hoofdrubrieken_data'};
-
+    global $neem_rubrieken_data;
+    $marge = 1;
     for ($loop_teller = 0;
          $loop_teller <= $_SESSION['formulier_teller'];
          $loop_teller++) {
 
-        global ${'zoek_' . $loop_teller . '_rubrieken_data'};
-
-        if (isset($_POST['zoek_0'])) {
-            if (isset($_POST["rubriek_zoek_$loop_teller"])) {
-                if ($_POST["rubriek_zoek_$loop_teller"] == 'Sorteren') {
-                    echo '<form action="#" method="POST">';
-                    foreach (${'alle_hoofdrubrieken_data'} as ${'zoek_' . $loop_teller . '_rubrieken'}) {
-                        echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
-<input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
-                    }
-                    echo '<input type="submit" value="Hersorteer rubrieken" name="rubriek_sorteer" class="button expanded float-right">
-                    </form>';
-                }
-            }
-        } else if (isset($_POST["rubriek_zoek_$loop_teller"])) {
-            if ($_POST["rubriek_zoek_$loop_teller"] == 'Sorteren') {
+        if (isset($_POST["rubriek_zoek_getal"])) {
+            if ((isset($_POST["rubriek_sorteren"]) == 'sorteren') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
                 echo '<form action="#" method="POST">';
-                foreach (${'zoek_' . $loop_teller . '_rubrieken_data'} as ${'zoek_' . $loop_teller . '_rubrieken'}) {
+                foreach ($neem_rubrieken_data as ${'zoek_' . $loop_teller . '_rubrieken'}) {
                     echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
 <input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
                 }
@@ -230,10 +224,12 @@ function formulier_sorteer()
                     </form>';
             }
         }
+
     }
 }
 
 ?>
+
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="medium-12 large-12 cell">
@@ -249,13 +245,11 @@ function formulier_sorteer()
                 </div>
 
                 <?php
-
                 formulier_hernoem();
 
                 formulier_subrubriek_voegin();
 
                 formulier_sorteer();
-
                 ?>
 
             </div>

@@ -15,7 +15,7 @@ if (isset($_GET['huidigepagina'])) {
 $aantalveilingen_per_pagina = 10;
 $vanaf_veiling = ($huidigepagina - 1) * $aantalveilingen_per_pagina;
 $tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina);
-if($huidigepagina!=1) {
+if ($huidigepagina != 1) {
     $tot_veiling = $vanaf_veiling + ($aantalveilingen_per_pagina - 1);
 }
 
@@ -286,17 +286,31 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
 
         }
 
+        // Check of er een afbeelding is gevonden of niet.
+        function c_file_exists($file)
+        {
+            $file_headers = @get_headers($file);
+            if (strpos($file_headers[0], '404 Not Found')) {
+                return false;
+            }
+            return true;
+        }
+
         if (sizeof($veilingen) != 0) {
             foreach ($veilingen as $veiling) {
 
                 echo "<div class='small-12 medium-9 large-9 float-center cell'>
             <div class='media-object veilingen-veiling-box '>
-                <div class='media-object-section'>
-                    <img class='thumbnail veilingen-veiling-image' src='http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3) . "'>
-                </div>
+                <div class='media-object-section'>";
+                if (c_file_exists("http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3))) {
+                    echo "<img class='thumbnail veilingen-veiling-image' src = 'http://iproject4.icasites.nl/pics/dt_1_" . substr($veiling[5], 3) . "' >";
+                } else {
+                    echo "<img class='thumbnail veilingen-veiling-image' src='upload/$veiling[5]' alt='Foto van een product'>";
+                }
+                echo "</div>
                 <div class='media-object-section veilingen-veiling-info'>
-                    <h5 class='veilingen-veiling-titel float-left'><a href='detailpagina.php?Voorwerpnummer=".$veiling[1]."' > >" . substr($veiling[2], 0, 50) . "</a></h5>
-                    <h5 class='veilingen-veiling-timer float-right countdown' end='".$veiling[4]."' ></h5>
+                    <h5 class='veilingen-veiling-titel float-left'><a href='detailpagina.php?Voorwerpnummer=" . $veiling[1] . "' > >" . substr($veiling[2], 0, 50) . "</a></h5>
+                    <h5 class='veilingen-veiling-timer float-right countdown' end='" . $veiling[4] . "' ></h5>
                     <p class='hide-for-small-only veilingen-veiling-omschrijving'>" . substr(strip_tags($veiling[3]), 0, 140) . "</p>
                 </div>
             </div>";
@@ -364,7 +378,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         for ($x = $pagina_voor_huidige_pagina; $x < $huidigepagina + $pagina_marger; $x++) {
             if ($x == $huidigepagina) {
                 echo "<li class='current'><span class='show-for-sr'>You're on page</span> $x</li>";
-            } else if ($x > 0 & $x <= $laatste_pagina ) {
+            } else if ($x > 0 & $x <= $laatste_pagina) {
                 echo "<li><a href='veilingen.php?huidigepagina=$x' >$x</a></li>";
             }
         }
@@ -372,9 +386,9 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         // hier wordt gekeken of je op de laatste pagina bent van de veilingen, zo ja wordt de volgende knop disabled
         if ($huidigepagina == $laatste_pagina) {
             echo "<li class='pagination-next'><a href='#' aria-label='Next page' class='disabled' >Volgende <span
-                            class='show-for-sr''>page</span></a></li> </ul>";
+                            class='show-for-sr''>page</span></a></li>";
         } else {
-            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=".($huidigepagina+=1)."' aria-label='Next page' >Volgende <span
+            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=" . ($huidigepagina += 1) . "' aria-label='Next page' >Volgende <span
                             class='show-for-sr''>page</span></a></li>";
         }
 
@@ -382,7 +396,7 @@ WHERE Voorwerp.RowNum BETWEEN $vanaf_veiling AND $tot_veiling AND Voorwerp.Rubri
         if ($huidigepagina == 1) {
             echo "<li class='pagination-next disabled'>Laatste pagina <span class='show-for-sr'>page</span></li>";
         } else {
-            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=".$laatste_pagina."' aria-label='Next page'>Laatste pagina <span class='show-for-sr'>page</span></li> </ul>";
+            echo "<li class='pagination-next'><a href='veilingen.php?huidigepagina=" . $laatste_pagina . "' aria-label='Next page'>Laatste pagina <span class='show-for-sr'>page</span></li> </ul>";
         }
         ?>
 
