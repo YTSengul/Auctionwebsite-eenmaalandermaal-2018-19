@@ -4,7 +4,8 @@ include_once "components/meta.php";
 
 $errorMessage = "";
 
-function insertBid($bid, $voorwerpNummer, $userName, $time){
+function insertBid($bid, $voorwerpNummer, $userName, $time)
+{
     global $dbh;
 
     $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
@@ -18,8 +19,9 @@ function insertBid($bid, $voorwerpNummer, $userName, $time){
     $verstuur_bod->execute();
 }
 
-function minimaleVerhoging($price){
-    switch($price){
+function minimaleVerhoging($price)
+{
+    switch ($price) {
         case $price < 50:
             return 0.5;
             break;
@@ -38,28 +40,26 @@ function minimaleVerhoging($price){
     }
 }
 
-function wrongBiddingMessage(){
+function wrongBiddingMessage()
+{
     global $errorMessage;
-    if($errorMessage != null){
+    if ($errorMessage != null) {
         echo "<div class='errorMessage'>" . $errorMessage . "</div>";
     }
 }
 
-function minimumPrice($price){
+function minimumPrice($price)
+{
     return $price + minimaleVerhoging($price);
 }
 
-function getMinimumPrice(){
-    if(auctionBiddingDetails($_GET['Voorwerpnummer'])[0] == "a_Bidder"){
-        return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
-    }
-    else{
-        return auctionBiddingDetails($_GET['Voorwerpnummer'])[2];
-    }
-
+function getMinimumPrice()
+{
+    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
 }
 
-function auctionBiddingDetails($voorwerpNummer){
+function auctionBiddingDetails($voorwerpNummer)
+{
     global $dbh;
 
     $auctionDetails_query = "SELECT Startprijs, Verkoper FROM Voorwerp WHERE Voorwerpnummer = :voorwerpNummer";
@@ -85,15 +85,13 @@ function auctionBiddingDetails($voorwerpNummer){
         //Double check that the bidding is higher than the starting price.
         //If this were to be the case it will be treated as if there were no bidding yet.
         //The only case that a person can bid twice in a row. (But impossible without messing with the database).
-        if($startPrice > $highestBid){
+        if ($startPrice > $highestBid) {
             return array("no_Biddings", $seller, $startPrice);
-        }
-        else{
+        } else {
             return array("a_Bidder", $seller, $highestBid, $highestBidder);
         }
 
-    }
-    else{
+    } else {
         return array("no_Biddings", $seller, $startPrice);
     }
 }
@@ -107,7 +105,7 @@ if (isset($_POST['verstuur_bod'])) {
         $bod = $_POST['bod'];
 
         //Must be a number.
-        if(is_numeric($bod)){
+        if (is_numeric($bod)) {
 
             //Rounded down to 2 decimals. For some reason the function number_format makes the float an string again.
             $bod = (float)number_format($bod, 2);
@@ -115,45 +113,30 @@ if (isset($_POST['verstuur_bod'])) {
             $auctionAndBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
             $seller = $auctionAndBiddingDetails[1];
             $price = $auctionAndBiddingDetails[2];
-            $minimumBidPrice;
-
-            //Er is een verhoging nodig.
-            if($auctionAndBiddingDetails[0] == "a_Bidder"){
-                echo "hit";
-                $minimumBidPrice = minimumPrice($price);
-            }
-            //Eerste bod dus startprijs = minimale prijs.
-            else{
-                echo "miss";
-                $minimumBidPrice = $price;
-            }
+            $minimumBidPrice = minimumPrice($price);
 
             //Seller tries to bid on his own auction.
-            if($seller == $_SESSION['ingelogde_gebruiker']){
+            if ($seller == $_SESSION['ingelogde_gebruiker']) {
                 $errorMessage = "U mag niet op uw eigen veilingen bieden.";
-            }
-            else{
+            } else {
                 //Impossible username.
                 $highest_Bid_Username = "a";
                 //There is at least 1 bid that has been placed.
-                if($auctionAndBiddingDetails[0] == "a_Bidder"){
+                if ($auctionAndBiddingDetails[0] == "a_Bidder") {
                     $highest_Bid_Username = $auctionAndBiddingDetails[3];
                 }
                 //This user has the last (and highest) bid already on him.
-                if($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']){
+                if ($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']) {
                     $errorMessage = "U heeft al geboden.";
-                }
-                else{
-                    if($minimumBidPrice <= $bod){
+                } else {
+                    if ($minimumBidPrice <= $bod) {
                         insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
-                    }
-                    else{
+                    } else {
                         $errorMessage = "U moet hoger bieden.";
                     }
                 }
             }
-        }
-        else{
+        } else {
             $errorMessage = "U moet een juist bedrag invoeren.";
         }
 
@@ -222,9 +205,10 @@ function echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs)
 }
 
 // Check of er een afbeelding is gevonden of niet.
-function c_file_exists($file){
+function c_file_exists($file)
+{
     $file_headers = @get_headers($file);
-    if(strpos($file_headers[0], '404 Not Found')) {
+    if (strpos($file_headers[0], '404 Not Found')) {
         return false;
     }
     return true;
@@ -233,23 +217,26 @@ function c_file_exists($file){
 //Functie die de hoofdfoto toont die bij een veiling hoort
 function echoMainpicture($pictureAuctionResult)
 {
-    $mainPictureArray = $pictureAuctionResult[0];
-    $mainPicture = $mainPictureArray[0];
+    echo '<div>';
+    foreach ($pictureAuctionResult as $mainPicture) {
 
-    if(c_file_exists('http://iproject4.icasites.nl/pics/'.$mainPicture)) {
-        echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$mainPicture' alt='Foto van een product' >";
-    } else {
-        echo "<img class='detailfoto' src='upload/$mainPicture' alt='Foto van een product' >";
+        if (c_file_exists('http://iproject4.icasites.nl/pics/' . $mainPicture[0])) {
+            echo "<img class='detailfoto mySlides' src='http://iproject4.icasites.nl/pics/$mainPicture[0]' alt='Foto van een product' >";
+        } else {
+            echo "<img class='detailfoto' src='upload/$mainPicture[0]' alt='Foto van een product' >";
+        }
     }
+    echo '<button class="detailpagina-button-left" onclick="plusDivs(-1)">&#10094; Vorige foto</button>
+          <button class="detailpagina-button-right" onclick="plusDivs(1)">Volgende foto &#10095;</button></div>';
 }
 
 //Functie die de subfoto's toont die bij een veiling horen
 function echoSubpictures($pictureAuctionResult)
 {
     foreach ($pictureAuctionResult as $picture) {
-        if(c_file_exists('http://iproject4.icasites.nl/pics/'.$picture[0])) {
-        echo "<img class='detailsubfoto' src='http://iproject4.icasites.nl/pics/$picture[0]' alt='Subfoto van een product'>";
-    } else {
+        if (c_file_exists('http://iproject4.icasites.nl/pics/' . $picture[0])) {
+            echo "<img class='detailsubfoto' src='http://iproject4.icasites.nl/pics/$picture[0]' alt='Subfoto van een product'>";
+        } else {
             echo "<img class='detailsubfoto' src='upload/$picture[0]' alt='Foto van een product'>";
         }
     }
@@ -311,122 +298,144 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
 
 
 <body>
-    <?php include_once "components/header.php"; ?>
-    <div class="grid-container">
-        <div class="grid-x grid-margin-x detailpagina">
-            <div class="medium-12 large-12 float-center cell">
-                <!--- Breadcrumbs -->
-                <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
-                    <ul class="breadcrumbs">
-                        <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
-                        <!---<li>
-                        <span class="show-for-sr">Current: </span> Huidige cat.
-                    </li>-->
-                    </ul>
-                </nav>
-
-                <!---<select class="float-right veilingen-filter-hoofd ">
-                <option>Optie 1</option>
-                <option>Optie 2</option>
-                <option>Optie 3</option>
-                <option>Optie 4</option>
-                <option>Optie 5</option>
-            </select>-->
-
-            </div>
-            <div clas <div class="cell">
-                <h2>
-                    <?php echo $title ?>
-                </h2>
-            </div>
-            <div class="cell large-7 productdetails flexColumn">
-                <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
-                <!--Note to self: Nog implementeren dat bij klik op subfoto dat de hoofdfoto wordt-->
-                <?php echoMainpicture($pictureAuctionResult) ?>
-                <div class="spaceAround marginTopAuto">
-                    <?php echoSubpictures($pictureAuctionResult) ?>
-                </div>
-            </div>
-            <div class="cell large-5 detail-biedingen">
-                <div class="spaceBetween">
-                    <h3>Doe een bod</h3>
-                    <h4 class="detail-timer" id="timer"></h4>
-                </div>
-                <hr>
-                <div>
-                    <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
-                        bent u verplicht te betalen als u het product wint.</p>
-                </div>
-                <?php wrongBiddingMessage(); ?>
-                <div>
-                    <form class="spaceBetween" method="POST">
-                        <input type="text" placeholder="Vul bedrag in..." name="bod" value="<?php echo getMinimumPrice(); ?>">
-                        <input class="button" type="submit" value="Bieden" name="verstuur_bod">
-                        <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
-                    </form>
-                </div>
-                <div class="detail-bedragen">
-                    <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
-                </div>
-                <div class="detail-aantal">
-                    <h4>Aantal
-                        biedingen:
-                        <?php echo $finalAmountBidsAuction > 0 || $finalAmountBidsAuction !== null ? $finalAmountBidsAuction : "0" ?>
-                    </h4>
-                </div>
-            </div>
-            <div class="cell detailpagina-omschrijving">
-                <ul class="tabs" data-tabs id="example-tabs">
-                    <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
-                    <li class="tabs-title"><a href="#panel2">Feedback</a></li>
+<?php include_once "components/header.php"; ?>
+<div class="grid-container">
+    <div class="grid-x grid-margin-x detailpagina">
+        <div class="medium-12 large-12 float-center cell">
+            <!--- Breadcrumbs -->
+            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
+                <ul class="breadcrumbs">
+                    <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
+                    <!---<li>
+                    <span class="show-for-sr">Current: </span> Huidige cat.
+                </li>-->
                 </ul>
-                <hr>
-                <div class="tabs-content" data-tabs-content="example-tabs">
-                    <div class="tabs-panel is-active" id="panel1">
-                        <iframe src="components/productomschrijving.php" class="detailpagina_iframe"></iframe>
-                    </div>
-                    <div class="tabs-panel" id="panel2">
-                        <!--Note: Iemand moet dit nog werkend maken-->
-                        <p>
-                            Yes, sir. I think those new droids are going to work out fine.
-                            In fact, I, uh, was also thinking about our agreement about my staying on another season.
-                            And if these new droids do work out, I want to transmit my application to the Academy this year.
-                            You mean the next semester before harvest? Sure, there're more than enough droids.
-                            Harvest is when I need you the most. Only one more season.
-                            This year we'll make enough on the harvest so I'll be able to hire some more hands.
-                            And then you can go to the Academy next year. You must understand I need you here, Luke.
-                            But it's a whole 'nother year. Look, it's only one more season.
-                            Yeah, that's what you said last year when Biggs and Tank left. Where are you going? It looks like I'm going nowhere.
-                            I have to finish cleaning those droids.
-                        </p>
-                    </div>
-                    <?php include "components/scripts.html"; ?>
-                    <!--    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>-->
-                    <!--    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>-->
-                    <!--    <script>-->
-                    <!--        $(document).foundation();-->
-                    <!--    </script>-->
-                    <script>
-                        var countdownDate = new Date("<?php echo $endTime; ?>").getTime();
-                        var interval = setInterval(function() {
-                            var now = new Date().getTime();
-                            var distance = countdownDate - now;
-                            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                            document.getElementById("timer").innerHTML = days + "d " + hours + "h " +
-                                minutes + "m " + seconds + "s ";
-                            if (distance < 0) {
-                                clearInterval(interval);
-                                document.getElementById("timer").innerHTML = "Veiling beëindigd";
-                            }
-                        }, 1000);
-                    </script>
+            </nav>
+
+            <!---<select class="float-right veilingen-filter-hoofd ">
+            <option>Optie 1</option>
+            <option>Optie 2</option>
+            <option>Optie 3</option>
+            <option>Optie 4</option>
+            <option>Optie 5</option>
+        </select>-->
+
+        </div>
+        <div clas
+        <div class="cell">
+            <h2>
+                <?php echo $title ?>
+            </h2>
+        </div>
+        <div class="cell large-7 productdetails flexColumn">
+            <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
+            <!--Note to self: Nog implementeren dat bij klik op subfoto dat de hoofdfoto wordt-->
+            <?php echoMainpicture($pictureAuctionResult) ?>
+            <div class="spaceAround marginTopAuto">
+                <?php echoSubpictures($pictureAuctionResult) ?>
+            </div>
+        </div>
+        <div class="cell large-5 detail-biedingen">
+            <div class="spaceBetween">
+                <h3>Doe een bod</h3>
+                <h4 class="detail-timer" id="timer"></h4>
+            </div>
+            <hr>
+            <div>
+                <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
+                    bent u verplicht te betalen als u het product wint.</p>
+            </div>
+            <?php wrongBiddingMessage(); ?>
+            <div>
+                <form class="spaceBetween" method="POST">
+                    <input type="text" placeholder="Vul bedrag in..." name="bod"
+                           value="<?php echo getMinimumPrice(); ?>">
+                    <input class="button" type="submit" value="Bieden" name="verstuur_bod">
+                    <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
+                </form>
+            </div>
+            <div class="detail-bedragen">
+                <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
+            </div>
+            <div class="detail-aantal">
+                <h4>Aantal
+                    biedingen:
+                    <?php echo $finalAmountBidsAuction > 0 || $finalAmountBidsAuction !== null ? $finalAmountBidsAuction : "0" ?>
+                </h4>
+            </div>
+        </div>
+        <div class="cell detailpagina-omschrijving">
+            <ul class="tabs" data-tabs id="example-tabs">
+                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
+                <li class="tabs-title"><a href="#panel2">Feedback</a></li>
+            </ul>
+            <hr>
+            <div class="tabs-content" data-tabs-content="example-tabs">
+                <div class="tabs-panel is-active" id="panel1">
+                    <iframe src="components/productomschrijving.php" class="detailpagina_iframe"></iframe>
                 </div>
+                <div class="tabs-panel" id="panel2">
+                    <!--Note: Iemand moet dit nog werkend maken-->
+                    <p>
+                        Yes, sir. I think those new droids are going to work out fine.
+                        In fact, I, uh, was also thinking about our agreement about my staying on another season.
+                        And if these new droids do work out, I want to transmit my application to the Academy this year.
+                        You mean the next semester before harvest? Sure, there're more than enough droids.
+                        Harvest is when I need you the most. Only one more season.
+                        This year we'll make enough on the harvest so I'll be able to hire some more hands.
+                        And then you can go to the Academy next year. You must understand I need you here, Luke.
+                        But it's a whole 'nother year. Look, it's only one more season.
+                        Yeah, that's what you said last year when Biggs and Tank left. Where are you going? It looks
+                        like I'm going nowhere.
+                        I have to finish cleaning those droids.
+                    </p>
+                </div>
+                <?php include "components/scripts.html"; ?>
+                <!--    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+                <!--    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>-->
+                <!--    <script>-->
+                <!--        $(document).foundation();-->
+                <!--    </script>-->
+                <script>
+                    var countdownDate = new Date("<?php echo $endTime; ?>").getTime();
+                    var interval = setInterval(function () {
+                        var now = new Date().getTime();
+                        var distance = countdownDate - now;
+                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        document.getElementById("timer").innerHTML = days + "d " + hours + "h " +
+                            minutes + "m " + seconds + "s ";
+                        if (distance < 0) {
+                            clearInterval(interval);
+                            document.getElementById("timer").innerHTML = "Veiling beëindigd";
+                        }
+                    }, 1000);
+                </script>
+                <script>
+                    var slideIndex = 1;
+                    showDivs(slideIndex);
+
+                    function plusDivs(n) {
+                        showDivs(slideIndex += n);
+                    }
+
+                    function showDivs(n) {
+                        var i;
+                        var x = document.getElementsByClassName("mySlides");
+                        if (n > x.length) {slideIndex = 1}
+                        if (n < 1) {slideIndex = x.length}
+                        for (i = 0; i < x.length; i++) {
+                            x[i].style.display = "none";
+                        }
+                        x[slideIndex-1].style.display = "block";
+                    }
+                </script>
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>
