@@ -1,3 +1,40 @@
+<?php
+    function isVerkoper($Gebruiker){
+        global $dbh;
+        $check_Is_Verkoper_query = "SELECT Verkoper FROM Gebruiker WHERE Gebruikersnaam = :gebruikersnaam";
+        $check_Is_Verkoper = $dbh->prepare($check_Is_Verkoper_query);
+        $check_Is_Verkoper->bindParam(":gebruikersnaam", $Gebruiker, PDO::PARAM_STR);
+        $check_Is_Verkoper->execute();
+
+        $isVerkoper = $check_Is_Verkoper->fetch(PDO::FETCH_OBJ)->Verkoper;
+
+        if($isVerkoper == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function moetPostverifictatie($Gebruiker){
+        global $dbh;
+        $check_Moet_Verificatie_query = "SELECT VerificatieCode FROM PostVerificatie WHERE Gebruikersnaam = :gebruikersnaam";
+        $check_Moet_Verificatie = $dbh->prepare($check_Moet_Verificatie_query);
+        $check_Moet_Verificatie->bindParam(":gebruikersnaam", $Gebruiker, PDO::PARAM_STR);
+        $check_Moet_Verificatie->execute();
+
+        if($check_Moet_Verificatie->rowCount() != 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+ ?>
+
+
+
 <div class="header hide-for-small-only">
     <div class="grid-container noPadding">
         <div class="grid-x">
@@ -7,17 +44,44 @@
                     <?php
                     if (!isset($_SESSION['ingelogde_gebruiker'])) {
                         echo '
-                                <div class="menu menu-account">
+                            <div class="menu menu-account">
                                 <li><a class="blackHover" href="login.php"> Inloggen</a></li>
                                 <li><p>|</p></li>
                                 <li><a class="blackHover" href="pre-registreer.php"> Registreren</a></li>
-                                </div>';
+                            </div>
+                        ';
                     } else {
-                        echo '<li><a class="blackHover" href="mijn_profiel.php"> mijn profiel</a></li><li><a>|</a></li><li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
-                    }
-                    if (isset($_SESSION['ingelogde_gebruiker'])) {
+                        echo '
+                            <li><a class="blackHover" href="mijn_profiel.php"> Mijn profiel</a></li>
+                            <li><a>|</a></li>
+                        ';
+                        if(isVerkoper($_SESSION['ingelogde_gebruiker'])){
+                            echo '
+                                <li><a class="blackHover" href="verkopen_object.php"> Verkopen object</a></li>
+                                <li><a>|</a></li>
+                            ';
+                        }
+                        else if(moetPostverifictatie($_SESSION['ingelogde_gebruiker'])){
+                            echo '
+                                <li><a class="blackHover" href="verkopersCodeInvoeren.php"> Verkoper code invoeren</a></li>
+                                <li><a>|</a></li>
+                            ';
+                        }
+                        else{
+                            echo '
+                                <li><a class="blackHover" href="verkoper_worden.php"> Verkoper worden</a></li>
+                                <li><a>|</a></li>
+                            ';
+                        }
+                        echo'
+                            <li><a class="blackHover" href="logout.php"> Uitloggen</a></li>
+                        ';
+
                         if ($_SESSION['ingelogde_gebruiker'] == 'tigersclaw4') {
-                            echo '<li><a>|</a></li><li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>';
+                            echo '
+                                <li><a>|</a></li>
+                                <li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>
+                            ';
                         }
                     }
                     ?>
@@ -28,6 +92,8 @@
 </div>
 
 <?php include_once "rubriekenBoom.php"; ?>
+
+<!-- Header voor telefoon -->
 
 <div class="off-canvas-content data-off-canvas-content">
     <div class="ecommerce-header-mobile hide-for-medium">

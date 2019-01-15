@@ -55,7 +55,12 @@ function minimumPrice($price)
 
 function getMinimumPrice()
 {
-    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
+    if(auctionBiddingDetails($_GET['Voorwerpnummer'])[0] == "a_Bidder"){
+        return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
+    }
+    else{
+        return auctionBiddingDetails($_GET['Voorwerpnummer'])[2];
+    }
 }
 
 function auctionBiddingDetails($voorwerpNummer)
@@ -113,7 +118,18 @@ if (isset($_POST['verstuur_bod'])) {
             $auctionAndBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
             $seller = $auctionAndBiddingDetails[1];
             $price = $auctionAndBiddingDetails[2];
-            $minimumBidPrice = minimumPrice($price);
+            $minimumBidPrice;
+
+            //Er is een verhoging nodig.
+            if($auctionAndBiddingDetails[0] == "a_Bidder"){
+                echo "hit";
+                $minimumBidPrice = minimumPrice($price);
+            }
+            //Eerste bod dus startprijs = minimale prijs.
+            else{
+                echo "miss";
+                $minimumBidPrice = $price;
+            }
 
             //Seller tries to bid on his own auction.
             if ($seller == $_SESSION['ingelogde_gebruiker']) {
