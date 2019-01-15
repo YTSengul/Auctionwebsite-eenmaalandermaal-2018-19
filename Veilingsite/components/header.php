@@ -5,17 +5,19 @@
                 <h1><a href="index.php">Eenmaal Andermaal</a></h1>
                 <ul class="menu align-right">
                     <?php
-                        if (!isset($_SESSION['ingelogde_gebruiker'])) {
-                            echo '
+                    if (!isset($_SESSION['ingelogde_gebruiker'])) {
+                        echo '
                                 <div class="menu menu-account">
                                 <li><a class="blackHover" href="login.php"> Inloggen</a></li>
                                 <li><p>|</p></li>
                                 <li><a class="blackHover" href="pre-registreer.php"> Registreren</a></li>
                                 </div>';
-                        }
-                        else {
-                            echo '<li><a class="blackHover" href="mijn_profiel.php"> mijn profiel</a></li><li><a>|</a></li><li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
-                        }
+                    } else {
+                        echo '<li><a class="blackHover" href="mijn_profiel.php"> mijn profiel</a></li><li><a>|</a></li><li><a class="blackHover" href="verkopen_object.php"> verkopen object</a></li><li><a>|</a></li><li><a class="blackHover" href="logout.php"> uitloggen</a></li>';
+                    }
+                    if (isset($_SESSION['ingelogde_gebruiker']) == 'y.t.sengul') {
+                        echo '<li><a>|</a></li><li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>';
+                    }
                     ?>
                 </ul>
             </div>
@@ -49,15 +51,14 @@
 
     <ul class="vertical menu">
         <?php
-            if (!isset($_SESSION['ingelogde_gebruiker'])) {
-                echo '
+        if (!isset($_SESSION['ingelogde_gebruiker'])) {
+            echo '
                     <li><a href="login.php"> Inloggen</a></li>
                     <li><a href="registreren.php"> Registreren</a></li>
                 ';
-            }
-            else {
-                echo '<li><a href="logout.php"> uitloggen</a></li>';
-            }
+        } else {
+            echo '<li><a href="logout.php"> uitloggen</a></li>';
+        }
         ?>
         <li><a href="#">Rubriekenboom</a></li>
     </ul>

@@ -17,6 +17,20 @@ $formulier_check = true;
 // de boolean voor de afbeelding. gaat aan als er een onjuist document word geladen
 $afbeelding_onjuist = false;
 
+// Voor de opgeslagen variabelen in de sessie
+if (!isset($_SESSION['first_on_website'])) {
+    if(isset($_SESSION["formulier_teller"])) {
+        unset($_SESSION["formulier_teller"]);
+    }
+    if(isset($_SESSION["gekozen_rubrieknaam"])) {
+        unset($_SESSION["gekozen_rubrieknaam"]);
+    }
+    if (isset($_SESSION["hoofdrubriek"])) {
+        unset($_SESSION["hoofdrubriek"]);
+    }
+    $_SESSION['first_on_website'] = true;
+}
+
 function image_processor()
 {
     global $nieuw_voorwerpnummer;
@@ -154,6 +168,8 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_add_image->execute();
         }
 
+        // De pagina gegevens worden op deze manier gereset indien de gebruiker opnieuw gegevens wilt toevoegen
+        $_SESSION['first_on_website'] = false;
         header('location:mijn_profiel.php');
 
     }
@@ -174,7 +190,7 @@ function rubrieken()
             $_SESSION['formulier_teller'] = $_POST['rubriek_zoek_getal'] += 1;
             $_SESSION['hoofdrubriek'][$_POST['rubriek_zoek_getal']] = $hoofdrubriek;
         } else {
-            $hoofdrubriek = $_SESSION['gekozen_rubrieknummer'];
+            $hoofdrubriek = -1;
         }
     };
 

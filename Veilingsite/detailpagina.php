@@ -204,19 +204,36 @@ function echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs)
     }
 }
 
+// Check of er een afbeelding is gevonden of niet.
+function c_file_exists($file){
+    $file_headers = @get_headers($file);
+    if(strpos($file_headers[0], '404 Not Found')) {
+        return false;
+    }
+    return true;
+}
+
 //Functie die de hoofdfoto toont die bij een veiling hoort
 function echoMainpicture($pictureAuctionResult)
 {
     $mainPictureArray = $pictureAuctionResult[0];
     $mainPicture = $mainPictureArray[0];
-    echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$mainPicture' alt='Foto van een product'>";
+    if(c_file_exists('http://iproject4.icasites.nl/pics/$mainPicture')) {
+        echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$mainPicture' alt='Foto van een product'>";
+    } else {
+        echo "<img class='detailfoto' src='upload/$mainPicture' alt='Foto van een product'>";
+    }
 }
 
 //Functie die de subfoto's toont die bij een veiling horen
 function echoSubpictures($pictureAuctionResult)
 {
     foreach ($pictureAuctionResult as $picture) {
+        if(c_file_exists('http://iproject4.icasites.nl/pics/'.$picture[0])) {
         echo "<img class='detailsubfoto' src='http://iproject4.icasites.nl/pics/$picture[0]' alt='Subfoto van een product'>";
+    } else {
+            echo "<img class='detailsubfoto' src='upload/$picture[0]' alt='Foto van een product'>";
+        }
     }
 }
 

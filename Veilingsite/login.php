@@ -13,9 +13,6 @@ $mail_in_gebruik = false;
 if(isset($_GET['mailadres'])){
     $mail_in_gebruik = true;
 }
-if(isset($_GET['gebruikersnaam'])){
-    $gebruikersnaam = $_GET['gebruikersnaam'];
-}
 
 if (isset($_POST["login"])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];

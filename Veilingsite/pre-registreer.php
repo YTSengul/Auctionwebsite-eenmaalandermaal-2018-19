@@ -26,7 +26,7 @@ if (isset($_POST['vraag_verificatiecode_op'])) {
     $sql_check_mail_data = $sql_check_mail->fetchAll(PDO::FETCH_NUM);
 
     if (sizeof($sql_check_mail_data) > 0) {
-        header('Location:login.php?mailadres=in_gebruik&gebruikersnaam='.$pre_emailadres);
+        header('Location:login.php?mailadres=in_gebruik');
     } else {
 
         $verify_until = date('Y-m-d H:i:s', strtotime('4 hour'));
