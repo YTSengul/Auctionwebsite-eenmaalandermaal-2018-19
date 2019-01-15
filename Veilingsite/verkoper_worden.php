@@ -103,8 +103,8 @@
                     }
                 }
 
-                //Creditcard
                 if($bankJuist && $bankrekeningJuist && $creditcardJuist){
+                    //Creditcard
                     if($_POST['Controle_optie'] == $Verification_Option1){
                         if($bankFilledIn || $bankrekeningFilledIn){
                             if($bankFilledIn && $bankrekeningFilledIn){
@@ -138,6 +138,7 @@
 
                             maakVerkoper();
                         }
+                        header('location: index.php');
                     }
                     //Post
                     else{
@@ -170,6 +171,7 @@
                             $verkoper_Worden->bindParam(4, $_POST['Controle_optie'], PDO::PARAM_STR);
                             $verkoper_Worden->execute();
                         }
+                        header('location: index.php');
                     }
                 }
             }
