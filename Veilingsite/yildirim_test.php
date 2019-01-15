@@ -1,262 +1,441 @@
 <?php
-
 include_once "components/connect.php";
-
 include_once "components/meta.php";
 
-include_once 'components/header.php';
+$errorMessage = "";
 
-// Op deze plaats worden de nieuwe volgnummers naar de database gestuurd indie die zij uitgevoerd
-if (isset($_POST['rubriek_sorteer'])) {
-    $sql_wijzig_volgnummer_query = 'update rubriek set Volgnummer = :volgnummer where Rubrieknummer = :rubrieknummer ';
-    $sql_wijzig_volgnummer = $dbh->prepare($sql_wijzig_volgnummer_query);
-
-    foreach ($_POST as $Rubrieknummer => $Volgnummer) {
-        if ($Rubrieknummer != 'rubriek_sorteer') {
-            $sql_wijzig_volgnummer->bindParam(":volgnummer", $Volgnummer);
-            $sql_wijzig_volgnummer->bindParam(":rubrieknummer", $Rubrieknummer);
-            $stuur_nieuwe_volgnummers = $sql_wijzig_volgnummer->execute();
-        }
-
-    }
-    $s = $_SERVER['REQUEST_URI'];
-    $nieuwe_string_na_sorteren = strstr($s, '?', true);
-    header('Location:' . $nieuwe_string_na_sorteren);
-} // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
-else if (isset($_POST['rubriek_hernoem_stuur'])) {
-
-    $nieuwe_rubriek_naam = $_POST['hernoem_rubriek'];
-    $nummer_van_hernoem_rubriek = $_POST['nummer_van_hernoem_rubriek'];
-
-    $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
-    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
-
-    $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
-    $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
-
-    $stuur_nieuwe_rubrieknaam = $sql_nieuwe_rubrieknaam->execute();
-
-    try {
-        if ($stuur_nieuwe_rubrieknaam) {
-            echo "<br>succesvol toegevoegd aan database";
-        } else {
-            echo "<br>niet toegevoegd aan database";
-        }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-} // Het versturen van de nieuwe Subrubriek naar de database
-else if (isset($_POST["subrubriek_voegtoe"])) {
-
-    $sql_neem_hoogste_rubrieknummer = "select MAX(RubriekNummer) from Rubriek";
-    $sql_hoogste_rubrieknummer = $dbh->prepare($sql_neem_hoogste_rubrieknummer);
-    $sql_hoogste_rubrieknummer->execute();
-    $hoogste_rubrieknummer_data = $sql_hoogste_rubrieknummer->fetchAll(PDO::FETCH_NUM);
-    $hoogste_rubrieknummer = $hoogste_rubrieknummer_data[0][0];
-    $nieuw_hoogste_hoofdrubrieknummer = $hoogste_rubrieknummer += 1;
-
-    //Hoofdrubriek van de subrubriek
-    $nummer_van_hoofdrubriek = $_POST['nummer_van_hoofdrubriek'];
-
-    // Naam van de nieuwe rubriek
-    $nieuw_subrubrieknaam = $_POST['hernoem_rubriek'];
-
-    // VOlgnummer toevoegen
-    $nieuw_volgnummer = 0;
-
-    /* De nieuwe subrubriek wordt met een query in de database opgeslagen */
-    $sql_voeg_nieuwe_subrubriek_toe = "insert into Rubriek ([RubriekNummer], [RubriekNaam], [VorigeRubriek], [Volgnummer]) values (:nieuw_hoogste_rubrieknummer, :nieuw_rubrieknaam, :nieuw_rubriek, :nieuw_volgnummer)";
-    $voeg_nieuwe_subrubriek_toe = $dbh->prepare($sql_voeg_nieuwe_subrubriek_toe);
-
-
-    if ($voeg_nieuwe_subrubriek_toe) {
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_hoogste_rubrieknummer", $nieuw_hoogste_hoofdrubrieknummer, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubrieknaam", $nieuw_subrubrieknaam, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubriek", $nummer_van_hoofdrubriek, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_volgnummer", $nieuw_volgnummer, PDO::PARAM_STR);
-
-        $voeg_nieuwe_subrubriek_toe->execute();
-
-        try {
-            if ($voeg_nieuwe_subrubriek_toe) {
-                echo "<br>Succesvol toegevoegd aan database</br>";
-            } else {
-                echo "<br>Fout met toevoegen aan database</br>";
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-}
-
-function rubrieken()
+function insertBid($bid, $voorwerpNummer, $userName, $time)
 {
-    // Benoemen van de globale variabelen
     global $dbh;
 
-    if (!isset($_SESSION['formulier_teller'])) {
-        $_SESSION['formulier_teller'] = 0;
-        $_SESSION['hoofdrubriek'] = array();
+    $gebruikersnaam = $_SESSION['ingelogde_gebruiker'];
+    $verstuur_bod_query = "INSERT INTO bod (Bodbedrag, Voorwerp, Gebruikersnaam, Tijd) VALUES(?, ?, ?, ?)";
+    $verstuur_bod = $dbh->prepare($verstuur_bod_query);
+    $verstuur_bod->bindParam(1, $bid);
+    $verstuur_bod->bindParam(2, $voorwerpNummer);
+    $verstuur_bod->bindParam(3, $userName);
+    $verstuur_bod->bindParam(4, $time);
+
+    $verstuur_bod->execute();
+}
+
+function minimaleVerhoging($price)
+{
+    switch ($price) {
+        case $price < 50:
+            return 0.5;
+            break;
+        case $price >= 50 && $price < 500:
+            return 1;
+            break;
+        case $price >= 500 && $price < 1000:
+            return 5;
+            break;
+        case $price >= 1000 && $price < 5000:
+            return 10;
+            break;
+        case $price >= 5000:
+            return 50;
+            break;
+    }
+}
+
+function wrongBiddingMessage()
+{
+    global $errorMessage;
+    if ($errorMessage != null) {
+        echo "<div class='errorMessage'>" . $errorMessage . "</div>";
+    }
+}
+
+function minimumPrice($price)
+{
+    return $price + minimaleVerhoging($price);
+}
+
+function getMinimumPrice()
+{
+    return minimumPrice(auctionBiddingDetails($_GET['Voorwerpnummer'])[2]);
+}
+
+function auctionBiddingDetails($voorwerpNummer)
+{
+    global $dbh;
+
+    $auctionDetails_query = "SELECT Startprijs, Verkoper FROM Voorwerp WHERE Voorwerpnummer = :voorwerpNummer";
+    $auctionDetails = $dbh->prepare($auctionDetails_query);
+    $auctionDetails->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+    $auctionDetails->execute();
+
+    $startPriceAndSeller = $auctionDetails->fetch(PDO::FETCH_OBJ);
+    $startPrice = $startPriceAndSeller->Startprijs;
+    $seller = $startPriceAndSeller->Verkoper;
+
+    $biddingDetails_query = "SELECT TOP (:top) Bodbedrag, Gebruikersnaam FROM bod WHERE voorwerp = :voorwerpNummer ORDER BY Bodbedrag DESC";
+    $biddingDetails = $dbh->prepare($biddingDetails_query);
+    $biddingDetails->bindValue(":top", 1, PDO::PARAM_INT);
+    $biddingDetails->bindParam(":voorwerpNummer", $voorwerpNummer, PDO::PARAM_INT);
+    $biddingDetails->execute();
+
+    if ($biddingDetails->rowCount() != 0) {
+        $highestBidAndNameHighestBidder = $biddingDetails->fetch(PDO::FETCH_OBJ);
+        $highestBid = $highestBidAndNameHighestBidder->Bodbedrag;
+        $highestBidder = $highestBidAndNameHighestBidder->Gebruikersnaam;
+
+        //Double check that the bidding is higher than the starting price.
+        //If this were to be the case it will be treated as if there were no bidding yet.
+        //The only case that a person can bid twice in a row. (But impossible without messing with the database).
+        if ($startPrice > $highestBid) {
+            return array("no_Biddings", $seller, $startPrice);
+        } else {
+            return array("a_Bidder", $seller, $highestBid, $highestBidder);
+        }
+
     } else {
-        // Check of er een rubriek gekozen is of of er verdere formuliergegevens worden ingevuld
-        if (isset($_POST['rubriek_zoek_getal'])) {
-            $hoofdrubriek = $_POST["zoek_" . $_POST['rubriek_zoek_getal'] . ""];
-            $_SESSION['formulier_teller'] = $_POST['rubriek_zoek_getal'] += 1;
-            $_SESSION['hoofdrubriek'][$_POST['rubriek_zoek_getal']] = $hoofdrubriek;
-        } else {
-            $hoofdrubriek = $_SESSION['gekozen_rubrieknaam'];
-        }
+        return array("no_Biddings", $seller, $startPrice);
     }
+}
 
-    if (isset($_POST['rubriek_hernoem']) || isset($_POST["rubriek_subrubriek_invoegen"]) || isset($_POST["rubriek_sorteren"])) {
-        $_SESSION['formulier_teller'] = ($_SESSION['formulier_teller'] - 1);
-    }
+//User pressed the bid button.
+if (isset($_POST['verstuur_bod'])) {
+    //User is logged in.
+    if (isset($_SESSION['ingelogde_gebruiker'])) {
 
+        //Amount that the user bid for the auction.
+        $bod = $_POST['bod'];
 
-    for ($x = 0; $x <= $_SESSION['formulier_teller']; $x++) {
-        $eenmeerdanforloopvariabele = 1 + $x;
-        if ($x == 0) {
-            $rubriek_zoek = $_SESSION['hoofdrubriek'][0] = -1;
-        } else {
-            $rubriek_zoek = $_SESSION['hoofdrubriek'][$x];
-        }
+        //Must be a number.
+        if (is_numeric($bod)) {
 
-        global $neem_rubrieken_data;
-        // Het ophalen van de rubrieken
-        $neem_rubrieken_query = "select * from rubriek where vorigeRubriek = '" . $rubriek_zoek . "' ORDER BY 'Volgnummer' DESC ";
-        $neem_rubrieken = $dbh->prepare($neem_rubrieken_query);
-        $neem_rubrieken->execute();
-        $neem_rubrieken_data = $neem_rubrieken->fetchAll(PDO::FETCH_NUM);
+            //Rounded down to 2 decimals. For some reason the function number_format makes the float an string again.
+            $bod = (float)number_format($bod, 2);
 
-        // Als de klant van iConcepts nog niet op de laagste niveau van de rubrieken is
-        if (sizeof($neem_rubrieken_data) != 0) {
-            unset($_SESSION['gekozen_rubrieknummer']);
-            // Het laten zien van de rubriek formulier
-            echo "<div class='medium-3 large-3 cell'>
-            <form action='#' method='POST'>
-              <select name='zoek_" . $x . "'>";
-            foreach ($neem_rubrieken_data as $rubriek) {
-                if ($rubriek[0] == $_SESSION["hoofdrubriek"][$eenmeerdanforloopvariabele]) {
-                    echo "<option selected value='" . $rubriek[0] . "'>" . $rubriek[1] . "</option>";
+            $auctionAndBiddingDetails = auctionBiddingDetails($_GET['Voorwerpnummer']);
+            $seller = $auctionAndBiddingDetails[1];
+            $price = $auctionAndBiddingDetails[2];
+            $minimumBidPrice = minimumPrice($price);
+
+            //Seller tries to bid on his own auction.
+            if ($seller == $_SESSION['ingelogde_gebruiker']) {
+                $errorMessage = "U mag niet op uw eigen veilingen bieden.";
+            } else {
+                //Impossible username.
+                $highest_Bid_Username = "a";
+                //There is at least 1 bid that has been placed.
+                if ($auctionAndBiddingDetails[0] == "a_Bidder") {
+                    $highest_Bid_Username = $auctionAndBiddingDetails[3];
+                }
+                //This user has the last (and highest) bid already on him.
+                if ($highest_Bid_Username == $_SESSION['ingelogde_gebruiker']) {
+                    $errorMessage = "U heeft al geboden.";
                 } else {
-                    echo "<option value='" . $rubriek[0] . "'>" . $rubriek[1] . "</option>";
+                    if ($minimumBidPrice <= $bod) {
+                        insertBid($bod, $_GET['Voorwerpnummer'], $_SESSION['ingelogde_gebruiker'], date('Y-m-d H:s:i'));
+                    } else {
+                        $errorMessage = "U moet hoger bieden.";
+                    }
                 }
             }
-            echo "    </select>
-             <input type='hidden' name='rubriek_zoek_getal' value='" . $x . "' >
-            <input type='submit' value='zoek' name='rubriek_zoek' class='button expanded'>
-            <input type='submit' value='hernoem' name='rubriek_hernoem' class='button expanded'>
-            <input type='submit' value='subrubriek invoegen' name='rubriek_subrubriek_invoegen' class='button expanded'>
-            <input type='submit' value='sorteren' name='rubriek_sorteren' class='button expanded'>
-            </form>
-          </div>";
-        } // Als de klant van iConcepts op de laagste niveau is
-        else if (sizeof($neem_rubrieken_data) == 0) {
-            $rubriek_zoek = $_SESSION['hoofdrubriek'][$x];
-            $neem_rubrieken_query = "select * from rubriek where Rubrieknummer = '" . $rubriek_zoek . "'";
-            $neem_rubrieken = $dbh->prepare($neem_rubrieken_query);
-            $neem_rubrieken->execute();
-            $neem_rubrieken_data = $neem_rubrieken->fetchAll(PDO::FETCH_NUM);
-            $_SESSION['gekozen_rubrieknaam'] = $neem_rubrieken_data[0][1];
-            $_SESSION['gekozen_rubrieknummer'] = $neem_rubrieken_data[0][0];
+        } else {
+            $errorMessage = "U moet een juist bedrag invoeren.";
         }
+
+    } else if (!isset($_SESSION['ingelogde_gebruiker'])) {
+        $errorMessage = "Je moet eerst inloggen voordat je kan bieden.";
     }
 }
 
-// De formulier die word aangeroepen als er een keuze gemaakt word om de rubriek te hernoemen
-function formulier_hernoem()
+//Als er geen Voorwerpnummer wordt meegegeven in de header (wat meestal betekent dat de user zelf probeert om via de URL de pagina te bereiken) kan de pagina niet correct geladen worden en wordt de user teruggestuurd naar de homepage.
+if (!isset($_GET['Voorwerpnummer'])) {
+    header('location: index.php');
+}
+
+//Prepared statement voor de productinformatie
+$detailsAuction = $dbh->prepare("SELECT Titel, Beschrijving, EindMoment, Startprijs FROM Voorwerp WHERE Voorwerpnummer = ?");
+$detailsAuction->execute([$_GET['Voorwerpnummer']]);
+$resultAuction = $detailsAuction->fetch();
+
+$title = $resultAuction['Titel'];
+$description = $resultAuction['Beschrijving'];
+$endTime = $resultAuction['EindMoment'];
+$startprijs = $resultAuction['Startprijs'];
+
+//Geeft variabele door aan productomschrijving in iFrame
+$_SESSION['beschrijving'] = $description;
+
+//Prepared statement voor de images
+$pictureAuction = $dbh->prepare("SELECT Filenaam FROM Bestand WHERE Voorwerp = ?");
+$pictureAuction->execute([$_GET['Voorwerpnummer']]);
+$pictureAuctionResult = $pictureAuction->fetchAll();
+
+//Prepared statement voor de biedingen
+$topFiveBids = $dbh->prepare("SELECT TOP 4 Bodbedrag, Gebruikersnaam FROM Bod WHERE Voorwerp = ? ORDER BY Bodbedrag DESC");
+$topFiveBids->execute([$_GET['Voorwerpnummer']]);
+$resultTopFiveBids = $topFiveBids->fetchAll();
+
+// Hier wordt de eerste bieding op de veiling uit de database genomen
+$eerstebieding_query = "SELECT Bodbedrag, Gebruikersnaam FROM Bod WHERE Voorwerp = ? ORDER BY Bodbedrag ASC";
+$eerstebieding_data = $dbh->prepare($eerstebieding_query);
+$eerstebieding_data->execute([$_GET['Voorwerpnummer']]);
+$eerstebieding = $eerstebieding_data->fetchAll();
+
+//Prepared statement voor het aantal biedingen: Later samenvoegen met statement hierboven?
+$amountBidsAuction = $dbh->prepare("SELECT COUNT(Voorwerp) FROM Bod WHERE Voorwerp = ? GROUP BY Voorwerp");
+$amountBidsAuction->execute([$_GET['Voorwerpnummer']]);
+$resultAmountBidsAuction = $amountBidsAuction->fetch();
+
+$finalAmountBidsAuction = $resultAmountBidsAuction[0];
+
+//Functie die de top 5 biedingen toont met username en bedrag
+$first = true;
+function echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs)
 {
-    $marge = 1;
-    // De input voor het hernoemen van de rubrieken
-    for ($loop_teller = 0;
-         $loop_teller <= $_SESSION['formulier_teller'];
-         $loop_teller++) {
-        if (isset($_POST["rubriek_zoek_getal"])) {
-            if ((isset($_POST["rubriek_hernoem"]) == 'hernoem') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
-                echo '<form action="#" method="POST">
-                    <input type="text" name="hernoem_rubriek" >
-                    <input type="hidden" name="nummer_van_hernoem_rubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
-                    <input type="submit" value="Hernoem rubriek" name="rubriek_hernoem_stuur" class="button expanded float-right">
-            </form>';
-            }
+    global $first;
+    foreach ($resultTopFiveBids as $bidData) {
+        if ($first == true) {
+            echo '<div class="spaceBetween"><h4><b>&euro;' . $bidData[0] . '</h4><h5>' . $bidData[1] . '</b></h5></div><hr>';
+            $first = false;
+        } else {
+            echo '<div class="spaceBetween"><h4>&euro;' . $bidData[0] . '</h4><h5>' . $bidData[1] . '</h5></div><hr>';
         }
+    }
+    if ($eerstebieding != null & sizeof($eerstebieding) > 4) {
+        echo '<div class="spaceBetween"><h5>Startprijs: €' . $startprijs . '</h5><h5>Eerste bod: €' . $eerstebieding[0][0] . '</h5></div><hr>';
     }
 }
 
-// De formulier die word aangeroepen als er een keuze gemaakt word om een sububriek in te voegen
-function formulier_subrubriek_voegin()
+// Check of er een afbeelding is gevonden of niet.
+function c_file_exists($file)
 {
-    $marge = 1;
-    // De input voor het hernoemen van de rubrieken
-    for ($loop_teller = 0;
-         $loop_teller <= $_SESSION['formulier_teller'];
-         $loop_teller++) {
-        if (isset($_POST["rubriek_zoek_getal"])) {
-            if ((isset($_POST["rubriek_subrubriek_invoegen"]) == 'subrubriek invoegen') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
-                echo '<form action="#" method="POST">
-                    <input type="text" name="hernoem_rubriek" >
-                    <input type="hidden" name="nummer_van_hoofdrubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
-                    <input type="submit" value="Hernoem rubriek" name="subrubriek_voegtoe" class="button expanded float-right">
-            </form>';
-            }
-        }
+    $file_headers = @get_headers($file);
+    if (strpos($file_headers[0], '404 Not Found')) {
+        return false;
     }
+    return true;
 }
 
-// De formulier die word aangeroepen als er een keuze gemaakt word om de rubrieken te sorteren
-function formulier_sorteer()
+//Functie die de hoofdfoto toont die bij een veiling hoort
+function echoMainpicture($pictureAuctionResult)
 {
-    global ${'alle_hoofdrubrieken_data'};
-    global $neem_rubrieken_data;
-    $marge = 1;
-    for ($loop_teller = 0;
-         $loop_teller <= $_SESSION['formulier_teller'];
-         $loop_teller++) {
+    echo '<div>';
+    foreach ($pictureAuctionResult as $mainPicture) {
 
-        if (isset($_POST["rubriek_zoek_getal"])) {
-            if ((isset($_POST["rubriek_sorteren"]) == 'sorteren') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
-                echo '<form action="#" method="POST">';
-                foreach ($neem_rubrieken_data as ${'zoek_' . $loop_teller . '_rubrieken'}) {
-                    echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
-<input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
-                }
-                echo '<input type="submit" value="Hersorteer rubrieken" name="rubriek_sorteer" class="button expanded float-right">
-                    </form>';
-            }
+        if (c_file_exists('http://iproject4.icasites.nl/pics/' . $mainPicture[0])) {
+            echo "<img class='detailfoto mySlides' src='http://iproject4.icasites.nl/pics/$mainPicture[0]' alt='Foto van een product' >";
+        } else {
+            echo "<img class='detailfoto' src='upload/$mainPicture[0]' alt='Foto van een product' >";
         }
+    }
+    echo '<button class="detailpagina-button-left" onclick="plusDivs(-1)">&#10094; Vorige foto</button>
+          <button class="detailpagina-button-right" onclick="plusDivs(1)">Volgende foto &#10095;</button></div>';
+}
 
+//Functie die de subfoto's toont die bij een veiling horen
+function echoSubpictures($pictureAuctionResult)
+{
+    foreach ($pictureAuctionResult as $picture) {
+        if (c_file_exists('http://iproject4.icasites.nl/pics/' . $picture[0])) {
+            echo "<img class='detailsubfoto' src='http://iproject4.icasites.nl/pics/$picture[0]' alt='Subfoto van een product'>";
+        } else {
+            echo "<img class='detailsubfoto' src='upload/$picture[0]' alt='Foto van een product'>";
+        }
     }
 }
 
 ?>
 
+<?PHP
+
+// hier zijn de breadcrumbs in te vinden
+function create_Breadcrumbs($RubriekNummer)
+{
+    global $dbh;
+    $vind_hoofdrubriek_query = "SELECT * FROM Rubriek WHERE RubriekNummer = $RubriekNummer";
+    $vind_hoofdrubriek_data = $dbh->prepare($vind_hoofdrubriek_query);
+    $vind_hoofdrubriek_data->execute();
+    $vind_hoofdrubriek = $vind_hoofdrubriek_data->fetchAll(PDO::FETCH_NUM);
+    $hoofdrubriek = $vind_hoofdrubriek[0];
+    return $hoofdrubriek;
+}
+
+// hier wordt de array van de breadcrumb gemaakt
+$breadcrumbs_namen = array();
+$breadcrumbs_nummers = array();
+function call_Breadcrumbs($filter_rubriek, &$breadcrumbs_namen, &$breadcrumbs_nummers)
+{
+    $rubriek_voor_hoofdcategorie = NULL;
+    if ($filter_rubriek != -1) {
+        for ($x = 0; $rubriek_voor_hoofdcategorie[2] != -1; $x++) {
+            if ($rubriek_voor_hoofdcategorie != NULL) {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($rubriek_voor_hoofdcategorie[2]);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            } else {
+                $rubriek_voor_hoofdcategorie = create_Breadcrumbs($filter_rubriek);
+                array_push($breadcrumbs_namen, "$rubriek_voor_hoofdcategorie[1]");
+                array_push($breadcrumbs_nummers, "$rubriek_voor_hoofdcategorie[0]");
+            }
+        }
+    }
+    sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers);
+}
+
+//hier worden de breadcrumbs op rij gezet en geshowed dit wordt gedaan om het van achter naar voor te sorteren
+
+function sort_show_breadcrumbs($breadcrumbs_namen, $breadcrumbs_nummers)
+{
+    echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=-1'>Hoofdrubrieken</a></li>";
+    for ($x = sizeof($breadcrumbs_namen) - 1; $x >= 0; $x--) {
+        echo "<li><a href='veilingen.php?huidigepagina=1&filter_rubriek=" . $breadcrumbs_nummers[$x] . "'>$breadcrumbs_namen[$x]</a></li>";
+    }
+}
+
+$detailsAuction_bc = $dbh->prepare("SELECT RubriekOpLaagsteNiveau FROM Voorwerpinrubriek WHERE Voorwerp = " . $_GET['Voorwerpnummer']);
+$detailsAuction_bc->execute();
+$resultAuction_bc = $detailsAuction_bc->fetch();
+
+?>
+
+
+<body>
+<?php include_once "components/header.php"; ?>
 <div class="grid-container">
-    <div class="grid-x grid-padding-x">
-        <div class="medium-12 large-12 cell">
-            <h2 class="registreren_titel">Plaats voorwerp</h2>
+    <div class="grid-x grid-margin-x detailpagina">
+        <div class="medium-12 large-12 float-center cell">
+            <!--- Breadcrumbs -->
+            <nav aria-label="You are here:" role="navigation" class="veilingen-breadcrumbs">
+                <ul class="breadcrumbs">
+                    <?php call_Breadcrumbs($resultAuction_bc[0], $breadcrumbs_namen, $breadcrumbs_nummers); ?>
+                    <!---<li>
+                    <span class="show-for-sr">Current: </span> Huidige cat.
+                </li>-->
+                </ul>
+            </nav>
+
+            <!---<select class="float-right veilingen-filter-hoofd ">
+            <option>Optie 1</option>
+            <option>Optie 2</option>
+            <option>Optie 3</option>
+            <option>Optie 4</option>
+            <option>Optie 5</option>
+        </select>-->
+
         </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-        <div class="medium-12 large-12 cell">
-            <div class='medium-12 large-12 cell verkopen-object-box'>
-                <h4>Rubriek</h4>
-                <div class='grid-x grid-padding-x'>
-                    <?PHP rubrieken(); ?>
+        <div clas
+        <div class="cell">
+            <h2>
+                <?php echo $title ?>
+            </h2>
+        </div>
+        <div class="cell large-7 productdetails flexColumn">
+            <!--Note to self: Inladen foto testen op de server: replacement inladen bij error-->
+            <!--Note to self: Nog implementeren dat bij klik op subfoto dat de hoofdfoto wordt-->
+            <?php echoMainpicture($pictureAuctionResult) ?>
+            <div class="spaceAround marginTopAuto">
+                <?php echoSubpictures($pictureAuctionResult) ?>
+            </div>
+        </div>
+        <div class="cell large-5 detail-biedingen">
+            <div class="spaceBetween">
+                <h3>Doe een bod</h3>
+                <h4 class="detail-timer" id="timer"></h4>
+            </div>
+            <hr>
+            <div>
+                <p>Hier kunt u bieden. Denk goed na over uw bod. Eenmaal geboden kunt u uw bod niet meer intrekken en
+                    bent u verplicht te betalen als u het product wint.</p>
+            </div>
+            <?php wrongBiddingMessage(); ?>
+            <div>
+                <form class="spaceBetween" method="POST">
+                    <input type="text" placeholder="Vul bedrag in..." name="bod"
+                           value="<?php echo getMinimumPrice(); ?>">
+                    <input class="button" type="submit" value="Bieden" name="verstuur_bod">
+                    <!--Note to self: Op mobielschermpjes loopt knop het scherm nog uit-->
+                </form>
+            </div>
+            <div class="detail-bedragen">
+                <?php echoBedragen($resultTopFiveBids, $eerstebieding, $startprijs) ?>
+            </div>
+            <div class="detail-aantal">
+                <h4>Aantal
+                    biedingen:
+                    <?php echo $finalAmountBidsAuction > 0 || $finalAmountBidsAuction !== null ? $finalAmountBidsAuction : "0" ?>
+                </h4>
+            </div>
+        </div>
+        <div class="cell detailpagina-omschrijving">
+            <ul class="tabs" data-tabs id="example-tabs">
+                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Omschrijving</a></li>
+                <li class="tabs-title"><a href="#panel2">Feedback</a></li>
+            </ul>
+            <hr>
+            <div class="tabs-content" data-tabs-content="example-tabs">
+                <div class="tabs-panel is-active" id="panel1">
+                    <iframe src="components/productomschrijving.php" class="detailpagina_iframe"></iframe>
                 </div>
+                <div class="tabs-panel" id="panel2">
+                    <!--Note: Iemand moet dit nog werkend maken-->
+                    <p>
+                        Yes, sir. I think those new droids are going to work out fine.
+                        In fact, I, uh, was also thinking about our agreement about my staying on another season.
+                        And if these new droids do work out, I want to transmit my application to the Academy this year.
+                        You mean the next semester before harvest? Sure, there're more than enough droids.
+                        Harvest is when I need you the most. Only one more season.
+                        This year we'll make enough on the harvest so I'll be able to hire some more hands.
+                        And then you can go to the Academy next year. You must understand I need you here, Luke.
+                        But it's a whole 'nother year. Look, it's only one more season.
+                        Yeah, that's what you said last year when Biggs and Tank left. Where are you going? It looks
+                        like I'm going nowhere.
+                        I have to finish cleaning those droids.
+                    </p>
+                </div>
+                <?php include "components/scripts.html"; ?>
+                <!--    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+                <!--    <script src="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.js"></script>-->
+                <!--    <script>-->
+                <!--        $(document).foundation();-->
+                <!--    </script>-->
+                <script>
+                    var countdownDate = new Date("<?php echo $endTime; ?>").getTime();
+                    var interval = setInterval(function () {
+                        var now = new Date().getTime();
+                        var distance = countdownDate - now;
+                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        document.getElementById("timer").innerHTML = days + "d " + hours + "h " +
+                            minutes + "m " + seconds + "s ";
+                        if (distance < 0) {
+                            clearInterval(interval);
+                            document.getElementById("timer").innerHTML = "Veiling beëindigd";
+                        }
+                    }, 1000);
+                </script>
+                <script>
+                    var slideIndex = 1;
+                    showDivs(slideIndex);
 
-                <?php
-                formulier_hernoem();
+                    function plusDivs(n) {
+                        showDivs(slideIndex += n);
+                    }
 
-                formulier_subrubriek_voegin();
-
-                formulier_sorteer();
-                ?>
-
+                    function showDivs(n) {
+                        var i;
+                        var x = document.getElementsByClassName("mySlides");
+                        if (n > x.length) {slideIndex = 1}
+                        if (n < 1) {slideIndex = x.length}
+                        for (i = 0; i < x.length; i++) {
+                            x[i].style.display = "none";
+                        }
+                        x[slideIndex-1].style.display = "block";
+                    }
+                </script>
             </div>
         </div>
     </div>
 </div>
-<?php include "components/scripts.html"; ?>
 </body>
-</html>
 
+</html>

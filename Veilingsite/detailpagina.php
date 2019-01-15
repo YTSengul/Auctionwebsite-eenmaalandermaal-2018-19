@@ -218,10 +218,11 @@ function echoMainpicture($pictureAuctionResult)
 {
     $mainPictureArray = $pictureAuctionResult[0];
     $mainPicture = $mainPictureArray[0];
-    if(c_file_exists('http://iproject4.icasites.nl/pics/$mainPicture')) {
-        echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$mainPicture' alt='Foto van een product'>";
+
+    if(c_file_exists('http://iproject4.icasites.nl/pics/'.$mainPicture)) {
+        echo "<img class='detailfoto' src='http://iproject4.icasites.nl/pics/$mainPicture' alt='Foto van een product' >";
     } else {
-        echo "<img class='detailfoto' src='upload/$mainPicture' alt='Foto van een product'>";
+        echo "<img class='detailfoto' src='upload/$mainPicture' alt='Foto van een product' >";
     }
 }
 
