@@ -248,7 +248,7 @@
             <form action="#" method="POST">
                 <label>' . $bank . placeStar($_POST['Controle_optie'], $bank) . '</label>
                 <p>' . $errorMessageBank . '</p>
-                <input type="text" placeholder="Allen kleine letters en hoofdletters. Min 3, Max 20" name="' . $bank . '" value="' . $bankValue . '">
+                <input type="text" placeholder="Alleen kleine letters en hoofdletters. Min 3, Max 20" name="' . $bank . '" value="' . $bankValue . '">
                 <label>' . $bankrekening . placeStar($_POST['Controle_optie'], $bankrekening) . '</label>
                 <p>' . $errorMessageBankrekening . '</p>
                 <input type="text" placeholder="Alleen Hoofdletters en Cijfers. Min 15, Max 30" name="' . $bankrekening . '" value="' . $bankrekeningValue . '">

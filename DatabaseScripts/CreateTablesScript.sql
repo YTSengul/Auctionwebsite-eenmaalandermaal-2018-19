@@ -220,6 +220,7 @@ CREATE TABLE Voorwerp
 )
 GO
 
+
 /*
 ======================================================================
 	Table: Bestand
@@ -329,13 +330,13 @@ CREATE TABLE PostVerificatie
 
 GO
 
-select * from PostVerificatie
-Select * from Verkoper
-select * from Gebruiker where Gebruikersnaam = 'Stefan oude Lohuis'
-delete From Verkoper
-delete from PostVerificatie
-Drop table PostVerificatie
-update Gebruiker set Verkoper = 0 where Gebruikersnaam = 'croata'
+--select * from PostVerificatie
+--Select * from Verkoper
+--select * from Gebruiker where Gebruikersnaam = 'Stefan oude Lohuis'
+--delete From Verkoper
+--delete from PostVerificatie
+--Drop table PostVerificatie
+--update Gebruiker set Verkoper = 0 where Gebruikersnaam = 'croata'
 GO
 
 
