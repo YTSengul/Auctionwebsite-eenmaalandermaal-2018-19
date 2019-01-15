@@ -9,6 +9,14 @@ $valid = 0;
 $invalid = 1;
 $login_verification = $valid;
 
+$mail_in_gebruik = false;
+if(isset($_GET['mailadres'])){
+    $mail_in_gebruik = true;
+}
+if(isset($_GET['gebruikersnaam'])){
+    $gebruikersnaam = $_GET['gebruikersnaam'];
+}
+
 if (isset($_POST["login"])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];
     $wachtwoord = $_POST['wachtwoord'];
@@ -48,7 +56,7 @@ if (isset($_POST["login"])) {
                 <label>Gebruikersnaam </label>
                 <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
-                } ?> type='text' name="gebruikersnaam" placeholder='Gebruikersnaam'>
+                } ?> type='text' name="gebruikersnaam" placeholder='Gebruikersnaam' value="<?PHP if(isset($gebruikersnaam)){echo $gebruikersnaam;} ?>" >
                 <label>Wachtwoord</label>
                 <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
@@ -58,6 +66,9 @@ if (isset($_POST["login"])) {
                 } ?>
                 <input type="submit" value="Login" name="login" class="button expanded float-right">
             </form>
+
+            <?PHP if($mail_in_gebruik) { echo "<p>Er staat al een account geregistreerd op deze emailadres.</p>"; } ?>
+
         </div>
 
     </div>

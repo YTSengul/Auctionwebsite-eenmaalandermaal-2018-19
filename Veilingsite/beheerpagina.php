@@ -224,9 +224,6 @@ function formulier_hernoem()
                     <input type="hidden" name="nummer_van_hernoem_rubriek" value="' . $_GET["zoek_$loop_teller"] . '"> 
                     <input type="submit" value="Hernoem rubriek" name="rubriek_hernoem" class="button expanded float-right">
             </form>';
-                echo '<pre>';
-                print_r($_GET);
-                echo '</pre>';
             }
         }
     }

@@ -12,9 +12,28 @@ $formulier_validation = $valid;
 $gebruikersnaam_validation = $valid;
 $wachtwoord_validation = $valid;
 
-// Hier wordt de hash uit de link gehaald
+// Hier wordt de hash uit de link gehaald, indien hij bestaat
 if (isset($_GET['hash'])) {
     $hash = $_GET['hash'];
+} else {
+    header('Location:pre-registreer.php?verificatie=onjuist');
+}
+
+// Hier wordt de tijd uit de link gehaald, indien hij bestaat
+if (isset($_GET['verify_until'])) {
+    $verify_until = $_GET['verify_until'];
+    if(date('Y-m-d H:i:s') > $_GET['verify_until']) {
+        header('Location:pre-registreer.php?tijd=verlopen');
+    }
+} else {
+    header('Location:pre-registreer.php?verificatie=onjuist');
+}
+
+// Hier wordt de emailadres uit de link gehaald, indien hij bestaat
+if (isset($_GET['emailadres'])) {
+    $emailadres = $_GET['emailadres'];
+} else {
+    header('Location:pre-registreer.php?verificatie=onjuist');
 }
 
 /* Mailbox definieren voor de check */
@@ -72,7 +91,7 @@ else {
 }
 
 // Check of de hash klopt met de gestuurde hash in de header
-if (md5($emailadres . 'sadvbsydbfdsbm') != $hash) {
+if (md5($emailadres . $verify_until . 'sadvbsydbfdsbm') != $hash) {
     $formulier_validation = $invalid;
     //header('Location:pre-registreer.php?mailadres=leeg');
 }
