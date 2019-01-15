@@ -4,6 +4,8 @@ ob_start();
 /*-----------------------------------------------------------*/
 include_once "components/connect.php";
 
+include_once "components/meta.php";
+
 // Variabelen of de formulier klopt of niet
 $valid = 0;
 $invalid = 1;
@@ -15,6 +17,9 @@ $wachtwoord_validation = $valid;
 // Hier wordt de hash uit de link gehaald, indien hij bestaat
 if (isset($_GET['hash'])) {
     $hash = $_GET['hash'];
+    $_SESSION['hash'] = $hash;
+} else if (isset($_SESSION['hash'])) {
+    $hash = $_SESSION['hash'];
 } else {
     header('Location:pre-registreer.php?verificatie=onjuist');
 }
@@ -22,9 +27,12 @@ if (isset($_GET['hash'])) {
 // Hier wordt de tijd uit de link gehaald, indien hij bestaat
 if (isset($_GET['verify_until'])) {
     $verify_until = $_GET['verify_until'];
+    $_SESSION['verify_until'] =  $verify_until;
     if(date('Y-m-d H:i:s') > $_GET['verify_until']) {
         header('Location:pre-registreer.php?tijd=verlopen');
     }
+} else if (isset($_SESSION['verify_until'])) {
+    $verify_until = $_SESSION['verify_until'];
 } else {
     header('Location:pre-registreer.php?verificatie=onjuist');
 }
@@ -32,6 +40,9 @@ if (isset($_GET['verify_until'])) {
 // Hier wordt de emailadres uit de link gehaald, indien hij bestaat
 if (isset($_GET['emailadres'])) {
     $emailadres = $_GET['emailadres'];
+    $_SESSION['emailadres'] =  $emailadres;
+} else if (isset($_SESSION['emailadres'])) {
+    $emailadres = $_SESSION['emailadres'];
 } else {
     header('Location:pre-registreer.php?verificatie=onjuist');
 }
@@ -179,6 +190,9 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
         // De gebruiker wordt geprobeerd aan te melden in de website
         try {
             $gebruiker_registreren = $stmt->execute();
+            $_SESSION['verify_until'];
+            $_SESSION['emailadres'];
+            $_SESSION['hash'];
             header('location:login.php?registratie=true');
         } catch (PDOException $e) {
             echo "Controleer uw ingevulde gegevens<br>" . $e;
@@ -186,7 +200,6 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
     }
 }
 
-include_once "components/meta.php"
 ?>
 
 <body>
