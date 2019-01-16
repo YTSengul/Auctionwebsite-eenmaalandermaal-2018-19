@@ -210,7 +210,7 @@ include_once "components/meta.php"
     }
 
     if ($verificatie == false) {
-        echo 'U moet de link uit uw mailbox aanklikken om uzelf te registreren. heeft u nog geen verificatiecode? Vraag die dan nu hier op.';
+        echo 'U moet de link uit uw mailbox aanklikken om uzelf te registreren. heeft u nog geen verificatiecode? Dan kunt u die hier aanvragen.';
     }
 
     if ($tijd_verlopen == true) {

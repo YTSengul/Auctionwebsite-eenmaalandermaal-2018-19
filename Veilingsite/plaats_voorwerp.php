@@ -247,7 +247,7 @@ function titel_check()
     if (isset($titel_onjuist)) {
         echo '<label>Titel*
             <input name="titel" class="is-invalid-input" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required>
-            <span class="form-error is-visible" id="exemple2Error">Gebruikersnaam moet minimaal 4 tekens bevatten.</span></label>';
+            <span class="form-error is-visible" id="exemple2Error">De titel moet minimaal 4 tekens bevatten.</span></label>';
     } else {
         echo '<label>Titel*
             <input name="titel" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required></label>';
@@ -306,7 +306,7 @@ function afbeeldingen()
                     <input type='file' name='foto_2' >
                     <input type='file' name='foto_3' >";
     if ($afbeelding_onjuist == true) {
-        echo "<span class='form-error is-visible' id='exemple2Error'>De beschrijving mag maar 5000 tekens lang zijn.</span>";
+        echo "<span class='form-error is-visible' id='exemple2Error'>Je mag alleen afbeeldingen toevoegen.</span>";
     }
     echo "</div>";
 }
@@ -471,7 +471,7 @@ function land_check()
 function voorwerp_en_levering()
 {
     // check of er een rubriek is gekozen op laagste niveau
-    echo "<form method='POST' action='verkopen_object.php' enctype='multipart/form-data'>
+    echo "<form method='POST' action='plaats_voorwerp.php' enctype='multipart/form-data'>
                 <div class='medium-12 large-12 float-center cell verkopen-object-box'>
                     <h4>Voorwerp en levering</h4>";
 
@@ -533,7 +533,7 @@ function contactgegevens()
 <div class="grid-container">
     <div class="grid-x grid-padding-x">
         <div class="medium-12 large-12 cell">
-            <h2 class="registreren_titel">Verkopen voorwerp</h2>
+            <h2 class="registreren_titel">Plaats voorwerp</h2>
         </div>
     </div>
     <div class="grid-x grid-padding-x">

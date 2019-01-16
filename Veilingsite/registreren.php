@@ -27,8 +27,8 @@ if (isset($_GET['hash'])) {
 // Hier wordt de tijd uit de link gehaald, indien hij bestaat
 if (isset($_GET['verify_until'])) {
     $verify_until = $_GET['verify_until'];
-    $_SESSION['verify_until'] =  $verify_until;
-    if(date('Y-m-d H:i:s') > $_GET['verify_until']) {
+    $_SESSION['verify_until'] = $verify_until;
+    if (date('Y-m-d H:i:s') > $_GET['verify_until']) {
         header('Location:pre-registreer.php?tijd=verlopen');
     }
 } else if (isset($_SESSION['verify_until'])) {
@@ -40,7 +40,7 @@ if (isset($_GET['verify_until'])) {
 // Hier wordt de emailadres uit de link gehaald, indien hij bestaat
 if (isset($_GET['emailadres'])) {
     $emailadres = $_GET['emailadres'];
-    $_SESSION['emailadres'] =  $emailadres;
+    $_SESSION['emailadres'] = $emailadres;
 } else if (isset($_SESSION['emailadres'])) {
     $emailadres = $_SESSION['emailadres'];
 } else {
@@ -99,20 +99,36 @@ else {
         $wachtwoord_validation = $invalid;
         $formulier_validation = $invalid;
     }
+
+    // Hier word gecheckt of de wachtwoorden te lang zijn of niet
+    if (strlen($wachtwoordcheck1) > 255) {
+        $wachtwoord_lengte = $invalid;
+    }
+
+    $gebruikersnaam_kort = $valid;
+    // Hier wordt gecheckt of de gebruikersnaam niet te kort is
+    if (trim(strlen($gebruikersnaam)) < 4) {
+        $gebruikersnaam_kort = $invalid;
+        $formulier_validation = $invalid;
+    }
+
 }
 
 // Check of de hash klopt met de gestuurde hash in de header
 if (md5($emailadres . $verify_until . 'sadvbsydbfdsbm') != $hash) {
     $formulier_validation = $invalid;
-    //header('Location:pre-registreer.php?mailadres=leeg');
+    header('Location:pre-registreer.php?verificatie=onjuist');
 }
 
 function check_length($label, $input)
 {
+    global $invalid;
+    global $formulier_validation;
     $variable_length = ['gebruikersnaam' => 40, 'emailadres' => 50, 'voornaam' => 30, 'achternaam' => 30, 'adresregel1' => 50, 'adresregel2' => 50,
         'postcode' => 7, 'plaatsnaam' => 85, 'land' => 40, 'wachtwoord1' => 255, 'antwoord' => 255];
     if (strlen($input) > $variable_length[$label]) {
-        return array(true,$variable_length[$label]);
+        $formulier_validation = $invalid;
+        return array(true, $variable_length[$label]);
     } else {
         return false;
     }
@@ -123,21 +139,22 @@ function create_label($name, $type, $placeholder, $required)
     global ${$name};
     $posted = ${$name};
     global $invalid;
+    global $gebruikersnaam_kort;
 
     $variables = check_length($name, $posted);
 
-    if($name == 'gebruikersnaam') {
+    if ($name == 'gebruikersnaam') {
         global $gebruikersnaam_validation;
     }
 
-    echo '<input name='.$name.' type="' . $type . '" placeholder="' . $placeholder . '" ';
+    echo '<input name=' . $name . ' type="' . $type . '" placeholder="' . $placeholder . '" ';
     if (isset($posted)) {
         // Als de variabele veel langer is dan toegestaan
         if ($variables[0]) {
             echo 'class="is-invalid-input"';
         }
         // Als de gebruikersnaam al in gebruik is
-        if($name == 'gebruikersnaam' && $gebruikersnaam_validation == $invalid) {
+        if ($name == 'gebruikersnaam' && $gebruikersnaam_validation == $invalid || $gebruikersnaam_kort == $invalid) {
             echo 'class="is-invalid-input"';
         }
         echo "value='$posted'";
@@ -150,7 +167,7 @@ function create_label($name, $type, $placeholder, $required)
     if (isset($posted)) {
         //echo "<script type='text/javascript'>alert('aaa');</script>";
         if ($variables[0]) {
-            echo '<span class="form-error is-visible" id="exemple2Error">Uw '.$name.' mag maar '.$variables[1].' karakters bevatten.</span>';
+            echo '<span class="form-error is-visible" id="exemple2Error">Uw ' . $name . ' mag maar ' . $variables[1] . ' karakters bevatten.</span>';
         }
     }
 }
@@ -224,22 +241,36 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
                     </label>
                     <?php if ($gebruikersnaam_validation == $invalid) {
                         echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam is al in gebruik.</span>';
+                    } else if ($gebruikersnaam_kort == $invalid) {
+                        echo '<span class="form-error is-visible" id="exemple2Error">Uw gebruikersnaam moet minimaal 4 tekens zijn.</span>';
                     } ?>
                     <div class="grid-x grid-padding-x">
                         <div class="medium-6 cell">
                             <label>Wachtwoord*
                                 <input <?php if ($wachtwoord_validation == $invalid) {
                                     echo 'class="is-invalid-input"';
-                                } ?> name="wachtwoord1" type="password" placeholder="Wachtwoord" required>
+                                } else if (isset($wachtwoord_lengte)) {
+                                    if ($wachtwoord_lengte == $invalid) {
+                                        echo 'class="is-invalid-input"';
+                                    }
+                                }  ?> name="wachtwoord1" type="password" placeholder="Wachtwoord" required>
                             </label>
                         </div>
                         <div class="medium-6 cell">
                             <label>Herhaal wachtwoord*
                                 <input <?php if ($wachtwoord_validation == $invalid) {
                                     echo 'class="is-invalid-input"';
+                                } else if (isset($wachtwoord_lengte)) {
+                                    if ($wachtwoord_lengte == $invalid) {
+                                        echo 'class="is-invalid-input"';
+                                    }
                                 } ?> name="wachtwoord2" type="password" placeholder="Herhaal wachtwoord" required>
                                 <?php if ($wachtwoord_validation == $invalid) {
                                     echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoorden komen niet overeen.</span>';
+                                } else if (isset($wachtwoord_lengte)) {
+                                    if ($wachtwoord_lengte == $invalid) {
+                                        echo '<span class="form-error is-visible" id="exemple2Error">Wachtwoorden mogen niet langer dan 255 karakters zijn!</span>';
+                                    }
                                 } ?>
                             </label>
                         </div>

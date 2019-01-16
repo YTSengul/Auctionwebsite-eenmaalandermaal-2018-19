@@ -16,9 +16,11 @@ if (isset($_SESSION['ingelogde_gebruiker'])) {
 }
 
 
-
 // Op deze plaats worden de nieuwe volgnummers naar de database gestuurd indie die zij uitgevoerd
 if (isset($_POST['rubriek_sorteer'])) {
+
+    $sorteer_melding = false;
+
     $sql_wijzig_volgnummer_query = 'update rubriek set Volgnummer = :volgnummer where Rubrieknummer = :rubrieknummer ';
     $sql_wijzig_volgnummer = $dbh->prepare($sql_wijzig_volgnummer_query);
 
@@ -26,32 +28,36 @@ if (isset($_POST['rubriek_sorteer'])) {
         if ($Rubrieknummer != 'rubriek_sorteer') {
             $sql_wijzig_volgnummer->bindParam(":volgnummer", $Volgnummer);
             $sql_wijzig_volgnummer->bindParam(":rubrieknummer", $Rubrieknummer);
-            $stuur_nieuwe_volgnummers = $sql_wijzig_volgnummer->execute();
+
+            try {
+                $stuur_nieuwe_volgnummers = $sql_wijzig_volgnummer->execute();
+            } catch (PDOException $e) {
+                $sorteer_melding = true;
+            }
         }
     }
-
 } // Dit is de stuk waar de rubrieknaam veranderd wordt als de formulier is ingediend
 else if (isset($_POST['rubriek_hernoem_stuur'])) {
 
     $nieuwe_rubriek_naam = $_POST['hernoem_rubriek'];
     $nummer_van_hernoem_rubriek = $_POST['nummer_van_hernoem_rubriek'];
 
-    $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
-    $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
+    $hernoem_rubriek_melding = false;
 
-    $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
-    $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
+    if (strlen($nieuwe_rubriek_naam) <= 40) {
+        $sql_hernoem_rubriek_query = 'update Rubriek set Rubrieknaam = :rubrieknaam where Rubrieknummer = :rubrieknummer';
+        $sql_nieuwe_rubrieknaam = $dbh->prepare($sql_hernoem_rubriek_query);
 
-    $stuur_nieuwe_rubrieknaam = $sql_nieuwe_rubrieknaam->execute();
+        $sql_nieuwe_rubrieknaam->bindParam(":rubrieknaam", $nieuwe_rubriek_naam);
+        $sql_nieuwe_rubrieknaam->bindParam(":rubrieknummer", $nummer_van_hernoem_rubriek);
 
-    try {
-        if ($stuur_nieuwe_rubrieknaam) {
-            echo "<br>succesvol toegevoegd aan database";
-        } else {
-            echo "<br>niet toegevoegd aan database";
+        try {
+            $stuur_nieuwe_rubrieknaam = $sql_nieuwe_rubrieknaam->execute();
+        } catch (PDOException $e) {
+
         }
-    } catch (PDOException $e) {
-        echo $e->getMessage();
+    } else {
+        $hernoem_rubriek_melding = true;
     }
 } // Het versturen van de nieuwe Subrubriek naar de database
 else if (isset($_POST["subrubriek_voegtoe"])) {
@@ -67,33 +73,36 @@ else if (isset($_POST["subrubriek_voegtoe"])) {
     $nummer_van_hoofdrubriek = $_POST['nummer_van_hoofdrubriek'];
 
     // Naam van de nieuwe rubriek
-    $nieuw_subrubrieknaam = $_POST['hernoem_rubriek'];
+    $nieuw_subrubrieknaam = $_POST['nieuwe_subrubriek'];
 
     // VOlgnummer toevoegen
     $nieuw_volgnummer = 0;
 
-    /* De nieuwe subrubriek wordt met een query in de database opgeslagen */
-    $sql_voeg_nieuwe_subrubriek_toe = "insert into Rubriek ([RubriekNummer], [RubriekNaam], [VorigeRubriek], [Volgnummer]) values (:nieuw_hoogste_rubrieknummer, :nieuw_rubrieknaam, :nieuw_rubriek, :nieuw_volgnummer)";
-    $voeg_nieuwe_subrubriek_toe = $dbh->prepare($sql_voeg_nieuwe_subrubriek_toe);
+    $subrubriek_melding = false;
+
+    if (strlen($nieuw_subrubrieknaam) <= 40) {
+        /* De nieuwe subrubriek wordt met een query in de database opgeslagen */
+        $sql_voeg_nieuwe_subrubriek_toe = "insert into Rubriek ([RubriekNummer], [RubriekNaam], [VorigeRubriek], [Volgnummer]) values (:nieuw_hoogste_rubrieknummer, :nieuw_rubrieknaam, :nieuw_rubriek, :nieuw_volgnummer)";
+        $voeg_nieuwe_subrubriek_toe = $dbh->prepare($sql_voeg_nieuwe_subrubriek_toe);
 
 
-    if ($voeg_nieuwe_subrubriek_toe) {
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_hoogste_rubrieknummer", $nieuw_hoogste_hoofdrubrieknummer, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubrieknaam", $nieuw_subrubrieknaam, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubriek", $nummer_van_hoofdrubriek, PDO::PARAM_STR);
-        $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_volgnummer", $nieuw_volgnummer, PDO::PARAM_STR);
+        if ($voeg_nieuwe_subrubriek_toe) {
+            $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_hoogste_rubrieknummer", $nieuw_hoogste_hoofdrubrieknummer, PDO::PARAM_STR);
+            $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubrieknaam", $nieuw_subrubrieknaam, PDO::PARAM_STR);
+            $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_rubriek", $nummer_van_hoofdrubriek, PDO::PARAM_STR);
+            $voeg_nieuwe_subrubriek_toe->bindParam(":nieuw_volgnummer", $nieuw_volgnummer, PDO::PARAM_STR);
 
-        $voeg_nieuwe_subrubriek_toe->execute();
 
-        try {
-            if ($voeg_nieuwe_subrubriek_toe) {
+            try {
+                $voeg_nieuwe_subrubriek_toe->execute();
                 echo "<br>Succesvol toegevoegd aan database</br>";
-            } else {
+            } catch (PDOException $e) {
+                echo $e->getMessage();
                 echo "<br>Fout met toevoegen aan database</br>";
             }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
         }
+    } else {
+        $subrubriek_melding = true;
     }
 }
 
@@ -179,7 +188,7 @@ function formulier_hernoem()
          $loop_teller++) {
         if (isset($_POST["rubriek_zoek_getal"])) {
             if ((isset($_POST["rubriek_hernoem"]) == 'hernoem') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
-                echo '<form action="#" method="POST">
+                echo '<form action="#" method="POST"> <label>Nieuwe naam</label>
                     <input type="text" name="hernoem_rubriek" >
                     <input type="hidden" name="nummer_van_hernoem_rubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
                     <input type="submit" value="Hernoem rubriek" name="rubriek_hernoem_stuur" class="button expanded float-right">
@@ -199,10 +208,10 @@ function formulier_subrubriek_voegin()
          $loop_teller++) {
         if (isset($_POST["rubriek_zoek_getal"])) {
             if ((isset($_POST["rubriek_subrubriek_invoegen"]) == 'subrubriek invoegen') && $_POST["rubriek_zoek_getal"] == ($loop_teller + $marge)) {
-                echo '<form action="#" method="POST">
-                    <input type="text" name="hernoem_rubriek" >
+                echo '<form action="#" method="POST"> <label>Naam nieuwe subrubriek</label>
+                    <input type="text" name="nieuwe_subrubriek" >
                     <input type="hidden" name="nummer_van_hoofdrubriek" value="' . $_POST["zoek_$loop_teller"] . '"> 
-                    <input type="submit" value="Hernoem rubriek" name="subrubriek_voegtoe" class="button expanded float-right">
+                    <input type="submit" value="Voeg rubriek toe" name="subrubriek_voegtoe" class="button expanded float-right">
             </form>';
             }
         }
@@ -224,7 +233,7 @@ function formulier_sorteer()
                 echo '<form action="#" method="POST">';
                 foreach ($neem_rubrieken_data as ${'zoek_' . $loop_teller . '_rubrieken'}) {
                     echo '<label>' . ${'zoek_' . $loop_teller . '_rubrieken'}[1] . '</label>
-<input type="text" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
+<input type="number" name="' . ${'zoek_' . $loop_teller . '_rubrieken'}[0] . '" value="' . ${'zoek_' . $loop_teller . '_rubrieken'}[3] . '" >';
                 }
                 echo '<input type="submit" value="Hersorteer rubrieken" name="rubriek_sorteer" class="button expanded float-right">
                     </form>';
@@ -256,6 +265,29 @@ function formulier_sorteer()
                 formulier_subrubriek_voegin();
 
                 formulier_sorteer();
+
+                if (isset($hernoem_rubriek_melding)) {
+                    if ($hernoem_rubriek_melding) {
+                        echo '<span class="form-error is-visible" id="exemple2Error">De rubrieknaam mag niet meer dan 40 karakters bevatten.</span>';
+                    } else {
+                        echo '<span class="is-visible" id="exemple2Error">Rubriek succesvol hernoemd.</span>';
+                    }
+                }
+                if (isset($subrubriek_melding)) {
+                    if ($subrubriek_melding) {
+                        echo '<span class="form-error is-visible" id="exemple2Error">De rubrieknaam mag niet meer dan 40 karakters bevatten.</span>';
+                    } else {
+                        echo '<span class="is-visible" id="">Subrubriek succesvol toegevoegd.</span>';
+                    }
+                }
+                if (isset($sorteer_melding)) {
+                    if($sorteer_melding){
+                        echo '<span class="form-error is-visible" id="exemple2Error">Het sorteren van de rubrieken is mislukt.</span>';
+                    } else {
+                        echo '<span class="is-visible" id="">Rubrieken succesvol gesorteerd.</span>';
+                    }
+                }
+
                 ?>
 
             </div>

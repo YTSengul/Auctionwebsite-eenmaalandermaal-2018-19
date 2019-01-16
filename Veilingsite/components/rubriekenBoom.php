@@ -58,6 +58,7 @@
     <div class="grid-x hide-for-small-only">
         <div class="medium-12 cell">
             <ul class="dropdown menu spaceAround" data-dropdown-menu>
+                <li class="noPadding noMargins"><a class="HeaderASpacings" href="veilingen.php"> Alle veilingen</a></li><a>|</a>
                 <?php rubriekenHeader(); ?>
                 <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings" href="#">Meer</a>
                     <ul class="menu megaMenuSize noBorder">

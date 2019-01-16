@@ -57,7 +57,7 @@
                         ';
                         if(isVerkoper($_SESSION['ingelogde_gebruiker'])){
                             echo '
-                                <li><a class="blackHover" href="verkopen_object.php"> Plaats voorwerp</a></li>
+                                <li><a class="blackHover" href="plaats_voorwerp.php"> Plaats voorwerp</a></li>
                                 <li><a>|</a></li>
                             ';
                         }
