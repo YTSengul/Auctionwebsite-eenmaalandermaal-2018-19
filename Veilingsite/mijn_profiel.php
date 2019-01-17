@@ -98,7 +98,7 @@ function get_from_voorwerp($header, $column, $filter, $order_by, $up_or_down, $t
                                         <div class="cell large-6">
                                             <div class="button-left noMargins">
                                                 <a href="detailpagina.php?Voorwerpnummer=' . $auction['Voorwerpnummer'] . '"
-                                                   class="button expanded noMargins">Bied nu!</a>
+                                                   class="button expanded noMargins">Bekijk voorwerp</a>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@ get_from_voorwerp('Mijn geboden veilingen', 'veilinggesloten', '0', 'EindMoment'
             return "EXPIRED";
         }
         if (days > 1) {
-            return days + " dagen";
+            return "Nog " + days + " dagen";
         }
         if (hours === 0 && minutes > 0) {
             return minutes + ":" + seconds;

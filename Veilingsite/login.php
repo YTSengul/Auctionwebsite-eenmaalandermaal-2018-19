@@ -50,17 +50,18 @@ if (isset($_POST["login"])) {
         <div class="cell large-5 float-center">
             <h5>Inloggen</h5>
             <form action="#" method="POST">
-                <label>Gebruikersnaam </label>
+                <label>Gebruikersnaam* </label>
                 <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='text' name="gebruikersnaam" placeholder='Gebruikersnaam' value="<?PHP if(isset($gebruikersnaam)){echo $gebruikersnaam;} ?>" >
-                <label>Wachtwoord</label>
+                <label>Wachtwoord* </label>
                 <input <?php if ($login_verification == $invalid) {
                     echo 'class="is-invalid-input"';
                 } ?> type='password' name="wachtwoord" placeholder='Wachtwoord'>
                 <?php if ($login_verification == $invalid) {
                     echo '<span class="form-error is-visible" id="exemple2Error">Gebruikersnaam/wachtwoord is onjuist.</span>';
                 } ?>
+                <span>* Deze velden zijn verplicht.</span> <br> <br>
                 <input type="submit" value="Login" name="login" class="button expanded float-right">
             </form>
 

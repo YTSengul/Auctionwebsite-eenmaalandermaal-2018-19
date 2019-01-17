@@ -3,6 +3,7 @@ include_once "components/connect.php";
 
 $verificatie_incorrect = false;
 $verificatie = true;
+
 if (isset($_GET['verificatie'])) {
     if ($_GET['verificatie'] == 'onjuist') {
         $verificatie = false;
@@ -210,11 +211,11 @@ include_once "components/meta.php"
     }
 
     if ($verificatie == false) {
-        echo 'U moet de link uit uw mailbox aanklikken om uzelf te registreren. heeft u nog geen verificatiecode? Vraag die dan nu hier op.';
+        echo 'U moet de link uit uw mailbox aanklikken om uzelf te registreren. heeft u nog geen verificatiecode? Dan kunt u die hier aanvragen.';
     }
 
     if ($tijd_verlopen == true) {
-        echo 'De tijd van uw verificatie is verlopen. U kunt hier om een nieuwe verificatiecode vragen.';
+        echo 'De tijd van uw verificatie is verlopen. U kunt hier om een nieuwe verificatielink vragen.';
     }
 
     echo '</div>

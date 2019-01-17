@@ -6,7 +6,7 @@
         /** Show amount of sub categories under main category. */
         $amountOfSubcategoriesShown = 3;
         /** Query to select all main categories from the database. Ordered by alphabet. */
-        $queryMainCategories = "SELECT Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Rubrieknaam ASC";
+        $queryMainCategories = "SELECT Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Volgnummer DESC,Rubrieknaam ASC";
 
         $hoofdRubrieken = $dbh->prepare($queryMainCategories);
         $hoofdRubrieken->bindParam(":vorigeRubriek", $previousCategory);
@@ -20,7 +20,7 @@
             ';
 
             /** Query to select the first 3 sub categories from the main categories. Ordered by popularity and then alphabet. */
-            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Volgnummer, Rubrieknaam ASC";
+            $querySubCategories = "SELECT TOP $amountOfSubcategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = :vorigeRubriek ORDER BY Volgnummer DESC, Rubrieknaam ASC";
 
             $subRubrieken = $dbh->prepare($querySubCategories);
             // $subRubrieken->bindParam(":topN", $amountOfSubcategoriesShown);
@@ -43,7 +43,7 @@
         /** Amounf of main categories to be shown on the website */
         $amountOfMainCategoriesShown = 7;
         /** Query to select all main categories from the database. Ordered by popularity and then alphabet. */
-        $queryMainCategories = "SELECT top $amountOfMainCategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = $previousCategory ORDER BY Volgnummer, Rubrieknaam ASC";
+        $queryMainCategories = "SELECT top $amountOfMainCategoriesShown Rubrieknaam, Rubrieknummer FROM Rubriek WHERE VorigeRubriek = $previousCategory ORDER BY Volgnummer DESC, Rubrieknaam ASC";
 
         $hoofdRubrieken = $dbh->prepare($queryMainCategories);
         $hoofdRubrieken->execute();
@@ -58,6 +58,7 @@
     <div class="grid-x hide-for-small-only">
         <div class="medium-12 cell">
             <ul class="dropdown menu spaceAround" data-dropdown-menu>
+                <li class="noPadding noMargins"><a class="HeaderASpacings" href="veilingen.php"> Alle veilingen</a></li><a>|</a>
                 <?php rubriekenHeader(); ?>
                 <li class="noPadding noMargins makeStatic"><a class="HeaderASpacings" href="#">Meer</a>
                     <ul class="menu megaMenuSize noBorder">
