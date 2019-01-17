@@ -393,17 +393,7 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
                 <div class="tabs-panel" id="panel2">
                     <!--Note: Iemand moet dit nog werkend maken-->
                     <p>
-                        Yes, sir. I think those new droids are going to work out fine.
-                        In fact, I, uh, was also thinking about our agreement about my staying on another season.
-                        And if these new droids do work out, I want to transmit my application to the Academy this year.
-                        You mean the next semester before harvest? Sure, there're more than enough droids.
-                        Harvest is when I need you the most. Only one more season.
-                        This year we'll make enough on the harvest so I'll be able to hire some more hands.
-                        And then you can go to the Academy next year. You must understand I need you here, Luke.
-                        But it's a whole 'nother year. Look, it's only one more season.
-                        Yeah, that's what you said last year when Biggs and Tank left. Where are you going? It looks
-                        like I'm going nowhere.
-                        I have to finish cleaning those droids.
+                        
                     </p>
                 </div>
                 <?php include "components/scripts.html"; ?>
