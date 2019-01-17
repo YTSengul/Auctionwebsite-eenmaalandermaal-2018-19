@@ -78,7 +78,7 @@ if (isset($_POST['plaats_veiling'])) {
     $beschrijving = $_POST['beschrijving'];
     $startprijs = $_POST['startprijs'];
     $betalingswijze = $_POST['betalingswijze'];
-    $verzendkosten = (int)$_POST['verzendkosten'];
+    $verzendkosten = $_POST['verzendkosten'];
     $looptijd = $_POST['looptijd'];
     $plaatsnaam = $_POST['plaatsnaam'];
     $land = $_POST['land'];
@@ -88,16 +88,25 @@ if (isset($_POST['plaats_veiling'])) {
     $rubriekoplaagsteniveau = $_SESSION['gekozen_rubrieknummer'];
     $verkoper = $_SESSION['ingelogde_gebruiker'];
 
+    // check of query is gelukt
+    $query_1 = false;
+
     // Hier wordt gecheckt of de titel minimaal 4 characters bevat
-    if (strlen($titel) < 4) {
+    if (strlen($titel) < 4 || strlen($titel) > 100) {
         $formulier_check = false;
         $titel_onjuist = true;
     }
 
-    // Er wordt een check gevoerd op de startprijs of hij hoger dan €1.00 is
-    if ($startprijs < 1) {
+    // Er wordt een check gevoerd op de startprijs of hij hoger dan €1.00 is en lager dan 10000000000000000
+    if ($startprijs <= 1 || $startprijs > 9999999999999999) {
         $formulier_check = false;
         $startprijs_onjuist = true;
+    }
+
+    // Er wordt een check gevoerd op de verzondkosten of hij niet te hoog is
+    if ($verzendkosten >= 1000000) {
+        $formulier_check = false;
+        $verzendkosten_onjuist = true;
     }
 
     // Er wordt gecheckt of de beschrijving niet langer is dan 5000 tekens.
@@ -128,36 +137,53 @@ if (isset($_POST['plaats_veiling'])) {
     $image_names = [];
     // De Geüploadde bestanden worden gecheckt
     image_processor();
-
     if ($formulier_check == true) {
         // De thumbail wordt hier als laatst nog gegeven aan een variabele om hem in de 'voorwerp' tabel toe te kunnen toevoegen
-        $thumbnail = (string)$image_names[0];
-
+        if(isset($image_names[0])) {
+            $thumbnail = (string)$image_names[0];
+        } else {
+            $thumbnail = '';
+        }
         // Met deze statement word de veiling geplaatst. De identity wordt voor de query aan en na de query uit gezet.
         $sql_plaats_voorwerp_query = "SET IDENTITY_INSERT voorwerp on; insert into voorwerp (Voorwerpnummer, Titel, Beschrijving, Startprijs, Betalingswijze, Betalingsinstructie, Plaatsnaam, Land, Looptijd, BeginMoment,  Verzendkosten, Verzendinstructies, Verkoper, Thumbnail) values (:voorwerpnummer, :titel, :beschrijving, :startprijs, :betalingswijze, :betalingsinstructie, :plaatsnaam, :land, :looptijd, :beginmoment, :verzendkosten, :verzendinstructies, :verkoper, :thumbnail); SET IDENTITY_INSERT voorwerp off";
         $sql_plaats_voorwerp = $dbh->prepare($sql_plaats_voorwerp_query);
         $sql_plaats_voorwerp->bindParam(":voorwerpnummer", $nieuw_voorwerpnummer);
         $sql_plaats_voorwerp->bindParam(":titel", $titel);
         $sql_plaats_voorwerp->bindParam(":beschrijving", $beschrijving);
-        $sql_plaats_voorwerp->bindParam(":startprijs", $startprijs);
+        $sql_plaats_voorwerp->bindParam(":startprijs", $startprijs, PDO::PARAM_INT);
         $sql_plaats_voorwerp->bindParam(":betalingswijze", $betalingswijze);
         $sql_plaats_voorwerp->bindParam(":betalingsinstructie", $betalingsinstructie);
         $sql_plaats_voorwerp->bindParam(":plaatsnaam", $plaatsnaam);
         $sql_plaats_voorwerp->bindParam(":land", $land);
         $sql_plaats_voorwerp->bindParam(":looptijd", $looptijd);
         $sql_plaats_voorwerp->bindParam(":beginmoment", $beginmoment);
-        $sql_plaats_voorwerp->bindParam(":verzendkosten", $verzendkosten);
+        $sql_plaats_voorwerp->bindParam(":verzendkosten", $verzendkosten, PDO::PARAM_INT);
         $sql_plaats_voorwerp->bindParam(":verkoper", $verkoper);
         $sql_plaats_voorwerp->bindParam(":verzendinstructies", $verzendinstructies);
         $sql_plaats_voorwerp->bindParam(":thumbnail", $thumbnail);
-        $sql_plaats_voorwerp->execute();
+
+        try {
+            $sql_plaats_voorwerp->execute();
+            $query_1 = true;
+        } catch (PDOException $e){
+            echo $e;
+        }
 
         // Met deze statement word de veiling in de rubriekoplaagsteniveau tabel geplaatst
         $sql_plaats_rubriekoplaagsteniveau_query = 'insert into VoorwerpInRubriek (Voorwerp, RubriekOpLaagsteNiveau) values (:voorwerpnummer, :rubrieknummer)';
         $sql_plaats_rubriekoplaagsteniveau = $dbh->prepare($sql_plaats_rubriekoplaagsteniveau_query);
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':voorwerpnummer', $nieuw_voorwerpnummer);
         $sql_plaats_rubriekoplaagsteniveau->bindParam(':rubrieknummer', $rubriekoplaagsteniveau);
-        $sql_plaats_rubriekoplaagsteniveau->execute();
+
+        try {
+            $sql_plaats_rubriekoplaagsteniveau->execute();
+            unset($_SESSION['formulier_teller']);
+            unset($_SESSION['hoofdrubriek']);
+            unset($_SESSION['gekozen_rubrieknaam']);
+            unset($_SESSION['gekozen_rubrieknummer']);
+        }catch (PDOException $e) {
+
+        }
 
         // De afbeeldingen worden toegevoegd aan de database
         foreach ($image_names as $name){
@@ -165,13 +191,23 @@ if (isset($_POST['plaats_veiling'])) {
         $sql_add_image = $dbh->prepare($sql_add_image_query);
         $sql_add_image->bindParam(':filenaam', $name);
         $sql_add_image->bindParam(':voorwerp', $nieuw_voorwerpnummer);
-        $sql_add_image->execute();
+
+            try {
+                $sql_plaats_rubriekoplaagsteniveau->execute();
+                unset($_SESSION['formulier_teller']);
+                unset($_SESSION['hoofdrubriek']);
+                unset($_SESSION['gekozen_rubrieknaam']);
+                unset($_SESSION['gekozen_rubrieknummer']);
+            }catch (PDOException $e) {
+                $sql_add_image->execute();
+            }
         }
 
-        // De pagina gegevens worden op deze manier gereset indien de gebruiker opnieuw gegevens wilt toevoegen
-        $_SESSION['first_on_website'] = false;
-        header('location:mijn_profiel.php');
-
+        if ($query_1 == true) {
+            // De pagina gegevens worden op deze manier gereset indien de gebruiker opnieuw gegevens wilt toevoegen
+            $_SESSION['first_on_website'] = false;
+            header('location:mijn_profiel.php');
+        }
     }
 }
 
@@ -247,7 +283,7 @@ function titel_check()
     if (isset($titel_onjuist)) {
         echo '<label>Titel*
             <input name="titel" class="is-invalid-input" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required>
-            <span class="form-error is-visible" id="exemple2Error">De titel moet minimaal 4 tekens bevatten.</span></label>';
+            <span class="form-error is-visible" id="exemple2Error">De titel mag minimaal 4, en maximaal 100 tekens bevatten.</span></label>';
     } else {
         echo '<label>Titel*
             <input name="titel" type="text" placeholder="Vul hier de titel van de veiling in." value="' . $titel . '" required></label>';
@@ -260,16 +296,18 @@ function startprijs_check()
     global $startprijs;
 
     if (isset($startprijs_onjuist)) {
-        echo "<div class='medium-6 cell'>
+        if ($startprijs_onjuist == true) {
+            echo "<div class='medium-6 cell'>
                 <label>Startprijs*
-                    <input type='number' class='is-invalid-input' name='startprijs' placeholder='Vul een startprijs in'  value='$startprijs' required>
-                    <span class='form-error is-visible' id='exemple2Error'>Startprijs moet minimaal €1 zijn.</span>
+                    <input type='number' step='any' name='startprijs' class='is-invalid-input' placeholder='Startprijs' value='" . $startprijs . "' >
+                    <span class='form-error is-visible' id='exemple2Error'>Startprijs moet tussen de €1 en 10000000000000000 liggen.</span>
                 </label>
               </div>";
+        }
     } else {
         echo "<div class='medium-6 cell'>
                 <label>Startprijs*
-                    <input type='number' name='startprijs' placeholder='Vul een startprijs in' value='$startprijs' required>
+                    <input type='number' step='any' name='startprijs' placeholder='Vul een startprijs in' value='$startprijs' required>
                 </label>
               </div>";
     }
@@ -280,13 +318,13 @@ function beschrijving_check()
     global $beschrijving_onjuist;
     global $beschrijving;
     if (isset($beschrijving_onjuist)) {
-        echo "<label> beschrijving
+        echo "<label> Beschrijving
                         <textarea rows='8' class='is-invalid-input' name='beschrijving' type='' placeholder='. . .'>$beschrijving</textarea>
                     <span class='form-error is-visible' id='exemple2Error'>De beschrijving mag maar 5000 tekens lang zijn.</span>
                     </label>
                </label>";
     } else {
-        echo "<label> beschrijving
+        echo "<label> Beschrijving
                         <textarea rows='8' name='beschrijving' type='' placeholder='. . .'>$beschrijving</textarea>
                     </label>
               </label>";
@@ -391,10 +429,18 @@ function betalingsinstructie_check()
 function verzendkosten()
 {
     global $verzendkosten;
+    global $verzendkosten_onjuist;
 
-    echo "<label>Verzendkosten
-        <input type='number' name='verzendkosten' placeholder='0.00' value='" . $verzendkosten . "' >
+    if ($verzendkosten_onjuist) {
+        echo "<label>Verzendkosten
+        <input type='number' name='verzendkosten' step='any' class='is-invalid-input' placeholder='0.00' value='" . $verzendkosten . "' >
+        <span class='form-error is-visible' id='exemple2Error'>De verzendkosten mogen niet hoger dan 1000000 zijn.</span>
       </label>";
+    } else {
+        echo "<label>Verzendkosten
+        <input type='number' name='verzendkosten' step='any' placeholder='0.00' value='" . $verzendkosten . "' >
+      </label>";
+    }
 }
 
 function verzendinstructies_check()

@@ -107,7 +107,7 @@ else {
 
     $gebruikersnaam_kort = $valid;
     // Hier wordt gecheckt of de gebruikersnaam niet te kort is
-    if (trim(strlen($gebruikersnaam)) < 4) {
+    if (trim(strlen($gebruikersnaam)) < 3) {
         $gebruikersnaam_kort = $invalid;
         $formulier_validation = $invalid;
     }
@@ -117,7 +117,7 @@ else {
 // Check of de hash klopt met de gestuurde hash in de header
 if (md5($emailadres . $verify_until . 'sadvbsydbfdsbm') != $hash) {
     $formulier_validation = $invalid;
-    header('Location:pre-registreer.php?verificatie=onjuist');
+    //header('Location:pre-registreer.php?verificatie=onjuist');
 }
 
 function check_length($label, $input)
@@ -140,7 +140,7 @@ function create_label($name, $type, $placeholder, $required)
     $posted = ${$name};
     global $invalid;
     global $gebruikersnaam_kort;
-
+    global $formulier_validation;
     $variables = check_length($name, $posted);
 
     if ($name == 'gebruikersnaam') {
@@ -152,15 +152,20 @@ function create_label($name, $type, $placeholder, $required)
         // Als de variabele veel langer is dan toegestaan
         if ($variables[0]) {
             echo 'class="is-invalid-input"';
+            $formulier_validation = $invalid;
         }
         // Als de gebruikersnaam al in gebruik is
-        if ($name == 'gebruikersnaam' && $gebruikersnaam_validation == $invalid || $gebruikersnaam_kort == $invalid) {
+        if (($name == 'gebruikersnaam' && $gebruikersnaam_validation == $invalid) || ($gebruikersnaam_kort == $invalid && $name == 'gebruikersnaam')) {
             echo 'class="is-invalid-input"';
+            $formulier_validation = $invalid;
         }
         echo "value='$posted'";
     }
     if ($required) {
         echo 'required';
+    }
+    if ($name == 'emailadres') {
+        echo ' readonly';
     }
 
     echo ' >';
@@ -178,44 +183,6 @@ $sql_landen->execute();
 $sql_landen_data = $sql_landen->fetchAll(PDO::FETCH_NUM);
 
 $aantal_landen = count($sql_landen_data);
-
-if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
-
-    // De wachtwoord wod gehashed voor het naar de database gestuurd word
-    $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
-
-    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) 
-    values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
-
-    $stmt = $dbh->prepare($sql_registreer);
-
-    if ($stmt) {
-        $stmt->bindParam(":gebruikersnaam", $gebruikersnaam, PDO::PARAM_STR);
-        $stmt->bindParam(":voornaam", $voornaam, PDO::PARAM_STR);
-        $stmt->bindParam(":achternaam", $achternaam, PDO::PARAM_STR);
-        $stmt->bindParam(":adresregel1", $adresregel1, PDO::PARAM_STR);
-        $stmt->bindParam(":adresregel2", $adresregel2, PDO::PARAM_STR);
-        $stmt->bindParam(":postcode", $postcode, PDO::PARAM_STR);
-        $stmt->bindParam(":plaatsnaam", $plaatsnaam, PDO::PARAM_STR);
-        $stmt->bindParam(":land", $land, PDO::PARAM_STR);
-        $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
-        $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
-        $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
-        $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
-        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord, PDO::PARAM_STR);
-
-        // De gebruiker wordt geprobeerd aan te melden in de website
-        try {
-            $gebruiker_registreren = $stmt->execute();
-            $_SESSION['verify_until'];
-            $_SESSION['emailadres'];
-            $_SESSION['hash'];
-            header('location:login.php?registratie=true');
-        } catch (PDOException $e) {
-            echo "Controleer uw ingevulde gegevens<br>" . $e;
-        }
-    }
-}
 
 ?>
 
@@ -377,3 +344,39 @@ if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
 
 </body>
 </html>
+
+<?php
+if (isset($_POST["registreer"]) && $formulier_validation == $valid) {
+    // De wachtwoord wod gehashed voor het naar de database gestuurd word
+    $wachtwoord1_hashed = password_hash($wachtwoord1, PASSWORD_DEFAULT);
+
+    $sql_registreer = "insert into gebruiker ([gebruikersnaam], [voornaam], [achternaam], [adresregel1], [adresregel2], [postcode], [plaatsnaam], [land], [datum], [mailbox], [wachtwoord], [vraagnummer], [antwoordtekst]) 
+    values (:gebruikersnaam, :voornaam, :achternaam, :adresregel1, :adresregel2, :postcode, :plaatsnaam, :land, :geboortedatum, :emailadres, :wachtwoord1, :veiligheidsvraag, :antwoord_op_veiligheidsvraag)";
+
+    $stmt = $dbh->prepare($sql_registreer);
+
+    if ($stmt) {
+        $stmt->bindParam(":gebruikersnaam", $gebruikersnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":voornaam", $voornaam, PDO::PARAM_STR);
+        $stmt->bindParam(":achternaam", $achternaam, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel1", $adresregel1, PDO::PARAM_STR);
+        $stmt->bindParam(":adresregel2", $adresregel2, PDO::PARAM_STR);
+        $stmt->bindParam(":postcode", $postcode, PDO::PARAM_STR);
+        $stmt->bindParam(":plaatsnaam", $plaatsnaam, PDO::PARAM_STR);
+        $stmt->bindParam(":land", $land, PDO::PARAM_STR);
+        $stmt->bindParam(":geboortedatum", $geboortedatum, PDO::PARAM_STR);
+        $stmt->bindParam(":emailadres", $emailadres, PDO::PARAM_STR);
+        $stmt->bindParam(":wachtwoord1", $wachtwoord1_hashed, PDO::PARAM_STR);
+        $stmt->bindParam(":veiligheidsvraag", $veiligheidsvraag, PDO::PARAM_STR);
+        $stmt->bindParam(":antwoord_op_veiligheidsvraag", $antwoord, PDO::PARAM_STR);
+
+        // De gebruiker wordt geprobeerd aan te melden in de website
+        try {
+            $gebruiker_registreren = $stmt->execute();
+            header('location:login.php?registratie=true');
+        } catch (PDOException $e) {
+            //echo "Controleer uw ingevulde gegevens<br>" . $e;
+        }
+    }
+}
+?>
