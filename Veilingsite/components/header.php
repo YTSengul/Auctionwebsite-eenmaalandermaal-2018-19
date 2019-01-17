@@ -80,7 +80,7 @@
                         if ($_SESSION['ingelogde_gebruiker'] == 'tigersclaw4') {
                             echo '
                                 <li><a>|</a></li>
-                                <li><a class="blackHover" href="beheerpagina.php"> beheerpagina</a></li>
+                                <li><a class="blackHover" href="beheerpagina.php"> Beheerpagina</a></li>
                             ';
                         }
                     }
