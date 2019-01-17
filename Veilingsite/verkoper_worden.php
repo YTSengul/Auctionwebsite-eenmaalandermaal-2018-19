@@ -84,7 +84,7 @@
                     }
                     else{
                         $bankrekeningJuist = false;
-                        $errorMessageBankrekening = "Moet minimaal 15 karakters hebben en minder dan 30. Alleen Hoofdletters en cijfers.";
+                        $errorMessageBankrekening = "Moet minimaal 15 karakters hebben en minder dan 30. Alleen Hoofdletters en cijfers. Moet beginnen met land afkorting.";
                     }
                 }
 
