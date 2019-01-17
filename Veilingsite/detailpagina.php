@@ -393,7 +393,7 @@ $resultAuction_bc = $detailsAuction_bc->fetch();
                 <div class="tabs-panel" id="panel2">
                     <!--Note: Iemand moet dit nog werkend maken-->
                     <p>
-                        
+
                     </p>
                 </div>
                 <?php include "components/scripts.html"; ?>

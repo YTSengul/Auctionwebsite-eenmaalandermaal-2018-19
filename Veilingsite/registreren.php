@@ -204,7 +204,7 @@ $aantal_landen = count($sql_landen_data);
                     </div>
 
                     <label>Gebruikersnaam*
-                        <?PHP create_label('gebruikersnaam', 'text', 'Uw gebruikersnaam', '*'); ?>
+                        <?PHP create_label('gebruikersnaam', 'text', 'Bobje66, Marcus23 ...', '*'); ?>
                     </label>
                     <?php if ($gebruikersnaam_validation == $invalid) {
                         echo '<span class="form-error is-visible" id="exemple2Error">Deze gebruikersnaam is al in gebruik.</span>';
@@ -249,28 +249,28 @@ $aantal_landen = count($sql_landen_data);
                         <h4>Persoonsgegevens</h4>
                     </div>
                     <label>Voornaam*
-                        <?PHP create_label('voornaam', 'text', 'Uw voornaam', '*'); ?>
+                        <?PHP create_label('voornaam', 'text', 'Bob, Martin ...', '*'); ?>
                     </label>
 
                     <label>Achternaam*
-                        <?PHP create_label('achternaam', 'text', 'Uw achternaam', '*'); ?>
+                        <?PHP create_label('achternaam', 'text', 'de Vree, Peters ...', '*'); ?>
                     </label>
 
                     <label>Adresregel1*
-                        <?PHP create_label('adresregel1', 'text', 'Uw adresregel1', '*'); ?>
+                        <?PHP create_label('adresregel1', 'text', 'Broekstraat 22, Veenendaalseweg 117 ...', '*'); ?>
                     </label>
                     <label>Adresregel2
-                        <?PHP create_label('adresregel2', 'text', 'Uw adresregel2', ''); ?>
+                        <?PHP create_label('adresregel2', 'text', 'Tweede adresregel ...', ''); ?>
                     </label>
                     <div class="grid-x grid-padding-x">
                         <div class="medium-6 cell">
                             <label>Plaatsnaam*
-                                <?PHP create_label('plaatsnaam', 'text', 'Uw plaatsnaam', '*'); ?>
+                                <?PHP create_label('plaatsnaam', 'text', 'Amsterdam, Drunen ...', '*'); ?>
                             </label>
                         </div>
                         <div class="medium-6 small-6 cell">
                             <label>Postcode*
-                                <?PHP create_label('postcode', 'text', 'Uw postcode', '*'); ?>
+                                <?PHP create_label('postcode', 'text', '4004DX, 3209HD ...', '*'); ?>
                             </label>
                         </div>
                     </div>
@@ -293,7 +293,7 @@ $aantal_landen = count($sql_landen_data);
                         } ?> type="date" required>
                     </label>
                     <label>E-mailadres*
-                        <?PHP create_label('emailadres', 'text', 'Uw E-mailadres', '*'); ?>
+                        <?PHP create_label('emailadres', 'text', 'emailadres@domein.nl ...', '*'); ?>
                     </label>
                     <label>Veiligheidsvraag*
                         <select name="veiligheidsvraag" required>
@@ -330,7 +330,7 @@ $aantal_landen = count($sql_landen_data);
                         </select>
                     </label>
                     <label>Antwoord*
-                        <?PHP create_label('antwoord', 'text', 'Uw antwoord op de veiligheidsvraag', '*'); ?>
+                        <?PHP create_label('antwoord', 'text', 'Uw antwoord op de veiligheidsvraag ...', '*'); ?>
                     </label>
                     <input type="hidden" name="hash" value="<?PHP echo $hash; ?>">
                 </div>
